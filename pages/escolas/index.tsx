@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
+import Link from "next/link";
 
 export default function Schools() {
     return (
@@ -29,9 +30,11 @@ export default function Schools() {
                         <Card>
                             <CardHeader
                                 action={
-                                    <IconButton aria-label="settings">
-                                        <AddIcon/>
-                                    </IconButton>
+                                    <Link href="/escolas/cadastrar" passHref legacyBehavior>
+                                        <IconButton aria-label="settings">
+                                            <AddIcon/>
+                                        </IconButton>
+                                    </Link>
                                 }
                                 title="Escolas"
                             />
