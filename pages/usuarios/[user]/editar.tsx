@@ -3,32 +3,25 @@ import Head from "next/head";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import React from "react";
+import Avatar from "@mui/material/Avatar";
+import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ControlledTextField } from "../../src/components/ControlledTextField";
-import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { ControlledAutocomplete } from "../../src/components/ControlledAutocomplete";
-import { ControlledCheckbox } from "../../src/components/ControlledCheckbox";
 
 const schema = yup
   .object({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    address: yup.string().required(),
-    school: yup.string().required(),
-    responsible: yup.string().required(),
-    goes: yup.boolean().required(),
-    return: yup.boolean().required(),
+    email: yup.string().email().required(),
+    cellPhone: yup.string().required(),
   })
   .required();
 
 type FormData = yup.InferType<typeof schema>;
-
-export default function StudentsCreate() {
+export default function UsersEdit() {
   const { control, handleSubmit } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
@@ -40,21 +33,22 @@ export default function StudentsCreate() {
   return (
     <>
       <Head>
-        <title>SchoolGo - Cadastrar Aluno</title>
+        <title>SchoolGo - Stephano</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Cadastrar Aluno" />
               <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Grid container spacing={2}>
-                    {message && (
-                      <Grid item xs={12}>
-                        <Alert severity="error">{message}</Alert>
-                      </Grid>
-                    )}
+                    <Grid item xs={12} display="flex" justifyContent="center">
+                      <Avatar
+                        alt="Stephano"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 150, height: 150 }}
+                      />
+                    </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
@@ -69,45 +63,20 @@ export default function StudentsCreate() {
                         label="Sobrenome"
                       />
                     </Grid>
-                    <Grid item xs={12}>
-                      <ControlledAutocomplete
-                        loading
-                        options={[]}
+                    <Grid item xs={12} md={6}>
+                      <ControlledTextField
                         control={control}
-                        name="address"
-                        label="Endereço"
+                        name="email"
+                        type="email"
+                        label="E-mail"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                      <ControlledAutocomplete
-                        loading
-                        options={[]}
+                      <ControlledTextField
                         control={control}
-                        name="school"
-                        label="Escola"
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <ControlledAutocomplete
-                        loading
-                        options={["dsadasdas", "dsadsadas"]}
-                        control={control}
-                        name="responsible"
-                        label="Responsável"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <ControlledCheckbox
-                        name="goes"
-                        label="Ida"
-                        control={control}
-                      />
-                    </Grid>
-                    <Grid item>
-                      <ControlledCheckbox
-                        name="return"
-                        label="Volta"
-                        control={control}
+                        name="cellPhone"
+                        type="tel"
+                        label="Celular"
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
@@ -117,7 +86,7 @@ export default function StudentsCreate() {
                         type="submit"
                         variant="contained"
                       >
-                        Cadastrar
+                        Editar
                       </LoadingButton>
                     </Grid>
                   </Grid>
