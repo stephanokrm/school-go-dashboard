@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useGetUserByMeQuery } from "../../../src/hooks/queries/useGetUserByMeQuery";
 
 const schema = yup
   .object({
@@ -22,18 +23,19 @@ const schema = yup
 
 type FormData = yup.InferType<typeof schema>;
 export default function UsersEdit() {
+  const { data: user, isLoading: isLoadingQuery } = useGetUserByMeQuery();
   const { control, handleSubmit } = useForm<FormData>({
     resolver: yupResolver(schema),
+    values: user,
   });
   const onSubmit = (data: FormData) => console.log(data);
 
-  const message = "S";
-  const isLoading = false;
+  const isLoading = isLoadingQuery;
 
   return (
     <>
       <Head>
-        <title>SchoolGo - Stephano</title>
+        <title>SchoolGo - {user?.firstName}</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
@@ -44,7 +46,7 @@ export default function UsersEdit() {
                   <Grid container spacing={2}>
                     <Grid item xs={12} display="flex" justifyContent="center">
                       <Avatar
-                        alt="Stephano"
+                        alt={user?.firstName}
                         src="/static/images/avatar/1.jpg"
                         sx={{ width: 150, height: 150 }}
                       />

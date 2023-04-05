@@ -22,6 +22,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Avatar } from "@mui/material";
+import { useGetUserByMeQuery } from "../hooks/queries/useGetUserByMeQuery";
+import { useLogoutMutation } from "../hooks/mutations/useLogoutMutation";
 
 const drawerWidth = 240;
 
@@ -35,16 +37,17 @@ interface Props {
 
 export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   const { window, children } = props;
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: user, error } = useGetUserByMeQuery();
+  const { mutate } = useLogoutMutation();
+
+  const isAuthenticated = !!user && !error;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const logout = async () => {
-    await router.push("/login");
-  };
+  const logout = () => mutate({});
 
   const menus = [
     { text: "Itinerários", href: "/itinerarios", Icon: RouteIcon },
@@ -81,16 +84,19 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
           <Link
             href={{
               pathname: "/usuarios/[user]/editar",
-              query: { user: "321jhie2" },
+              query: { user: user?.id },
             }}
             passHref
             legacyBehavior
           >
             <ListItemButton>
               <ListItemIcon>
-                <Avatar alt="Stephano" src="/static/images/avatar/1.jpg" />
+                <Avatar
+                  alt={user?.firstName}
+                  src="/static/images/avatar/1.jpg"
+                />
               </ListItemIcon>
-              <ListItemText primary="Stephano" />
+              <ListItemText primary={user?.firstName} />
             </ListItemButton>
           </Link>
         </ListItem>
@@ -111,65 +117,69 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar
-        position="fixed"
-        sx={{
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+      {isAuthenticated && (
+        <>
+          <AppBar
+            position="fixed"
+            sx={{
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            SchoolGo
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { sm: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap component="div">
+                SchoolGo
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Box
+            component="nav"
+            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+            aria-label="mailbox folders"
+          >
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Drawer
+              container={container}
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              sx={{
+                display: { xs: "block", sm: "none" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+            >
+              {drawer}
+            </Drawer>
+            <Drawer
+              variant="permanent"
+              sx={{
+                display: { xs: "none", sm: "block" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+              open
+            >
+              {drawer}
+            </Drawer>
+          </Box>
+        </>
+      )}
       <Box
         component="main"
         sx={{
@@ -178,7 +188,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
+        {isAuthenticated && <Toolbar />}
         {children}
       </Box>
     </Box>
