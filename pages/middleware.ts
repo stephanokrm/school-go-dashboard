@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getUserByMe } from "../src/services/getUserByMe";
 
 export default async function middleware(request: NextRequest) {
   const authorization = request.cookies.get("authorization")?.value;
   const isLogin = request.nextUrl.pathname.startsWith("/login");
 
   try {
-    const user = await getUserByMe({ authorization });
+    const user = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/me`,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${authorization}`,
+        },
+      }
+    );
 
     if (user && !isLogin) return NextResponse.next();
 
