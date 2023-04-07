@@ -17,8 +17,12 @@ import Typography from "@mui/material/Typography";
 import EmailIcon from "@mui/icons-material/Email";
 import Divider from "@mui/material/Divider";
 import React from "react";
+import Link from "next/link";
+import { useGetUsersQuery } from "../../../src/hooks/queries/useGetUsersQuery";
 
 export default function Users() {
+  const { data: users } = useGetUsersQuery();
+
   return (
     <>
       <Head>
@@ -30,89 +34,77 @@ export default function Users() {
             <Card>
               <CardHeader
                 action={
-                  <IconButton aria-label="settings">
-                    <AddIcon />
-                  </IconButton>
+                  <Link
+                    href="/dashboard/usuarios/cadastrar"
+                    passHref
+                    legacyBehavior
+                  >
+                    <IconButton aria-label="settings">
+                      <AddIcon />
+                    </IconButton>
+                  </Link>
                 }
                 title="Usuários"
               />
               <CardContent sx={{ padding: 0 }}>
                 <List sx={{ width: "100%" }}>
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Stephano Ramos"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              (51) 99445-6366
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              stephano.ramos.p@gmail.com
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Amanda Costa"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              (51) 99445-6366
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              stephano.ramos.p@gmail.com
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
+                  {users?.map((user) => (
+                    <>
+                      <ListItem
+                        alignItems="flex-start"
+                        secondaryAction={
+                          <>
+                            <Link
+                              href={{
+                                pathname: "/dashboard/usuarios/[id]/editar",
+                                query: { id: user.id },
+                              }}
+                              passHref
+                              legacyBehavior
+                            >
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                sx={{ mr: 0.1 }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Link>
+                            <IconButton edge="end" aria-label="delete">
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        }
+                      >
+                        <ListItemText
+                          primary={`${user.firstName} ${user.lastName}`}
+                          secondary={
+                            <>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {user.cellPhone}
+                                </Typography>
+                              </Box>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <EmailIcon sx={{ mr: 1 }} fontSize="small" />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {user.email}
+                                </Typography>
+                              </Box>
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <Divider />
+                    </>
+                  ))}
                 </List>
               </CardContent>
             </Card>

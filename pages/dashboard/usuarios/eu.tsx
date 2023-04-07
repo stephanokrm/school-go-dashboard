@@ -4,15 +4,15 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import React from "react";
-import Avatar from "@mui/material/Avatar";
-import { ControlledTextField } from "../../../../src/components/ControlledTextField";
+import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useGetUserByMeQuery } from "../../../../src/hooks/queries/useGetUserByMeQuery";
-import { useUserUpdateMutation } from "../../../../src/hooks/mutations/useUserUpdateMutation";
+import { useGetUserByMeQuery } from "../../../src/hooks/queries/useGetUserByMeQuery";
+import { useUserUpdateMutation } from "../../../src/hooks/mutations/useUserUpdateMutation";
 import Alert from "@mui/material/Alert";
+import CardHeader from "@mui/material/CardHeader";
 
 const schema = yup
   .object({
@@ -25,7 +25,7 @@ const schema = yup
   .required();
 
 export type UserEditFieldValues = yup.InferType<typeof schema>;
-export default function UsersEdit() {
+export default function UsersMe() {
   const { data: user, isLoading: isLoadingQuery } = useGetUserByMeQuery();
   const { control, handleSubmit, setError } = useForm<UserEditFieldValues>({
     resolver: yupResolver(schema),
@@ -49,16 +49,10 @@ export default function UsersEdit() {
         <Grid container>
           <Grid item xs={12}>
             <Card>
+              <CardHeader title="Minha Conta" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} display="flex" justifyContent="center">
-                      <Avatar
-                        alt={user?.firstName}
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 150, height: 150 }}
-                      />
-                    </Grid>
                     {message && (
                       <Grid item xs={12}>
                         <Alert severity="error">{message}</Alert>

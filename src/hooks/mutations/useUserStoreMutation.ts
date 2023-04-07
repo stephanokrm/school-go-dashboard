@@ -1,35 +1,35 @@
-import { useQueryClient } from "@tanstack/react-query";
 import axios from "../../axios";
 import { User, RawUser, Resource } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
 import { userToRawUser } from "../../maps/userToRawUser";
-import { UserEditFieldValues } from "../../../pages/dashboard/usuarios/[id]/editar";
 import { UseFormSetError } from "react-hook-form";
+import { UserStoreFieldValues } from "../../../pages/dashboard/usuarios/cadastrar";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
 type Response = Resource<RawUser>;
 type SuccessResponse = AxiosResponse<Response>;
-interface UseUserUpdateMutation {
-  setError: UseFormSetError<UserEditFieldValues>;
+interface UseUserStoreMutation {
+  setError: UseFormSetError<UserStoreFieldValues>;
 }
 
-export const useUserUpdateMutation = ({ setError }: UseUserUpdateMutation) => {
+export const useUserStoreMutation = ({ setError }: UseUserStoreMutation) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
-  return useFormMutation<SuccessResponse, UserEditFieldValues>(
+  return useFormMutation<SuccessResponse, UserStoreFieldValues>(
     async (user) => {
       return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/${user.id}`,
-        {
-          ...(await userToRawUser(user as User)),
-          _method: "PUT",
-        }
+        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user`,
+        await userToRawUser(user as User)
       );
     },
     {
       setError,
       onSuccess: async () => {
         await queryClient.invalidateQueries(["getUserByMe"]);
+        await router.push("/dashboard/usuarios");
       },
     }
   );

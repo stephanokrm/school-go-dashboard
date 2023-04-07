@@ -18,9 +18,9 @@ import RouteIcon from "@mui/icons-material/Route";
 import PersonIcon from "@mui/icons-material/Person";
 import FaceIcon from "@mui/icons-material/Face";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { Avatar } from "@mui/material";
 import { useGetUserByMeQuery } from "../hooks/queries/useGetUserByMeQuery";
 import { useLogoutMutation } from "../hooks/mutations/useLogoutMutation";
@@ -51,8 +51,13 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
 
   const menus = [
     { text: "Itinerários", href: "/dashboard/itinerarios", Icon: RouteIcon },
-    { text: "Escolas", href: "/dashboard/escolas", Icon: SchoolIcon },
     { text: "Alunos", href: "/dashboard/alunos", Icon: FaceIcon },
+    { text: "Escolas", href: "/dashboard/escolas", Icon: SchoolIcon },
+    {
+      text: "Motoristas",
+      href: "/dashboard/motoristas",
+      Icon: DirectionsBusFilledIcon,
+    },
     {
       text: "Responsáveis",
       href: "/dashboard/responsaveis",
@@ -81,14 +86,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
       <Divider />
       <List>
         <ListItem key="Stephano" disablePadding>
-          <Link
-            href={{
-              pathname: "/dashboard/usuarios/[user]/editar",
-              query: { user: user?.id },
-            }}
-            passHref
-            legacyBehavior
-          >
+          <Link href="/dashboard/usuarios/eu" passHref legacyBehavior>
             <ListItemButton>
               <ListItemIcon>
                 <Avatar
