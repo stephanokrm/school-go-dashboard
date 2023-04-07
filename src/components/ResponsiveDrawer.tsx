@@ -50,15 +50,15 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   const logout = () => mutate({});
 
   const menus = [
-    { text: "Itinerários", href: "/itinerarios", Icon: RouteIcon },
-    { text: "Escolas", href: "/escolas", Icon: SchoolIcon },
-    { text: "Alunos", href: "/alunos", Icon: FaceIcon },
+    { text: "Itinerários", href: "/dashboard/itinerarios", Icon: RouteIcon },
+    { text: "Escolas", href: "/dashboard/escolas", Icon: SchoolIcon },
+    { text: "Alunos", href: "/dashboard/alunos", Icon: FaceIcon },
     {
       text: "Responsáveis",
-      href: "/responsaveis",
+      href: "/dashboard/responsaveis",
       Icon: SupervisedUserCircleIcon,
     },
-    { text: "Usuários", href: "/usuarios", Icon: PersonIcon },
+    { text: "Usuários", href: "/dashboard/usuarios", Icon: PersonIcon },
   ];
   const drawer = (
     <Box onClick={handleDrawerToggle}>
@@ -83,7 +83,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
         <ListItem key="Stephano" disablePadding>
           <Link
             href={{
-              pathname: "/usuarios/[user]/editar",
+              pathname: "/dashboard/usuarios/[user]/editar",
               query: { user: user?.id },
             }}
             passHref

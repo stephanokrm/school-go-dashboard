@@ -3,54 +3,58 @@ import Head from "next/head";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import React from "react";
-import Avatar from "@mui/material/Avatar";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { ControlledTextField } from "../../../src/components/ControlledTextField";
+import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useGetUserByMeQuery } from "../../../src/hooks/queries/useGetUserByMeQuery";
+import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
+import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
 
 const schema = yup
   .object({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    email: yup.string().email().required(),
-    cellPhone: yup.string().required(),
+    address: yup.string().required(),
+    school: yup.string().required(),
+    responsible: yup.string().required(),
+    goes: yup.boolean().required(),
+    return: yup.boolean().required(),
   })
   .required();
 
 type FormData = yup.InferType<typeof schema>;
-export default function UsersEdit() {
-  const { data: user, isLoading: isLoadingQuery } = useGetUserByMeQuery();
+
+export default function StudentsCreate() {
   const { control, handleSubmit } = useForm<FormData>({
     resolver: yupResolver(schema),
-    values: user,
   });
   const onSubmit = (data: FormData) => console.log(data);
 
-  const isLoading = isLoadingQuery;
+  const message = "S";
+  const isLoading = false;
 
   return (
     <>
       <Head>
-        <title>SchoolGo - {user?.firstName}</title>
+        <title>SchoolGo - Cadastrar Aluno</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
+              <CardHeader title="Cadastrar Aluno" />
               <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <Grid container spacing={2}>
-                    <Grid item xs={12} display="flex" justifyContent="center">
-                      <Avatar
-                        alt={user?.firstName}
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 150, height: 150 }}
-                      />
-                    </Grid>
+                    {message && (
+                      <Grid item xs={12}>
+                        <Alert severity="error">{message}</Alert>
+                      </Grid>
+                    )}
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
@@ -65,20 +69,45 @@ export default function UsersEdit() {
                         label="Sobrenome"
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                      <ControlledTextField
+                    <Grid item xs={12}>
+                      <ControlledAutocomplete
+                        loading
+                        options={[]}
                         control={control}
-                        name="email"
-                        type="email"
-                        label="E-mail"
+                        name="address"
+                        label="Endereço"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                      <ControlledTextField
+                      <ControlledAutocomplete
+                        loading
+                        options={[]}
                         control={control}
-                        name="cellPhone"
-                        type="tel"
-                        label="Celular"
+                        name="school"
+                        label="Escola"
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <ControlledAutocomplete
+                        loading
+                        options={["dsadasdas", "dsadsadas"]}
+                        control={control}
+                        name="responsible"
+                        label="Responsável"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <ControlledCheckbox
+                        name="goes"
+                        label="Ida"
+                        control={control}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <ControlledCheckbox
+                        name="return"
+                        label="Volta"
+                        control={control}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
@@ -88,7 +117,7 @@ export default function UsersEdit() {
                         type="submit"
                         variant="contained"
                       >
-                        Editar
+                        Cadastrar
                       </LoadingButton>
                     </Grid>
                   </Grid>

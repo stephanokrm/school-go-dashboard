@@ -24,13 +24,13 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ControlledTextField } from "../../src/components/ControlledTextField";
+import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { ControlledAutocomplete } from "../../src/components/ControlledAutocomplete";
+import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
 import Responsible from "../responsaveis";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { ControlledCheckbox } from "../../src/components/ControlledCheckbox";
+import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
 
 const schema = yup
   .object({

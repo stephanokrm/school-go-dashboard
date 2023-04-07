@@ -31,7 +31,11 @@ export default function Itineraries() {
             <Card>
               <CardHeader
                 action={
-                  <Link href="/itinerarios/cadastrar" passHref legacyBehavior>
+                  <Link
+                    href="/dashboard/itinerarios/cadastrar"
+                    passHref
+                    legacyBehavior
+                  >
                     <IconButton aria-label="settings">
                       <AddIcon />
                     </IconButton>

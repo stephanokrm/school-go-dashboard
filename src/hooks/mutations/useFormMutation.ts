@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { AxiosError } from "axios";
-import { FieldPath, FieldValues, useForm } from "react-hook-form";
+import { FieldPath, FieldValues, UseFormSetError } from "react-hook-form";
 import {
   MutationFunction,
   useMutation,
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query";
+
+const snakeToCamel = <TVariables extends FieldValues>(
+  str: FieldPath<TVariables>
+) =>
+  str
+    .toLowerCase()
+    .replace(/([-_][a-z])/g, (group) =>
+      group.toUpperCase().replace("-", "").replace("_", "")
+    ) as FieldPath<TVariables>;
 
 type ServiceError<TFieldValues extends FieldValues> = AxiosError<{
   message?: string;
@@ -17,16 +26,23 @@ type UseFormMutationResult<TData, TError, TVariables, TContext> = {
   message?: string;
 } & UseMutationResult<TData, TError, TVariables, TContext>;
 
+type UseFormMutationOptions<
+  TData,
+  TVariables extends FieldValues,
+  TContext = unknown
+> = Omit<
+  UseMutationOptions<TData, ServiceError<TVariables>, TVariables, TContext>,
+  "mutationFn"
+> & {
+  setError?: UseFormSetError<TVariables>;
+};
 export const useFormMutation = <
   TData,
   TVariables extends FieldValues,
   TContext = unknown
 >(
   mutationFn: MutationFunction<TData, TVariables>,
-  options?: Omit<
-    UseMutationOptions<TData, ServiceError<TVariables>, TVariables, TContext>,
-    "mutationFn"
-  >
+  options?: UseFormMutationOptions<TData, TVariables, TContext>
 ): UseFormMutationResult<
   TData,
   ServiceError<TVariables>,
@@ -34,7 +50,6 @@ export const useFormMutation = <
   TContext
 > => {
   const [message, setMessage] = useState<string>();
-  const { setError } = useForm<TVariables>();
 
   const mutation = useMutation<
     TData,
@@ -43,6 +58,11 @@ export const useFormMutation = <
     TContext
   >(mutationFn, {
     ...options,
+    onSuccess: (...args) => {
+      setMessage(undefined);
+
+      options?.onSuccess?.(...args);
+    },
     onError: async (error) => {
       if (error.response?.data.message) {
         setMessage(error.response.data.message);
@@ -62,7 +82,7 @@ export const useFormMutation = <
             return errors && errors.length > 0;
           })
           .forEach((field) => {
-            setError?.(field, {
+            options?.setError?.(snakeToCamel<TVariables>(field), {
               message: error.response?.data?.errors?.[field]?.[0],
             });
           });

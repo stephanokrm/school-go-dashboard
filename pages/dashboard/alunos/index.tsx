@@ -1,28 +1,30 @@
 import Container from "@mui/material/Container";
 import Head from "next/head";
+import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
+import SchoolIcon from "@mui/icons-material/School";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import EditIcon from "@mui/icons-material/Edit";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
-import Link from "next/link";
 
-export default function Schools() {
+export default function Students() {
   return (
     <>
       <Head>
-        <title>SchoolGo - Escolas</title>
+        <title>SchoolGo - Alunos</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
@@ -30,18 +32,21 @@ export default function Schools() {
             <Card>
               <CardHeader
                 action={
-                  <Link href="/escolas/cadastrar" passHref legacyBehavior>
+                  <Link
+                    href="/dashboard/alunos/cadastrar"
+                    passHref
+                    legacyBehavior
+                  >
                     <IconButton aria-label="settings">
                       <AddIcon />
                     </IconButton>
                   </Link>
                 }
-                title="Escolas"
+                title="Alunos"
               />
               <CardContent sx={{ padding: 0 }}>
                 <List sx={{ width: "100%" }}>
                   <ListItem
-                    alignItems="flex-start"
                     secondaryAction={
                       <>
                         <IconButton
@@ -58,7 +63,7 @@ export default function Schools() {
                     }
                   >
                     <ListItemText
-                      primary="Colégio Ulbra Cristo Redentor"
+                      primary="Stephano Ramos"
                       secondary={
                         <>
                           <Box display="flex" alignItems="center" mt={1}>
@@ -68,13 +73,27 @@ export default function Schools() {
                               Canoas - RS, 92030-320
                             </Typography>
                           </Box>
+                          <Box display="flex" alignItems="center" mt={1}>
+                            <SchoolIcon sx={{ mr: 1 }} fontSize="small" />
+                            <Typography variant="subtitle2" display="inline">
+                              Colégio Cristo Redentor
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" mt={1}>
+                            <SupervisedUserCircleIcon
+                              sx={{ mr: 1 }}
+                              fontSize="small"
+                            />
+                            <Typography variant="subtitle2" display="inline">
+                              André
+                            </Typography>
+                          </Box>
                         </>
                       }
                     />
                   </ListItem>
                   <Divider />
                   <ListItem
-                    alignItems="flex-start"
                     secondaryAction={
                       <>
                         <IconButton
@@ -91,14 +110,29 @@ export default function Schools() {
                     }
                   >
                     <ListItemText
-                      primary="Colégio Espírito Santo"
+                      primary="Amanda Costa"
                       secondary={
                         <>
                           <Box display="flex" alignItems="center" mt={1}>
                             <LocationOnIcon sx={{ mr: 1 }} fontSize="small" />
                             <Typography variant="subtitle2" display="inline">
-                              R. Tamôio, 3393 - Nossa Sra. das Gracas, Canoas -
-                              RS, 92120-002
+                              Av. Inconfidência, 1231 Bairro - Mal. Rondon,
+                              Canoas - RS, 92030-320
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" mt={1}>
+                            <SchoolIcon sx={{ mr: 1 }} fontSize="small" />
+                            <Typography variant="subtitle2" display="inline">
+                              Colégio Espírito Santo
+                            </Typography>
+                          </Box>
+                          <Box display="flex" alignItems="center" mt={1}>
+                            <SupervisedUserCircleIcon
+                              sx={{ mr: 1 }}
+                              fontSize="small"
+                            />
+                            <Typography variant="subtitle2" display="inline">
+                              Matheus
                             </Typography>
                           </Box>
                         </>

@@ -49,7 +49,7 @@ export const useLoginMutation = <TFieldValues extends FieldValues>() => {
         });
 
         await queryClient.invalidateQueries(["getUserByMe"]);
-        await router.push("/");
+        await router.push("/dashboard/itinerarios");
       },
     }
   );

@@ -9,10 +9,10 @@ const browserAxios = () => {
   });
 
   instance.interceptors.request.use((config) => {
-    const token = new Cookies().get("authorization");
+    const authorization = new Cookies().get("authorization");
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (authorization) {
+      config.headers.Authorization = `Bearer ${authorization}`;
     }
 
     return config;

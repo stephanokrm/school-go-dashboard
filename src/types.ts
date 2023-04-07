@@ -3,7 +3,7 @@ export type Resource<T> = {
 };
 
 export type RawUser = {
-  id: string;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
@@ -17,7 +17,7 @@ export type RawUser = {
 };
 
 export type User = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
