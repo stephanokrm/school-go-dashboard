@@ -29,7 +29,7 @@ export type UserEditFieldValues = yup.InferType<typeof schema>;
 export default function UsersEdit() {
   const router = useRouter();
   const { id } = router.query;
-  const { data: user, isLoading: isLoadingQuery } = useGetUserByIdQuery(
+  const { data: user, isLoading: isLoadingUser } = useGetUserByIdQuery(
     id as string | undefined
   );
   const { control, handleSubmit, setError } = useForm<UserEditFieldValues>({
@@ -38,12 +38,12 @@ export default function UsersEdit() {
   });
   const {
     mutate,
-    isLoading: isMutating,
+    isLoading: isUpdatingUser,
     message,
   } = useUserUpdateMutation({ setError });
   const onSubmit = handleSubmit((user) => mutate(user));
 
-  const isLoading = isLoadingQuery || isMutating;
+  const isLoading = isLoadingUser || isUpdatingUser;
 
   return (
     <>
@@ -68,6 +68,7 @@ export default function UsersEdit() {
                         control={control}
                         name="firstName"
                         label="Nome"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -75,6 +76,7 @@ export default function UsersEdit() {
                         control={control}
                         name="lastName"
                         label="Sobrenome"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -83,6 +85,7 @@ export default function UsersEdit() {
                         name="email"
                         type="email"
                         label="E-mail"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -91,6 +94,7 @@ export default function UsersEdit() {
                         name="cellPhone"
                         type="tel"
                         label="Celular"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

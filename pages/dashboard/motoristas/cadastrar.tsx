@@ -9,41 +9,46 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
-import { useUserStoreMutation } from "../../../src/hooks/mutations/useUserStoreMutation";
+import { useDriverStoreMutation } from "../../../src/hooks/mutations/useDriverStoreMutation";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
 
 const schema = yup
   .object({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup.string().email().required(),
-    cellPhone: yup.string().required(),
+    user: yup
+      .object({
+        firstName: yup.string().required(),
+        lastName: yup.string().required(),
+        email: yup.string().email().required(),
+        cellPhone: yup.string().required(),
+      })
+      .required(),
+    license: yup.string().required(),
   })
   .required();
 
-export type UserStoreFieldValues = yup.InferType<typeof schema>;
-export default function UsersCreate() {
-  const { control, handleSubmit, setError } = useForm<UserStoreFieldValues>({
+export type DriverStoreFieldValues = yup.InferType<typeof schema>;
+export default function DriversCreate() {
+  const { control, handleSubmit, setError } = useForm<DriverStoreFieldValues>({
     resolver: yupResolver(schema),
   });
   const {
     mutate,
-    isLoading: isStoringUser,
+    isLoading: isStoringDriver,
     message,
-  } = useUserStoreMutation({ setError });
-  const onSubmit = handleSubmit((user) => mutate(user));
+  } = useDriverStoreMutation({ setError });
+  const onSubmit = handleSubmit((driver) => mutate(driver));
 
   return (
     <>
       <Head>
-        <title>SchoolGo - Cadastrar Usuário</title>
+        <title>SchoolGo - Cadastrar Motorista</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Cadastrar Usuário" />
+              <CardHeader title="Cadastrar Motorista" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
@@ -55,21 +60,21 @@ export default function UsersCreate() {
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="firstName"
+                        name="user.firstName"
                         label="Nome"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="lastName"
+                        name="user.lastName"
                         label="Sobrenome"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="email"
+                        name="user.email"
                         type="email"
                         label="E-mail"
                       />
@@ -77,14 +82,21 @@ export default function UsersCreate() {
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="cellPhone"
+                        name="user.cellPhone"
                         type="tel"
                         label="Celular"
                       />
                     </Grid>
+                    <Grid item xs={12} md={6}>
+                      <ControlledTextField
+                        control={control}
+                        name="license"
+                        label="CNH"
+                      />
+                    </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
                       <LoadingButton
-                        loading={isStoringUser}
+                        loading={isStoringDriver}
                         size="large"
                         type="submit"
                         variant="contained"

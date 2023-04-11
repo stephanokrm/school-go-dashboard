@@ -9,7 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import EditIcon from "@mui/icons-material/Edit";
-import FaceIcon from "@mui/icons-material/Face";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,8 +18,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
+import Link from "next/link";
+import { useGetDriversQuery } from "../../../src/hooks/queries/useGetDriversQuery";
 
 export default function Drivers() {
+  const { data: drivers, isLoading: isLoadingDrivers } = useGetDriversQuery();
+
   return (
     <>
       <Head>
@@ -31,89 +35,89 @@ export default function Drivers() {
             <Card>
               <CardHeader
                 action={
-                  <IconButton aria-label="settings">
-                    <AddIcon />
-                  </IconButton>
+                  <Link
+                    href="/dashboard/motoristas/cadastrar"
+                    passHref
+                    legacyBehavior
+                  >
+                    <IconButton aria-label="settings">
+                      <AddIcon />
+                    </IconButton>
+                  </Link>
                 }
                 title="Motoristas"
               />
               <CardContent sx={{ padding: 0 }}>
                 <List sx={{ width: "100%" }}>
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Stephano Ramos"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              (51) 99445-6366
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              stephano.ramos.p@gmail.com
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Amanda Costa"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              (51) 99445-6366
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              stephano.ramos.p@gmail.com
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
+                  {drivers?.map((driver) => (
+                    <>
+                      <ListItem
+                        alignItems="flex-start"
+                        secondaryAction={
+                          <>
+                            <Link
+                              href={{
+                                pathname: "/dashboard/motoristas/[id]/editar",
+                                query: { id: driver.id },
+                              }}
+                              passHref
+                              legacyBehavior
+                            >
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                sx={{ mr: 0.1 }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Link>
+                            <IconButton edge="end" aria-label="delete">
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        }
+                      >
+                        <ListItemText
+                          primary={`${driver.user.firstName} ${driver.user.lastName}`}
+                          secondary={
+                            <>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {driver.user.cellPhone}
+                                </Typography>
+                              </Box>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <EmailIcon sx={{ mr: 1 }} fontSize="small" />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {driver.user.email}
+                                </Typography>
+                              </Box>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <ContactPageIcon
+                                  sx={{ mr: 1 }}
+                                  fontSize="small"
+                                />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {driver.license}
+                                </Typography>
+                              </Box>
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <Divider />
+                    </>
+                  ))}
                 </List>
               </CardContent>
             </Card>

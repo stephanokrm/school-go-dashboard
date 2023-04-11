@@ -16,7 +16,7 @@ export const useLogoutMutation = () => {
       );
     },
     {
-      onSettled: async () => {
+      onMutate: async () => {
         removeCookie("authorization");
 
         await queryClient.clear();

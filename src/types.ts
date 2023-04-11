@@ -33,3 +33,15 @@ export type User = {
   deletedAt: Date | null;
   deletedAtISO: string | null;
 };
+
+export type RawDriver = {
+  id: number;
+  license: string;
+  user: RawUser;
+};
+
+export type Driver = {
+  id: number;
+  license: string;
+  user: User;
+};

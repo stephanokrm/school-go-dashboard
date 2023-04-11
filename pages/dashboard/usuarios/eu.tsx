@@ -26,19 +26,19 @@ const schema = yup
 
 export type UserEditFieldValues = yup.InferType<typeof schema>;
 export default function UsersMe() {
-  const { data: user, isLoading: isLoadingQuery } = useGetUserByMeQuery();
+  const { data: user, isLoading: isLoadingUser } = useGetUserByMeQuery();
   const { control, handleSubmit, setError } = useForm<UserEditFieldValues>({
     resolver: yupResolver(schema),
     values: user,
   });
   const {
     mutate,
-    isLoading: isMutating,
+    isLoading: isUpdatingUser,
     message,
   } = useUserUpdateMutation({ setError });
   const onSubmit = handleSubmit((user) => mutate(user));
 
-  const isLoading = isLoadingQuery || isMutating;
+  const isLoading = isLoadingUser || isUpdatingUser;
 
   return (
     <>
@@ -63,6 +63,7 @@ export default function UsersMe() {
                         control={control}
                         name="firstName"
                         label="Nome"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -70,6 +71,7 @@ export default function UsersMe() {
                         control={control}
                         name="lastName"
                         label="Sobrenome"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -78,6 +80,7 @@ export default function UsersMe() {
                         name="email"
                         type="email"
                         label="E-mail"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -86,6 +89,7 @@ export default function UsersMe() {
                         name="cellPhone"
                         type="tel"
                         label="Celular"
+                        loading={isLoadingUser}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
@@ -95,7 +99,7 @@ export default function UsersMe() {
                         type="submit"
                         variant="contained"
                       >
-                        Editar
+                        Atualizar
                       </LoadingButton>
                     </Grid>
                   </Grid>

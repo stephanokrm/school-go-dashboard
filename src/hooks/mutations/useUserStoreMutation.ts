@@ -27,8 +27,12 @@ export const useUserStoreMutation = ({ setError }: UseUserStoreMutation) => {
     },
     {
       setError,
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["getUserByMe"]);
+      onSuccess: async (response) => {
+        await queryClient.invalidateQueries(["getUsers"]);
+        await queryClient.invalidateQueries([
+          "getUserById",
+          response.data.data.id,
+        ]);
         await router.push("/dashboard/usuarios");
       },
     }

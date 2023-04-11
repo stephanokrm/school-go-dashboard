@@ -6,31 +6,15 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import SchoolIcon from "@mui/icons-material/School";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import EditIcon from "@mui/icons-material/Edit";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ListItemText from "@mui/material/ListItemText";
-import Box from "@mui/material/Box";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
 import React from "react";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
-import Responsible from "../responsaveis";
 import { DateCalendar } from "@mui/x-date-pickers";
-import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
+import { useGetDriversQuery } from "../../../src/hooks/queries/useGetDriversQuery";
 
 const schema = yup
   .object({
@@ -44,6 +28,8 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 export default function ItinerariesCreate() {
+  const { data: drivers = [], isLoading: isLoadingDrivers } =
+    useGetDriversQuery();
   const { control, handleSubmit, getValues } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
@@ -77,11 +63,14 @@ export default function ItinerariesCreate() {
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledAutocomplete
-                        loading
-                        options={[]}
+                        loading={isLoadingDrivers}
+                        options={drivers}
                         control={control}
                         name="driver"
                         label="Motorista"
+                        getOptionLabel={(driver) =>
+                          `${driver.user.firstName} ${driver.user.lastName}`
+                        }
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>

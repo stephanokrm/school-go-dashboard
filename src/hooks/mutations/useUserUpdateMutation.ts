@@ -6,6 +6,8 @@ import { useFormMutation } from "./useFormMutation";
 import { userToRawUser } from "../../maps/userToRawUser";
 import { UserEditFieldValues } from "../../../pages/dashboard/usuarios/[id]/editar";
 import { UseFormSetError } from "react-hook-form";
+import { useGetUserByMeQuery } from "../queries/useGetUserByMeQuery";
+import { useRouter } from "next/router";
 
 type Response = Resource<RawUser>;
 type SuccessResponse = AxiosResponse<Response>;
@@ -14,7 +16,9 @@ interface UseUserUpdateMutation {
 }
 
 export const useUserUpdateMutation = ({ setError }: UseUserUpdateMutation) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
+  const { data: me } = useGetUserByMeQuery();
 
   return useFormMutation<SuccessResponse, UserEditFieldValues>(
     async (user) => {
@@ -28,8 +32,17 @@ export const useUserUpdateMutation = ({ setError }: UseUserUpdateMutation) => {
     },
     {
       setError,
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(["getUserByMe"]);
+      onSuccess: async (response) => {
+        const id = response.data.data.id;
+
+        await queryClient.invalidateQueries(["getUsers"]);
+        await queryClient.invalidateQueries(["getUserById", id]);
+
+        if (me?.id === id) {
+          await queryClient.invalidateQueries(["getUserByMe"]);
+        }
+
+        await router.push("/dashboard/usuarios");
       },
     }
   );
