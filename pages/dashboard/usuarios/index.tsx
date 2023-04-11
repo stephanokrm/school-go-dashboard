@@ -19,9 +19,14 @@ import Divider from "@mui/material/Divider";
 import React from "react";
 import Link from "next/link";
 import { useGetUsersQuery } from "../../../src/hooks/queries/useGetUsersQuery";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function Users() {
-  const { data: users } = useGetUsersQuery();
+  const {
+    data: users,
+    isLoading: isLoadingUsers,
+    isFetching: isFetchingUsers,
+  } = useGetUsersQuery();
 
   return (
     <>
@@ -105,6 +110,31 @@ export default function Users() {
                       <Divider />
                     </>
                   ))}
+                  {isLoadingUsers || isFetchingUsers ? (
+                    <ListItem alignItems="flex-start">
+                      <ListItemText
+                        primary={
+                          <Skeleton variant="rectangular" width="100%" />
+                        }
+                        secondary={
+                          <>
+                            <Box display="flex" alignItems="center" mt={1}>
+                              <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
+                              <Typography variant="subtitle2" display="inline">
+                                <Skeleton variant="rectangular" width="100%" />
+                              </Typography>
+                            </Box>
+                            <Box display="flex" alignItems="center" mt={1}>
+                              <EmailIcon sx={{ mr: 1 }} fontSize="small" />
+                              <Typography variant="subtitle2" display="inline">
+                                <Skeleton variant="rectangular" width="100%" />
+                              </Typography>
+                            </Box>
+                          </>
+                        }
+                      />
+                    </ListItem>
+                  ) : null}
                 </List>
               </CardContent>
             </Card>
