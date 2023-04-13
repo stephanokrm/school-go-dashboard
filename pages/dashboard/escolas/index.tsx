@@ -17,8 +17,12 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
 import Link from "next/link";
+import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
 
 export default function Schools() {
+  const { data: schools = [], isLoading: isLoadingSchools } =
+    useGetSchoolsQuery();
+
   return (
     <>
       <Head>
@@ -44,71 +48,48 @@ export default function Schools() {
               />
               <CardContent sx={{ padding: 0 }}>
                 <List sx={{ width: "100%" }}>
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Colégio Ulbra Cristo Redentor"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <LocationOnIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              Av. Inconfidência, 1231 Bairro - Mal. Rondon,
-                              Canoas - RS, 92030-320
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Colégio Espírito Santo"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <LocationOnIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              R. Tamôio, 3393 - Nossa Sra. das Gracas, Canoas -
-                              RS, 92120-002
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
+                  {schools.map((school) => (
+                    <>
+                      <ListItem
+                        alignItems="flex-start"
+                        secondaryAction={
+                          <>
+                            <IconButton
+                              edge="end"
+                              aria-label="delete"
+                              sx={{ mr: 0.1 }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton edge="end" aria-label="delete">
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        }
+                      >
+                        <ListItemText
+                          primary={school.name}
+                          secondary={
+                            <>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <LocationOnIcon
+                                  sx={{ mr: 1 }}
+                                  fontSize="small"
+                                />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {school.address.description}
+                                </Typography>
+                              </Box>
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <Divider />
+                    </>
+                  ))}
                 </List>
               </CardContent>
             </Card>

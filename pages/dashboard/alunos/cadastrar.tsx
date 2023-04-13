@@ -13,12 +13,19 @@ import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
 import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
+import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
+import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
 
 const schema = yup
   .object({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    address: yup.string().required(),
+    address: yup
+      .object({
+        description: yup.string().required(),
+        place: yup.string().required(),
+      })
+      .required(),
     school: yup.string().required(),
     responsible: yup.string().required(),
     goes: yup.boolean().required(),
@@ -29,6 +36,8 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 export default function StudentsCreate() {
+  const { data: schools = [], isLoading: isLoadingSchools } =
+    useGetSchoolsQuery();
   const { control, handleSubmit } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
@@ -70,21 +79,20 @@ export default function StudentsCreate() {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <ControlledAutocomplete
-                        loading
-                        options={[]}
+                      <ControlledGoogleMaps
+                        label="Endereço"
                         control={control}
                         name="address"
-                        label="Endereço"
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledAutocomplete
-                        loading
-                        options={[]}
+                        loading={isLoadingSchools}
+                        options={schools}
                         control={control}
                         name="school"
                         label="Escola"
+                        getOptionLabel={(school) => school.name}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>

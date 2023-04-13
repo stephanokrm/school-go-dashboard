@@ -11,17 +11,23 @@ import * as yup from "yup";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
 import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
 import { ControlledTimePicker } from "../../../src/components/ControlledTimePicker";
+import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
+import { useSchoolStoreMutation } from "../../../src/hooks/mutations/useSchoolStoreMutation";
 
 const schema = yup
   .object({
     name: yup.string().required(),
-    address: yup.string().required(),
-    morning: yup.boolean().required(),
-    afternoon: yup.boolean().required(),
-    night: yup.boolean().required(),
+    address: yup
+      .object({
+        description: yup.string().required(),
+        place: yup.string().required(),
+      })
+      .required(),
+    morning: yup.boolean(),
+    afternoon: yup.boolean(),
+    night: yup.boolean(),
     morningEntryTime: yup.date().when("morning", {
       is: true,
       then: (schema) => schema.required(),
@@ -54,18 +60,21 @@ const schema = yup
   })
   .required();
 
-type FormData = yup.InferType<typeof schema>;
+export type SchoolStoreFieldValues = yup.InferType<typeof schema>;
 
 export default function SchoolsCreate() {
-  const { control, handleSubmit, watch, formState } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
-  const onSubmit = (data: FormData) => console.log(data);
+  const { control, handleSubmit, watch, getValues, setError } =
+    useForm<SchoolStoreFieldValues>({
+      resolver: yupResolver(schema),
+    });
 
-  const message = "S";
-  const isLoading = false;
+  const {
+    mutate,
+    isLoading: isStoringSchool,
+    message,
+  } = useSchoolStoreMutation({ setError });
 
-  console.log({ formState });
+  const onSubmit = handleSubmit((school) => mutate(school));
 
   return (
     <>
@@ -78,7 +87,7 @@ export default function SchoolsCreate() {
             <Card>
               <CardHeader title="Cadastrar Escola" />
               <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
                     {message && (
                       <Grid item xs={12}>
@@ -93,12 +102,10 @@ export default function SchoolsCreate() {
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                      <ControlledAutocomplete
-                        loading
-                        options={[]}
+                      <ControlledGoogleMaps
+                        label="Endereço"
                         control={control}
                         name="address"
-                        label="Endereço"
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -186,7 +193,7 @@ export default function SchoolsCreate() {
                     )}
                     <Grid item xs={12} display="flex" justifyContent="end">
                       <LoadingButton
-                        loading={isLoading}
+                        loading={isStoringSchool}
                         size="large"
                         type="submit"
                         variant="contained"
