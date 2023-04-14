@@ -12,25 +12,12 @@ import Alert from "@mui/material/Alert";
 import { useDriverStoreMutation } from "../../../src/hooks/mutations/useDriverStoreMutation";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
+import { driversCreateSchema } from "../../../src/schemas";
 
-const schema = yup
-  .object({
-    user: yup
-      .object({
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
-        email: yup.string().email().required(),
-        cellPhone: yup.string().required(),
-      })
-      .required(),
-    license: yup.string().required(),
-  })
-  .required();
-
-export type DriverStoreFieldValues = yup.InferType<typeof schema>;
+export type DriverStoreFieldValues = yup.InferType<typeof driversCreateSchema>;
 export default function DriversCreate() {
   const { control, handleSubmit, setError } = useForm<DriverStoreFieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(driversCreateSchema),
   });
   const {
     mutate,

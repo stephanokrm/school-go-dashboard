@@ -15,31 +15,15 @@ import { ControlledAutocomplete } from "../../../src/components/ControlledAutoco
 import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
 import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
 import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
+import { studentsCreateSchema } from "../../../src/schemas";
 
-const schema = yup
-  .object({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    address: yup
-      .object({
-        description: yup.string().required(),
-        place: yup.string().required(),
-      })
-      .required(),
-    school: yup.string().required(),
-    responsible: yup.string().required(),
-    goes: yup.boolean().required(),
-    return: yup.boolean().required(),
-  })
-  .required();
-
-type FormData = yup.InferType<typeof schema>;
+type FormData = yup.InferType<typeof studentsCreateSchema>;
 
 export default function StudentsCreate() {
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
   const { control, handleSubmit } = useForm<FormData>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(studentsCreateSchema),
   });
   const onSubmit = (data: FormData) => console.log(data);
 

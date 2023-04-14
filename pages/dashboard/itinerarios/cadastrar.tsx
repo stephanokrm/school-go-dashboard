@@ -9,36 +9,28 @@ import Chip from "@mui/material/Chip";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
 import { DateCalendar } from "@mui/x-date-pickers";
 import { useGetDriversQuery } from "../../../src/hooks/queries/useGetDriversQuery";
-
-const schema = yup
-  .object({
-    driver: yup.string(),
-    school: yup.string(),
-    students: yup.string(),
-    direction: yup.boolean(),
-  })
-  .required();
-
-type FormData = yup.InferType<typeof schema>;
+import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
+import { itinerariesCreateSchema } from "../../../src/schemas";
+import { ItinerariesCreateFieldValues } from "../../../src/types";
 
 export default function ItinerariesCreate() {
   const { data: drivers = [], isLoading: isLoadingDrivers } =
     useGetDriversQuery();
-  const { control, handleSubmit, getValues } = useForm<FormData>({
-    resolver: yupResolver(schema),
-  });
-  const onSubmit = (data: FormData) => console.log(data);
+  const { data: schools = [], isLoading: isLoadingSchools } =
+    useGetSchoolsQuery();
+  const { control, handleSubmit, getValues } =
+    useForm<ItinerariesCreateFieldValues>({
+      resolver: yupResolver(itinerariesCreateSchema),
+    });
+  const onSubmit = (data: ItinerariesCreateFieldValues) => console.log(data);
 
   const message = "S";
   const isLoading = false;
-
-  console.log({ formState: getValues() });
 
   return (
     <>
@@ -75,11 +67,12 @@ export default function ItinerariesCreate() {
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledAutocomplete
-                        loading
-                        options={[]}
+                        loading={isLoadingSchools}
+                        options={schools}
                         control={control}
                         name="school"
                         label="Escola"
+                        getOptionLabel={(school) => school.name}
                       />
                     </Grid>
                     <Grid item xs={12}>

@@ -91,7 +91,7 @@ export function ControlledGoogleMaps<FieldValue extends FieldValues>(
           autoComplete
           includeInputInList
           filterSelectedOptions
-          value={value}
+          value={field.value ?? value}
           onChange={async (event: any, newValue: RawAddress | null) => {
             setOptions(newValue ? [newValue, ...options] : options);
             setValue(newValue);

@@ -8,41 +8,91 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
+import { ControlledTextField } from "../../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
-import { ControlledTimePicker } from "../../../src/components/ControlledTimePicker";
-import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
-import { useSchoolStoreMutation } from "../../../src/hooks/mutations/useSchoolStoreMutation";
-import { schoolsCreateSchema } from "../../../src/schemas";
+import { ControlledCheckbox } from "../../../../src/components/ControlledCheckbox";
+import { ControlledTimePicker } from "../../../../src/components/ControlledTimePicker";
+import { ControlledGoogleMaps } from "../../../../src/components/ControlledGoogleMaps";
+import { useSchoolUpdateMutation } from "../../../../src/hooks/mutations/useSchoolUpdateMutation";
+import { useRouter } from "next/router";
+import { useGetSchoolByIdQuery } from "../../../../src/hooks/queries/useGetSchoolByIdQuery";
 
-export type SchoolStoreFieldValues = yup.InferType<typeof schoolsCreateSchema>;
+const schema = yup
+  .object({
+    id: yup.number().required(),
+    name: yup.string().required(),
+    address: yup
+      .object({
+        description: yup.string().required(),
+        place: yup.string().required(),
+      })
+      .required(),
+    morning: yup.boolean(),
+    afternoon: yup.boolean(),
+    night: yup.boolean(),
+    morningEntryTime: yup.date().when("morning", {
+      is: true,
+      then: (schema) => schema.required(),
+    }),
+    morningDepartureTime: yup
+      .date()
+      .when("morning", {
+        is: true,
+        then: (schema) => schema.required(),
+      })
+      .when("morningEntryTime", ([morningEntryTime], schema) => {
+        return morningEntryTime ? schema.min(morningEntryTime) : schema;
+      }),
+    afternoonEntryTime: yup.date().when("afternoon", {
+      is: true,
+      then: (schema) => schema.required(),
+    }),
+    afternoonDepartureTime: yup.date().when("afternoon", {
+      is: true,
+      then: (schema) => schema.required(),
+    }),
+    nightEntryTime: yup.date().when("night", {
+      is: true,
+      then: (schema) => schema.required(),
+    }),
+    nightDepartureTime: yup.date().when("night", {
+      is: true,
+      then: (schema) => schema.required(),
+    }),
+  })
+  .required();
 
-export default function SchoolsCreate() {
-  const { control, handleSubmit, watch, getValues, setError } =
-    useForm<SchoolStoreFieldValues>({
-      resolver: yupResolver(schoolsCreateSchema),
+export type SchoolUpdateFieldValues = yup.InferType<typeof schema>;
+
+export default function SchoolsEdit() {
+  const router = useRouter();
+  const { id } = router.query;
+  const { data: school, isLoading: isLoadingSchool } = useGetSchoolByIdQuery(
+    id as string | undefined
+  );
+  const { control, handleSubmit, watch, setError } =
+    useForm<SchoolUpdateFieldValues>({
+      resolver: yupResolver(schema),
+      values: school,
     });
-
   const {
     mutate,
     isLoading: isStoringSchool,
     message,
-  } = useSchoolStoreMutation({ setError });
-
+  } = useSchoolUpdateMutation({ setError });
   const onSubmit = handleSubmit((school) => mutate(school));
 
   return (
     <>
       <Head>
-        <title>SchoolGo - Cadastrar Escola</title>
+        <title>SchoolGo - Editar Escola</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Cadastrar Escola" />
+              <CardHeader title="Editar Escola" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
@@ -155,7 +205,7 @@ export default function SchoolsCreate() {
                         type="submit"
                         variant="contained"
                       >
-                        Cadastrar
+                        Atualizar
                       </LoadingButton>
                     </Grid>
                   </Grid>

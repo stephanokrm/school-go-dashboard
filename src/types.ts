@@ -1,6 +1,13 @@
+// COMMON
+
+import * as yup from "yup";
+import { itinerariesCreateSchema } from "./schemas";
+
 export type Resource<T> = {
   data: T;
 };
+
+// MODELS
 
 export type RawUser = {
   id: number;
@@ -90,11 +97,17 @@ export type School = {
   morning: boolean;
   afternoon: boolean;
   night: boolean;
-  morningEntryTime?: string;
-  morningDepartureTime?: string;
-  afternoonEntryTime?: string;
-  afternoonDepartureTime?: string;
-  nightEntryTime?: string;
-  nightDepartureTime?: string;
+  morningEntryTime?: Date;
+  morningDepartureTime?: Date;
+  afternoonEntryTime?: Date;
+  afternoonDepartureTime?: Date;
+  nightEntryTime?: Date;
+  nightDepartureTime?: Date;
   address: Address;
 };
+
+// FIELD VALUES
+
+export type ItinerariesCreateFieldValues = yup.InferType<
+  typeof itinerariesCreateSchema
+>;

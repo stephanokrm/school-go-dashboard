@@ -3,6 +3,7 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 import { ptBR } from "@mui/x-date-pickers/locales";
 import { ptBR as dataGridPtBR } from "@mui/x-data-grid";
 import { ptBR as corePtBR } from "@mui/material/locale";
+import { amber } from "@mui/material/colors";
 
 export const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -14,6 +15,10 @@ export const poppins = Poppins({
 const theme = responsiveFontSizes(
   createTheme(
     {
+      palette: {
+        mode: "dark",
+        primary: amber,
+      },
       typography: {
         fontFamily: poppins.style.fontFamily,
       },

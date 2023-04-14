@@ -13,22 +13,13 @@ import { useGetUserByMeQuery } from "../../../src/hooks/queries/useGetUserByMeQu
 import { useUserUpdateMutation } from "../../../src/hooks/mutations/useUserUpdateMutation";
 import Alert from "@mui/material/Alert";
 import CardHeader from "@mui/material/CardHeader";
+import { usersEditSchema } from "../../../src/schemas";
 
-const schema = yup
-  .object({
-    id: yup.number().required(),
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup.string().email().required(),
-    cellPhone: yup.string().required(),
-  })
-  .required();
-
-export type UserEditFieldValues = yup.InferType<typeof schema>;
+export type UserEditFieldValues = yup.InferType<typeof usersEditSchema>;
 export default function UsersMe() {
   const { data: user, isLoading: isLoadingUser } = useGetUserByMeQuery();
   const { control, handleSubmit, setError } = useForm<UserEditFieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(usersEditSchema),
     values: user,
   });
   const {

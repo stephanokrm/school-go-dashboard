@@ -54,13 +54,22 @@ export default function Schools() {
                         alignItems="flex-start"
                         secondaryAction={
                           <>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              sx={{ mr: 0.1 }}
+                            <Link
+                              href={{
+                                pathname: "/dashboard/escolas/[id]/editar",
+                                query: { id: school.id },
+                              }}
+                              passHref
+                              legacyBehavior
                             >
-                              <EditIcon />
-                            </IconButton>
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                sx={{ mr: 0.1 }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Link>
                             <IconButton edge="end" aria-label="delete">
                               <DeleteIcon />
                             </IconButton>

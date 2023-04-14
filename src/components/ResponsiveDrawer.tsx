@@ -25,7 +25,7 @@ import { Avatar } from "@mui/material";
 import { useGetUserByMeQuery } from "../hooks/queries/useGetUserByMeQuery";
 import { useLogoutMutation } from "../hooks/mutations/useLogoutMutation";
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 interface Props {
   /**
@@ -68,7 +68,6 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   const drawer = (
     <Box onClick={handleDrawerToggle}>
       <Toolbar />
-      <Divider />
       <List>
         {menus.map(({ text, href, Icon }, index) => (
           <ListItem key={text} disablePadding>

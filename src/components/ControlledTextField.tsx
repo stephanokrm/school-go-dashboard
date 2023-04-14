@@ -33,6 +33,7 @@ export function ControlledTextField<FieldValue extends FieldValues>(
         <TextField
           {...field}
           {...rest}
+          value={field.value ?? ""}
           fullWidth
           error={!!fieldState.error}
           helperText={fieldState.error?.message}

@@ -12,20 +12,12 @@ import Alert from "@mui/material/Alert";
 import { useUserStoreMutation } from "../../../src/hooks/mutations/useUserStoreMutation";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
+import { usersCreateSchema } from "../../../src/schemas";
 
-const schema = yup
-  .object({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup.string().email().required(),
-    cellPhone: yup.string().required(),
-  })
-  .required();
-
-export type UserStoreFieldValues = yup.InferType<typeof schema>;
+export type UserStoreFieldValues = yup.InferType<typeof usersCreateSchema>;
 export default function UsersCreate() {
   const { control, handleSubmit, setError } = useForm<UserStoreFieldValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(usersCreateSchema),
   });
   const {
     mutate,
