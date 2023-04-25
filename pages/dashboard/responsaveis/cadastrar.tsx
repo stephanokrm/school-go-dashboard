@@ -8,32 +8,34 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
-import { useDriverStoreMutation } from "../../../src/hooks/mutations/useDriverStoreMutation";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { driversCreateSchema } from "../../../src/schemas";
-import { DriverCreateForm } from "../../../src/types";
-export default function DriversCreate() {
-  const { control, handleSubmit, setError } = useForm<DriverCreateForm>({
-    resolver: yupResolver(driversCreateSchema),
+import { responsibleCreateSchema } from "../../../src/schemas";
+import { ResponsibleCreateForm } from "../../../src/types";
+import { useResponsibleStoreMutation } from "../../../src/hooks/mutations/useResponsibleStoreMutation";
+
+export default function ResponsibleCreate() {
+  const { control, handleSubmit, setError } = useForm<ResponsibleCreateForm>({
+    resolver: yupResolver(responsibleCreateSchema),
   });
   const {
     mutate,
-    isLoading: isStoringDriver,
+    isLoading: isStoringResponsible,
     message,
-  } = useDriverStoreMutation({ setError });
-  const onSubmit = handleSubmit((driver) => mutate(driver));
+  } = useResponsibleStoreMutation({ setError });
+
+  const onSubmit = handleSubmit((responsible) => mutate(responsible));
 
   return (
     <>
       <Head>
-        <title>SchoolGo - Cadastrar Motorista</title>
+        <title>SchoolGo - Cadastrar Responsável</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Cadastrar Motorista" />
+              <CardHeader title="Cadastrar Responsável" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
@@ -72,16 +74,9 @@ export default function DriversCreate() {
                         label="Celular"
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
-                      <ControlledTextField
-                        control={control}
-                        name="license"
-                        label="CNH"
-                      />
-                    </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
                       <LoadingButton
-                        loading={isStoringDriver}
+                        loading={isStoringResponsible}
                         size="large"
                         type="submit"
                         variant="contained"

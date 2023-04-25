@@ -18,6 +18,7 @@ import Divider from "@mui/material/Divider";
 import React from "react";
 import Link from "next/link";
 import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
+import SchoolIcon from "@mui/icons-material/School";
 
 export default function Schools() {
   const { data: schools = [], isLoading: isLoadingSchools } =
@@ -47,59 +48,72 @@ export default function Schools() {
                 title="Escolas"
               />
               <CardContent sx={{ padding: 0 }}>
-                <List sx={{ width: "100%" }}>
-                  {schools.map((school) => (
-                    <>
-                      <ListItem
-                        alignItems="flex-start"
-                        secondaryAction={
-                          <>
-                            <Link
-                              href={{
-                                pathname: "/dashboard/escolas/[id]/editar",
-                                query: { id: school.id },
-                              }}
-                              passHref
-                              legacyBehavior
-                            >
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                sx={{ mr: 0.1 }}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </Link>
-                            <IconButton edge="end" aria-label="delete">
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
-                        }
-                      >
-                        <ListItemText
-                          primary={school.name}
-                          secondary={
+                {schools.length === 0 ? (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <SchoolIcon fontSize="large" />
+                    </Grid>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <Typography variant="h5">
+                        Nenhuma escola cadastrada
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <List sx={{ width: "100%" }}>
+                    {schools.map((school) => (
+                      <>
+                        <ListItem
+                          alignItems="flex-start"
+                          secondaryAction={
                             <>
-                              <Box display="flex" alignItems="center" mt={1}>
-                                <LocationOnIcon
-                                  sx={{ mr: 1 }}
-                                  fontSize="small"
-                                />
-                                <Typography
-                                  variant="subtitle2"
-                                  display="inline"
+                              <Link
+                                href={{
+                                  pathname: "/dashboard/escolas/[id]/editar",
+                                  query: { id: school.id },
+                                }}
+                                passHref
+                                legacyBehavior
+                              >
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  sx={{ mr: 0.1 }}
                                 >
-                                  {school.address.description}
-                                </Typography>
-                              </Box>
+                                  <EditIcon />
+                                </IconButton>
+                              </Link>
+                              <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                              </IconButton>
                             </>
                           }
-                        />
-                      </ListItem>
-                      <Divider />
-                    </>
-                  ))}
-                </List>
+                        >
+                          <ListItemText
+                            primary={school.name}
+                            secondary={
+                              <>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <LocationOnIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {school.address.description}
+                                  </Typography>
+                                </Box>
+                              </>
+                            }
+                          />
+                        </ListItem>
+                        <Divider />
+                      </>
+                    ))}
+                  </List>
+                )}
               </CardContent>
             </Card>
           </Grid>

@@ -1,13 +1,29 @@
 // COMMON
 
 import * as yup from "yup";
-import { itinerariesCreateSchema } from "./schemas";
+import {
+  itinerariesCreateSchema,
+  driversCreateSchema,
+  responsibleCreateSchema,
+  studentCreateSchema,
+  studentEditSchema,
+} from "./schemas";
 
 export type Resource<T> = {
   data: T;
 };
 
 // MODELS
+
+export type RawRole = {
+  id: number;
+  role: string;
+};
+
+export type Role = {
+  id: number;
+  role: string;
+};
 
 export type RawUser = {
   id: number;
@@ -21,6 +37,7 @@ export type RawUser = {
   created_at: string;
   updated_at: string | null;
   deleted_at: string | null;
+  roles: RawRole[];
 };
 
 export type User = {
@@ -39,6 +56,7 @@ export type User = {
   updatedAtISO: string | null;
   deletedAt: Date | null;
   deletedAtISO: string | null;
+  roles?: Role[];
 };
 
 export type RawDriver = {
@@ -50,6 +68,16 @@ export type RawDriver = {
 export type Driver = {
   id: number;
   license: string;
+  user: User;
+};
+
+export type RawResponsible = {
+  id: number;
+  user: RawUser;
+};
+
+export type Responsible = {
+  id: number;
   user: User;
 };
 
@@ -106,8 +134,46 @@ export type School = {
   address: Address;
 };
 
+export type RawStudent = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  morning: boolean;
+  afternoon: boolean;
+  night: boolean;
+  goes: boolean;
+  return: boolean;
+  address: RawAddress;
+  responsible: RawResponsible;
+  school: RawSchool;
+};
+
+export type Student = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  morning: boolean;
+  afternoon: boolean;
+  night: boolean;
+  goes: boolean;
+  return: boolean;
+  address: Address;
+  responsible: Responsible;
+  school: School;
+};
+
 // FIELD VALUES
 
-export type ItinerariesCreateFieldValues = yup.InferType<
+export type ItinerariesCreateForm = yup.InferType<
   typeof itinerariesCreateSchema
 >;
+
+export type DriverCreateForm = yup.InferType<typeof driversCreateSchema>;
+
+export type ResponsibleCreateForm = yup.InferType<
+  typeof responsibleCreateSchema
+>;
+
+export type StudentCreateForm = yup.InferType<typeof studentCreateSchema>;
+
+export type StudentEditForm = yup.InferType<typeof studentEditSchema>;

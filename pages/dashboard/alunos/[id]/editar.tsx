@@ -7,50 +7,56 @@ import CardHeader from "@mui/material/CardHeader";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
+import { ControlledTextField } from "../../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
-import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
-import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
-import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
-import { studentCreateSchema } from "../../../src/schemas";
+import { ControlledAutocomplete } from "../../../../src/components/ControlledAutocomplete";
+import { ControlledCheckbox } from "../../../../src/components/ControlledCheckbox";
+import { useGetSchoolsQuery } from "../../../../src/hooks/queries/useGetSchoolsQuery";
+import { ControlledGoogleMaps } from "../../../../src/components/ControlledGoogleMaps";
 import Divider from "@mui/material/Divider";
 import { FormLabel } from "@mui/material";
-import { useGetResponsiblesQuery } from "../../../src/hooks/queries/useGetResponsiblesQuery";
-import { useStudentStoreMutation } from "../../../src/hooks/mutations/useStudentStoreMutation";
-import { StudentCreateForm } from "../../../src/types";
+import { useGetResponsiblesQuery } from "../../../../src/hooks/queries/useGetResponsiblesQuery";
+import { useRouter } from "next/router";
+import { studentEditSchema } from "../../../../src/schemas";
+import { StudentEditForm } from "../../../../src/types";
+import { useGetStudentByIdQuery } from "../../../../src/hooks/queries/useGetStudentByIdQuery";
+import { useStudentUpdateMutation } from "../../../../src/hooks/mutations/useStudentUpdateMutation";
 
-export default function StudentsCreate() {
+export default function StudentEdit() {
+  const router = useRouter();
+  const { id } = router.query;
+  const { data: student, isLoading: isLoadingStudent } = useGetStudentByIdQuery(
+    id as string | undefined
+  );
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
   const { data: responsibles = [], isLoading: isLoadingResponsibles } =
     useGetResponsiblesQuery();
-  const { control, handleSubmit, watch, setError } = useForm<StudentCreateForm>(
-    {
-      resolver: yupResolver(studentCreateSchema),
-    }
-  );
+  const { control, handleSubmit, watch, setError } = useForm<StudentEditForm>({
+    resolver: yupResolver(studentEditSchema),
+    values: student,
+  });
   const {
     mutate,
-    isLoading: isStoringStudent,
+    isLoading: isUpdatingStudent,
     message,
-  } = useStudentStoreMutation({ setError });
+  } = useStudentUpdateMutation({ setError });
 
   const onSubmit = handleSubmit((student) => mutate(student));
   const isLoading =
-    isLoadingSchools || isLoadingResponsibles || isStoringStudent;
+    isLoadingSchools || isLoadingResponsibles || isUpdatingStudent;
 
   return (
     <>
       <Head>
-        <title>SchoolGo - Cadastrar Aluno</title>
+        <title>SchoolGo - Editar Aluno</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Cadastrar Aluno" />
+              <CardHeader title="Editar Aluno" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
@@ -159,7 +165,7 @@ export default function StudentsCreate() {
                         type="submit"
                         variant="contained"
                       >
-                        Cadastrar
+                        Atualizar
                       </LoadingButton>
                     </Grid>
                   </Grid>

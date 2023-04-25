@@ -20,9 +20,11 @@ import Divider from "@mui/material/Divider";
 import React from "react";
 import Link from "next/link";
 import { useGetDriversQuery } from "../../../src/hooks/queries/useGetDriversQuery";
+import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 
 export default function Drivers() {
-  const { data: drivers, isLoading: isLoadingDrivers } = useGetDriversQuery();
+  const { data: drivers = [], isLoading: isLoadingDrivers } =
+    useGetDriversQuery();
 
   return (
     <>
@@ -48,77 +50,93 @@ export default function Drivers() {
                 title="Motoristas"
               />
               <CardContent sx={{ padding: 0 }}>
-                <List sx={{ width: "100%" }}>
-                  {drivers?.map((driver) => (
-                    <>
-                      <ListItem
-                        alignItems="flex-start"
-                        secondaryAction={
-                          <>
-                            <Link
-                              href={{
-                                pathname: "/dashboard/motoristas/[id]/editar",
-                                query: { id: driver.id },
-                              }}
-                              passHref
-                              legacyBehavior
-                            >
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                sx={{ mr: 0.1 }}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </Link>
-                            <IconButton edge="end" aria-label="delete">
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
-                        }
-                      >
-                        <ListItemText
-                          primary={`${driver.user.firstName} ${driver.user.lastName}`}
-                          secondary={
+                {drivers.length === 0 ? (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <DirectionsBusFilledIcon fontSize="large" />
+                    </Grid>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <Typography variant="h5">
+                        Nenhum motorista cadastrado
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <List sx={{ width: "100%" }}>
+                    {drivers.map((driver) => (
+                      <>
+                        <ListItem
+                          alignItems="flex-start"
+                          secondaryAction={
                             <>
-                              <Box display="flex" alignItems="center" mt={1}>
-                                <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                                <Typography
-                                  variant="subtitle2"
-                                  display="inline"
+                              <Link
+                                href={{
+                                  pathname: "/dashboard/motoristas/[id]/editar",
+                                  query: { id: driver.id },
+                                }}
+                                passHref
+                                legacyBehavior
+                              >
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  sx={{ mr: 0.1 }}
                                 >
-                                  {driver.user.cellPhone}
-                                </Typography>
-                              </Box>
-                              <Box display="flex" alignItems="center" mt={1}>
-                                <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                                <Typography
-                                  variant="subtitle2"
-                                  display="inline"
-                                >
-                                  {driver.user.email}
-                                </Typography>
-                              </Box>
-                              <Box display="flex" alignItems="center" mt={1}>
-                                <ContactPageIcon
-                                  sx={{ mr: 1 }}
-                                  fontSize="small"
-                                />
-                                <Typography
-                                  variant="subtitle2"
-                                  display="inline"
-                                >
-                                  {driver.license}
-                                </Typography>
-                              </Box>
+                                  <EditIcon />
+                                </IconButton>
+                              </Link>
+                              <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                              </IconButton>
                             </>
                           }
-                        />
-                      </ListItem>
-                      <Divider />
-                    </>
-                  ))}
-                </List>
+                        >
+                          <ListItemText
+                            primary={`${driver.user.firstName} ${driver.user.lastName}`}
+                            secondary={
+                              <>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <WhatsAppIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {driver.user.cellPhone}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <EmailIcon sx={{ mr: 1 }} fontSize="small" />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {driver.user.email}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <ContactPageIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {driver.license}
+                                  </Typography>
+                                </Box>
+                              </>
+                            }
+                          />
+                        </ListItem>
+                        <Divider />
+                      </>
+                    ))}
+                  </List>
+                )}
               </CardContent>
             </Card>
           </Grid>

@@ -16,6 +16,12 @@ export const driversCreateSchema = yup
   })
   .required();
 
+export const responsibleCreateSchema = yup
+  .object({
+    user: usersCreateSchema,
+  })
+  .required();
+
 export const addressesCreateSchema = yup
   .object({
     description: yup.string().required(),
@@ -70,15 +76,34 @@ export const itinerariesCreateSchema = yup
   })
   .required();
 
-export const studentsCreateSchema = yup
+export const studentCreateSchema = yup
   .object({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
     address: addressesCreateSchema,
     school: schoolsCreateSchema,
-    responsible: yup.string().required(),
+    responsible: responsibleCreateSchema,
     goes: yup.boolean(),
     return: yup.boolean(),
+    morning: yup.boolean(),
+    afternoon: yup.boolean(),
+    night: yup.boolean(),
+  })
+  .required();
+
+export const studentEditSchema = yup
+  .object({
+    id: yup.number().required(),
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    address: addressesCreateSchema,
+    school: schoolsCreateSchema,
+    responsible: responsibleCreateSchema,
+    goes: yup.boolean(),
+    return: yup.boolean(),
+    morning: yup.boolean(),
+    afternoon: yup.boolean(),
+    night: yup.boolean(),
   })
   .required();
 

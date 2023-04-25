@@ -16,18 +16,20 @@ import { DateCalendar } from "@mui/x-date-pickers";
 import { useGetDriversQuery } from "../../../src/hooks/queries/useGetDriversQuery";
 import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
 import { itinerariesCreateSchema } from "../../../src/schemas";
-import { ItinerariesCreateFieldValues } from "../../../src/types";
+import { ItinerariesCreateForm } from "../../../src/types";
+import { useGetStudentsQuery } from "../../../src/hooks/queries/useGetStudentsQuery";
 
 export default function ItinerariesCreate() {
   const { data: drivers = [], isLoading: isLoadingDrivers } =
     useGetDriversQuery();
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
-  const { control, handleSubmit, getValues } =
-    useForm<ItinerariesCreateFieldValues>({
-      resolver: yupResolver(itinerariesCreateSchema),
-    });
-  const onSubmit = (data: ItinerariesCreateFieldValues) => console.log(data);
+  const { data: students = [], isLoading: isLoadingStudents } =
+    useGetStudentsQuery();
+  const { control, handleSubmit, getValues } = useForm<ItinerariesCreateForm>({
+    resolver: yupResolver(itinerariesCreateSchema),
+  });
+  const onSubmit = (data: ItinerariesCreateForm) => console.log(data);
 
   const message = "S";
   const isLoading = false;
@@ -77,22 +79,25 @@ export default function ItinerariesCreate() {
                     </Grid>
                     <Grid item xs={12}>
                       <ControlledAutocomplete
-                        loading
+                        loading={isLoadingStudents}
                         multiple
                         filterSelectedOptions
-                        options={["dsadasdas", "dsadsadas"]}
+                        options={students}
                         control={control}
                         name="students"
                         label="Alunos"
+                        getOptionLabel={(student) =>
+                          `${student.firstName} ${student.lastName}`
+                        }
                         renderTags={(value, getTagProps) =>
                           value.map((option, index) => (
                             <Chip
                               {...getTagProps({ index })}
-                              key={option}
-                              label={option}
+                              key={option.firstName}
+                              label={`${option.firstName} ${option.lastName}`}
                               avatar={
                                 <Avatar
-                                  alt={option}
+                                  alt={option.firstName}
                                   src="/static/images/avatar/1.jpg"
                                 />
                               }

@@ -19,8 +19,12 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
+import { useGetStudentsQuery } from "../../../src/hooks/queries/useGetStudentsQuery";
+import FaceIcon from "@mui/icons-material/Face";
 
 export default function Students() {
+  const { data: students = [] } = useGetStudentsQuery();
+
   return (
     <>
       <Head>
@@ -45,101 +49,93 @@ export default function Students() {
                 title="Alunos"
               />
               <CardContent sx={{ padding: 0 }}>
-                <List sx={{ width: "100%" }}>
-                  <ListItem
-                    secondaryAction={
+                {students.length === 0 ? (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <FaceIcon fontSize="large" />
+                    </Grid>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <Typography variant="h5">
+                        Nenhum aluno cadastrado
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <List sx={{ width: "100%" }}>
+                    {students.map((student) => (
                       <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
+                        <ListItem
+                          secondaryAction={
+                            <>
+                              <Link
+                                href={{
+                                  pathname: "/dashboard/alunos/[id]/editar",
+                                  query: { id: student.id },
+                                }}
+                                passHref
+                                legacyBehavior
+                              >
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  sx={{ mr: 0.1 }}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                              </Link>
+                              <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                              </IconButton>
+                            </>
+                          }
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
+                          <ListItemText
+                            primary={`${student.firstName} ${student.lastName}`}
+                            secondary={
+                              <>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <LocationOnIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {student.address.description}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <SchoolIcon sx={{ mr: 1 }} fontSize="small" />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {student.school.name}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <SupervisedUserCircleIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {student.responsible.user.firstName}{" "}
+                                    {student.responsible.user.lastName}
+                                  </Typography>
+                                </Box>
+                              </>
+                            }
+                          />
+                        </ListItem>
+                        <Divider />
                       </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Stephano Ramos"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <LocationOnIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              Av. Inconfidência, 1231 Bairro - Mal. Rondon,
-                              Canoas - RS, 92030-320
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <SchoolIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              Colégio Cristo Redentor
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <SupervisedUserCircleIcon
-                              sx={{ mr: 1 }}
-                              fontSize="small"
-                            />
-                            <Typography variant="subtitle2" display="inline">
-                              André
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Amanda Costa"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <LocationOnIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              Av. Inconfidência, 1231 Bairro - Mal. Rondon,
-                              Canoas - RS, 92030-320
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <SchoolIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              Colégio Espírito Santo
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <SupervisedUserCircleIcon
-                              sx={{ mr: 1 }}
-                              fontSize="small"
-                            />
-                            <Typography variant="subtitle2" display="inline">
-                              Matheus
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                </List>
+                    ))}
+                  </List>
+                )}
               </CardContent>
             </Card>
           </Grid>

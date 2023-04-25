@@ -9,7 +9,6 @@ import AddIcon from "@mui/icons-material/Add";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import EditIcon from "@mui/icons-material/Edit";
-import FaceIcon from "@mui/icons-material/Face";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,8 +17,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import React from "react";
+import Link from "next/link";
+import { useGetResponsiblesQuery } from "../../../src/hooks/queries/useGetResponsiblesQuery";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 export default function Responsible() {
+  const { data: responsibles = [] } = useGetResponsiblesQuery();
+
   return (
     <>
       <Head>
@@ -31,90 +35,95 @@ export default function Responsible() {
             <Card>
               <CardHeader
                 action={
-                  <IconButton aria-label="settings">
-                    <AddIcon />
-                  </IconButton>
+                  <Link
+                    href="/dashboard/responsaveis/cadastrar"
+                    passHref
+                    legacyBehavior
+                  >
+                    <IconButton aria-label="Cadastrar Responsável">
+                      <AddIcon />
+                    </IconButton>
+                  </Link>
                 }
                 title="Responsáveis"
               />
               <CardContent sx={{ padding: 0 }}>
-                <List sx={{ width: "100%" }}>
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
+                {responsibles.length === 0 ? (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <SupervisedUserCircleIcon fontSize="large" />
+                    </Grid>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <Typography variant="h5">
+                        Nenhum responsável cadastrado
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <List sx={{ width: "100%" }}>
+                    {responsibles.map((responsible) => (
                       <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
+                        <ListItem
+                          alignItems="flex-start"
+                          secondaryAction={
+                            <>
+                              <Link
+                                href={{
+                                  pathname:
+                                    "/dashboard/responsaveis/[id]/editar",
+                                  query: { id: responsible.id },
+                                }}
+                                passHref
+                                legacyBehavior
+                              >
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  sx={{ mr: 0.1 }}
+                                >
+                                  <EditIcon />
+                                </IconButton>
+                              </Link>
+                              <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                              </IconButton>
+                            </>
+                          }
                         >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
+                          <ListItemText
+                            primary={`${responsible.user.firstName} ${responsible.user.lastName}`}
+                            secondary={
+                              <>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <WhatsAppIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {responsible.user.cellPhone}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <EmailIcon sx={{ mr: 1 }} fontSize="small" />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {responsible.user.email}
+                                  </Typography>
+                                </Box>
+                              </>
+                            }
+                          />
+                        </ListItem>
+                        <Divider />
                       </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Stephano Ramos"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              (51) 99445-6366
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              stephano.ramos.p@gmail.com
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Amanda Costa"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <WhatsAppIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              (51) 99445-6366
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <EmailIcon sx={{ mr: 1 }} fontSize="small" />
-                            <Typography variant="subtitle2" display="inline">
-                              stephano.ramos.p@gmail.com
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                </List>
+                    ))}
+                  </List>
+                )}
               </CardContent>
             </Card>
           </Grid>

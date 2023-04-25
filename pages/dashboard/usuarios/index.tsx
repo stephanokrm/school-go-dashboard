@@ -15,6 +15,7 @@ import Box from "@mui/material/Box";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import Typography from "@mui/material/Typography";
 import EmailIcon from "@mui/icons-material/Email";
+import KeyIcon from "@mui/icons-material/Key";
 import Divider from "@mui/material/Divider";
 import React from "react";
 import Link from "next/link";
@@ -23,7 +24,7 @@ import Skeleton from "@mui/material/Skeleton";
 
 export default function Users() {
   const {
-    data: users,
+    data: users = [],
     isLoading: isLoadingUsers,
     isFetching: isFetchingUsers,
   } = useGetUsersQuery();
@@ -53,7 +54,7 @@ export default function Users() {
               />
               <CardContent sx={{ padding: 0 }}>
                 <List sx={{ width: "100%" }}>
-                  {users?.map((user) => (
+                  {users.map((user) => (
                     <>
                       <ListItem
                         alignItems="flex-start"
@@ -103,6 +104,19 @@ export default function Users() {
                                   {user.email}
                                 </Typography>
                               </Box>
+                              {user.roles?.length && (
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <KeyIcon sx={{ mr: 1 }} fontSize="small" />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {user.roles
+                                      .map(({ role }) => role)
+                                      .join(", ")}
+                                  </Typography>
+                                </Box>
+                              )}
                             </>
                           }
                         />

@@ -1,5 +1,6 @@
 import { RawUser, User } from "../types";
 import { parsePhoneNumber } from "libphonenumber-js";
+import { rawRoleToRole } from "./rawRoleToRole";
 
 export const rawUserToUser = async (rawUser: RawUser): Promise<User> => ({
   id: rawUser.id,
@@ -17,4 +18,5 @@ export const rawUserToUser = async (rawUser: RawUser): Promise<User> => ({
   updatedAtISO: rawUser.updated_at ?? null,
   deletedAt: null,
   deletedAtISO: rawUser.deleted_at ?? null,
+  roles: await Promise.all(rawUser.roles.map(rawRoleToRole)),
 });
