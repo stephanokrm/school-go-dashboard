@@ -16,6 +16,7 @@ import { ControlledTimePicker } from "../../../src/components/ControlledTimePick
 import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
 import { useSchoolStoreMutation } from "../../../src/hooks/mutations/useSchoolStoreMutation";
 import { schoolsCreateSchema } from "../../../src/schemas";
+import { FormLabel } from "@mui/material";
 
 export type SchoolStoreFieldValues = yup.InferType<typeof schoolsCreateSchema>;
 
@@ -64,6 +65,9 @@ export default function SchoolsCreate() {
                         control={control}
                         name="address"
                       />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormLabel>Turnos</FormLabel>
                     </Grid>
                     <Grid item xs={12}>
                       <ControlledCheckbox

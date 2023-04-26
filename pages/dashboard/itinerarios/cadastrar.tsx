@@ -18,17 +18,26 @@ import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuer
 import { itinerariesCreateSchema } from "../../../src/schemas";
 import { ItinerariesCreateForm } from "../../../src/types";
 import { useGetStudentsQuery } from "../../../src/hooks/queries/useGetStudentsQuery";
+import { FormLabel } from "@mui/material";
+import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
+import Divider from "@mui/material/Divider";
 
 export default function ItinerariesCreate() {
   const { data: drivers = [], isLoading: isLoadingDrivers } =
     useGetDriversQuery();
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
+  const { control, handleSubmit, watch, setValue } =
+    useForm<ItinerariesCreateForm>({
+      resolver: yupResolver(itinerariesCreateSchema),
+      defaultValues: { students: [] },
+    });
   const { data: students = [], isLoading: isLoadingStudents } =
-    useGetStudentsQuery();
-  const { control, handleSubmit, getValues } = useForm<ItinerariesCreateForm>({
-    resolver: yupResolver(itinerariesCreateSchema),
-  });
+    useGetStudentsQuery({
+      morning: watch("morning"),
+      afternoon: watch("afternoon"),
+      night: watch("night"),
+    });
   const onSubmit = (data: ItinerariesCreateForm) => console.log(data);
 
   const message = "S";
@@ -55,7 +64,7 @@ export default function ItinerariesCreate() {
                     <Grid item xs={12}>
                       <DateCalendar />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12}>
                       <ControlledAutocomplete
                         loading={isLoadingDrivers}
                         options={drivers}
@@ -67,7 +76,7 @@ export default function ItinerariesCreate() {
                         }
                       />
                     </Grid>
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12}>
                       <ControlledAutocomplete
                         loading={isLoadingSchools}
                         options={schools}
@@ -75,6 +84,39 @@ export default function ItinerariesCreate() {
                         name="school"
                         label="Escola"
                         getOptionLabel={(school) => school.name}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Divider />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormLabel>Turnos</FormLabel>
+                    </Grid>
+                    <Grid item>
+                      <ControlledCheckbox
+                        name="morning"
+                        label="Manhã"
+                        control={control}
+                        disabled={!watch("school.morning")}
+                        onInput={() => setValue("students", [])}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <ControlledCheckbox
+                        name="afternoon"
+                        label="Tarde"
+                        control={control}
+                        disabled={!watch("school.afternoon")}
+                        onInput={() => setValue("students", [])}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <ControlledCheckbox
+                        name="night"
+                        label="Noite"
+                        control={control}
+                        disabled={!watch("school.night")}
+                        onInput={() => setValue("students", [])}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -86,6 +128,11 @@ export default function ItinerariesCreate() {
                         control={control}
                         name="students"
                         label="Alunos"
+                        disabled={
+                          !watch("morning") &&
+                          !watch("afternoon") &&
+                          !watch("night")
+                        }
                         getOptionLabel={(student) =>
                           `${student.firstName} ${student.lastName}`
                         }

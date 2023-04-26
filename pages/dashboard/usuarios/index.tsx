@@ -104,7 +104,7 @@ export default function Users() {
                                   {user.email}
                                 </Typography>
                               </Box>
-                              {user.roles?.length && (
+                              {user.roles && user.roles.length > 0 && (
                                 <Box display="flex" alignItems="center" mt={1}>
                                   <KeyIcon sx={{ mr: 1 }} fontSize="small" />
                                   <Typography

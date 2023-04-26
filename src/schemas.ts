@@ -67,14 +67,6 @@ export const schoolsCreateSchema = yup
     }),
   })
   .required();
-export const itinerariesCreateSchema = yup
-  .object({
-    driver: driversCreateSchema,
-    school: schoolsCreateSchema,
-    students: yup.string(),
-    direction: yup.boolean(),
-  })
-  .required();
 
 export const studentCreateSchema = yup
   .object({
@@ -85,6 +77,18 @@ export const studentCreateSchema = yup
     responsible: responsibleCreateSchema,
     goes: yup.boolean(),
     return: yup.boolean(),
+    morning: yup.boolean(),
+    afternoon: yup.boolean(),
+    night: yup.boolean(),
+  })
+  .required();
+
+export const itinerariesCreateSchema = yup
+  .object({
+    driver: driversCreateSchema,
+    school: schoolsCreateSchema,
+    students: yup.array().of(studentCreateSchema),
+    direction: yup.boolean(),
     morning: yup.boolean(),
     afternoon: yup.boolean(),
     night: yup.boolean(),
