@@ -7,7 +7,6 @@ import CardHeader from "@mui/material/CardHeader";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { ControlledTextField } from "../../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -17,71 +16,26 @@ import { ControlledGoogleMaps } from "../../../../src/components/ControlledGoogl
 import { useSchoolUpdateMutation } from "../../../../src/hooks/mutations/useSchoolUpdateMutation";
 import { useRouter } from "next/router";
 import { useGetSchoolByIdQuery } from "../../../../src/hooks/queries/useGetSchoolByIdQuery";
+import { schoolEditSchema } from "../../../../src/schemas";
+import { SchoolEditForm } from "../../../../src/types";
 
-const schema = yup
-  .object({
-    id: yup.number().required(),
-    name: yup.string().required(),
-    address: yup
-      .object({
-        description: yup.string().required(),
-        place: yup.string().required(),
-      })
-      .required(),
-    morning: yup.boolean(),
-    afternoon: yup.boolean(),
-    night: yup.boolean(),
-    morningEntryTime: yup.date().when("morning", {
-      is: true,
-      then: (schema) => schema.required(),
-    }),
-    morningDepartureTime: yup
-      .date()
-      .when("morning", {
-        is: true,
-        then: (schema) => schema.required(),
-      })
-      .when("morningEntryTime", ([morningEntryTime], schema) => {
-        return morningEntryTime ? schema.min(morningEntryTime) : schema;
-      }),
-    afternoonEntryTime: yup.date().when("afternoon", {
-      is: true,
-      then: (schema) => schema.required(),
-    }),
-    afternoonDepartureTime: yup.date().when("afternoon", {
-      is: true,
-      then: (schema) => schema.required(),
-    }),
-    nightEntryTime: yup.date().when("night", {
-      is: true,
-      then: (schema) => schema.required(),
-    }),
-    nightDepartureTime: yup.date().when("night", {
-      is: true,
-      then: (schema) => schema.required(),
-    }),
-  })
-  .required();
-
-export type SchoolUpdateFieldValues = yup.InferType<typeof schema>;
-
-export default function SchoolsEdit() {
+export default function SchoolEdit() {
   const router = useRouter();
   const { id } = router.query;
   const { data: school, isLoading: isLoadingSchool } = useGetSchoolByIdQuery(
     id as string | undefined
   );
-  const { control, handleSubmit, watch, setError } =
-    useForm<SchoolUpdateFieldValues>({
-      resolver: yupResolver(schema),
-      values: school,
-    });
+  const { control, handleSubmit, watch, setError } = useForm<SchoolEditForm>({
+    resolver: yupResolver(schoolEditSchema),
+    values: school,
+  });
   const {
     mutate,
-    isLoading: isStoringSchool,
+    isLoading: isUpdatingSchool,
     message,
   } = useSchoolUpdateMutation({ setError });
   const onSubmit = handleSubmit((school) => mutate(school));
+  const isLoading = isLoadingSchool || isUpdatingSchool;
 
   return (
     <>
@@ -106,6 +60,7 @@ export default function SchoolsEdit() {
                         control={control}
                         name="name"
                         label="Nome"
+                        loading={isLoadingSchool}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -200,7 +155,7 @@ export default function SchoolsEdit() {
                     )}
                     <Grid item xs={12} display="flex" justifyContent="end">
                       <LoadingButton
-                        loading={isStoringSchool}
+                        loading={isLoading}
                         size="large"
                         type="submit"
                         variant="contained"

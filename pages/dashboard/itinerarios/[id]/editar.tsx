@@ -11,32 +11,39 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { ControlledAutocomplete } from "../../../src/components/ControlledAutocomplete";
-import { useGetDriversQuery } from "../../../src/hooks/queries/useGetDriversQuery";
-import { useGetSchoolsQuery } from "../../../src/hooks/queries/useGetSchoolsQuery";
-import { itineraryCreateSchema } from "../../../src/schemas";
-import { ItineraryCreateForm } from "../../../src/types";
-import { useGetStudentsQuery } from "../../../src/hooks/queries/useGetStudentsQuery";
+import { ControlledAutocomplete } from "../../../../src/components/ControlledAutocomplete";
+import { useGetDriversQuery } from "../../../../src/hooks/queries/useGetDriversQuery";
+import { useGetSchoolsQuery } from "../../../../src/hooks/queries/useGetSchoolsQuery";
+import { itineraryEditSchema } from "../../../../src/schemas";
+import { ItineraryEditForm } from "../../../../src/types";
+import { useGetStudentsQuery } from "../../../../src/hooks/queries/useGetStudentsQuery";
 import { FormLabel } from "@mui/material";
-import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
+import { ControlledCheckbox } from "../../../../src/components/ControlledCheckbox";
 import Divider from "@mui/material/Divider";
-import { useItineraryStoreMutation } from "../../../src/hooks/mutations/useItineraryStoreMutation";
+import { useItineraryUpdateMutation } from "../../../../src/hooks/mutations/useItineraryUpdateMutation";
+import { useRouter } from "next/router";
+import { useGetItineraryByIdQuery } from "../../../../src/hooks/queries/useGetItineraryByIdQuery";
 
-export default function ItineraryCreate() {
+export default function ItineraryEdit() {
+  const router = useRouter();
+  const { id } = router.query;
+  const { data: itinerary, isLoading: isLoadingItinerary } =
+    useGetItineraryByIdQuery(id as string | undefined);
   const { data: drivers = [], isLoading: isLoadingDrivers } =
     useGetDriversQuery();
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
-  const { control, handleSubmit, watch, setValue, setError } =
-    useForm<ItineraryCreateForm>({
-      resolver: yupResolver(itineraryCreateSchema),
+  const { control, handleSubmit, watch, setValue, setError, formState } =
+    useForm<ItineraryEditForm>({
+      resolver: yupResolver(itineraryEditSchema),
+      values: itinerary,
       defaultValues: { students: [] },
     });
   const {
     mutate,
-    isLoading: isStoringItinerary,
+    isLoading: isUpdatingItinerary,
     message,
-  } = useItineraryStoreMutation({ setError });
+  } = useItineraryUpdateMutation({ setError });
   const { data: students = [], isLoading: isLoadingStudents } =
     useGetStudentsQuery({
       morning: watch("morning"),
@@ -47,7 +54,8 @@ export default function ItineraryCreate() {
   const school = watch("school");
   const onSubmit = handleSubmit((itinerary) => mutate(itinerary));
   const isLoading =
-    isStoringItinerary ||
+    isLoadingItinerary ||
+    isUpdatingItinerary ||
     isLoadingSchools ||
     isLoadingDrivers ||
     isLoadingStudents;
@@ -55,13 +63,13 @@ export default function ItineraryCreate() {
   return (
     <>
       <Head>
-        <title>SchoolGo - Cadastrar Itinerário</title>
+        <title>SchoolGo - Editar Itinerário</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Cadastrar Itinerário" />
+              <CardHeader title="Editar Itinerário" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
@@ -215,7 +223,7 @@ export default function ItineraryCreate() {
                         type="submit"
                         variant="contained"
                       >
-                        Cadastrar
+                        Atualizar
                       </LoadingButton>
                     </Grid>
                   </Grid>

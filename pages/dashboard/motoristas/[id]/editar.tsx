@@ -6,7 +6,6 @@ import CardContent from "@mui/material/CardContent";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import { useDriverUpdateMutation } from "../../../../src/hooks/mutations/useDriverUpdateMutation";
@@ -14,40 +13,25 @@ import { ControlledTextField } from "../../../../src/components/ControlledTextFi
 import CardHeader from "@mui/material/CardHeader";
 import { useRouter } from "next/router";
 import { useGetDriverByIdQuery } from "../../../../src/hooks/queries/useGetDriverByIdQuery";
-
-const schema = yup
-  .object({
-    id: yup.number().required(),
-    license: yup.string().required(),
-    user: yup
-      .object({
-        id: yup.number().required(),
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
-        email: yup.string().email().required(),
-        cellPhone: yup.string().required(),
-      })
-      .required(),
-  })
-  .required();
-
-export type DriverUpdateFieldValues = yup.InferType<typeof schema>;
-export default function DriversEdit() {
+import { driverEditSchema } from "../../../../src/schemas";
+import { DriverEditForm } from "../../../../src/types";
+export default function DriverEdit() {
   const router = useRouter();
   const { id } = router.query;
   const { data: driver, isLoading: isLoadingDriver } = useGetDriverByIdQuery(
     id as string | undefined
   );
-  const { control, handleSubmit, setError } = useForm<DriverUpdateFieldValues>({
-    resolver: yupResolver(schema),
+  const { control, handleSubmit, setError } = useForm<DriverEditForm>({
+    resolver: yupResolver(driverEditSchema),
     values: driver,
   });
   const {
     mutate,
-    isLoading: isStoringDriver,
+    isLoading: isUpdatingDriver,
     message,
   } = useDriverUpdateMutation({ setError });
   const onSubmit = handleSubmit((driver) => mutate(driver));
+  const isLoading = isLoadingDriver || isUpdatingDriver;
 
   return (
     <>
@@ -111,7 +95,7 @@ export default function DriversEdit() {
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
                       <LoadingButton
-                        loading={isStoringDriver}
+                        loading={isLoading}
                         size="large"
                         type="submit"
                         variant="contained"

@@ -7,7 +7,7 @@ interface Params {
   night?: boolean;
 }
 
-export const useGetStudentsQuery = (params: Params) => {
+export const useGetStudentsQuery = (params: Params = {}) => {
   return useQuery(["getStudents", params], async ({ signal }) => {
     return getStudents({ params, signal });
   });

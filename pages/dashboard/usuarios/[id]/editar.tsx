@@ -7,33 +7,23 @@ import React from "react";
 import { ControlledTextField } from "../../../../src/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useGetUserByIdQuery } from "../../../../src/hooks/queries/useGetUserByIdQuery";
 import { useUserUpdateMutation } from "../../../../src/hooks/mutations/useUserUpdateMutation";
 import Alert from "@mui/material/Alert";
 import CardHeader from "@mui/material/CardHeader";
 import { useRouter } from "next/router";
+import { userEditSchema } from "../../../../src/schemas";
+import { UserEditForm } from "../../../../src/types";
 
-const schema = yup
-  .object({
-    id: yup.number().required(),
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup.string().email().required(),
-    cellPhone: yup.string().required(),
-  })
-  .required();
-
-export type UserEditFieldValues = yup.InferType<typeof schema>;
-export default function UsersEdit() {
+export default function UserEdit() {
   const router = useRouter();
   const { id } = router.query;
   const { data: user, isLoading: isLoadingUser } = useGetUserByIdQuery(
     id as string | undefined
   );
-  const { control, handleSubmit, setError } = useForm<UserEditFieldValues>({
-    resolver: yupResolver(schema),
+  const { control, handleSubmit, setError } = useForm<UserEditForm>({
+    resolver: yupResolver(userEditSchema),
     values: user,
   });
   const {
@@ -42,7 +32,6 @@ export default function UsersEdit() {
     message,
   } = useUserUpdateMutation({ setError });
   const onSubmit = handleSubmit((user) => mutate(user));
-
   const isLoading = isLoadingUser || isUpdatingUser;
 
   return (

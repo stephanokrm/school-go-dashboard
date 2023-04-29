@@ -4,43 +4,46 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import React from "react";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useGetUserByMeQuery } from "../../../src/hooks/queries/useGetUserByMeQuery";
-import { useUserUpdateMutation } from "../../../src/hooks/mutations/useUserUpdateMutation";
 import Alert from "@mui/material/Alert";
+import { ControlledTextField } from "../../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { userEditSchema } from "../../../src/schemas";
-import { UserEditForm } from "../../../src/types";
+import { responsibleEditSchema } from "../../../../src/schemas";
+import { ResponsibleEditForm } from "../../../../src/types";
+import { useResponsibleUpdateMutation } from "../../../../src/hooks/mutations/useResponsibleUpdateMutation";
+import { useRouter } from "next/router";
+import { useGetResponsibleByIdQuery } from "../../../../src/hooks/queries/useGetResponsibleByIdQuery";
 
-export default function UserMe() {
-  const { data: user, isLoading: isLoadingUser } = useGetUserByMeQuery();
-  const { control, handleSubmit, setError } = useForm<UserEditForm>({
-    resolver: yupResolver(userEditSchema),
-    values: user,
+export default function ResponsibleEdit() {
+  const router = useRouter();
+  const { id } = router.query;
+  const { data: responsible, isLoading: isLoadingResponsible } =
+    useGetResponsibleByIdQuery(id as string | undefined);
+  const { control, handleSubmit, setError } = useForm<ResponsibleEditForm>({
+    resolver: yupResolver(responsibleEditSchema),
+    values: responsible,
   });
   const {
     mutate,
-    isLoading: isUpdatingUser,
+    isLoading: isUpdatingResponsible,
     message,
-  } = useUserUpdateMutation({ setError });
-  const onSubmit = handleSubmit((user) => mutate(user));
+  } = useResponsibleUpdateMutation({ setError });
 
-  const isLoading = isLoadingUser || isUpdatingUser;
+  const isLoading = isLoadingResponsible || isUpdatingResponsible;
+  const onSubmit = handleSubmit((responsible) => mutate(responsible));
 
   return (
     <>
       <Head>
-        <title>SchoolGo - {user?.firstName}</title>
+        <title>SchoolGo - Editar Responsável</title>
       </Head>
       <Container maxWidth="lg" disableGutters>
         <Grid container>
           <Grid item xs={12}>
             <Card>
-              <CardHeader title="Minha Conta" />
+              <CardHeader title="Editar Responsável" />
               <CardContent>
                 <form onSubmit={onSubmit}>
                   <Grid container spacing={2}>
@@ -52,35 +55,35 @@ export default function UserMe() {
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="firstName"
+                        name="user.firstName"
                         label="Nome"
-                        loading={isLoadingUser}
+                        loading={isLoadingResponsible}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="lastName"
+                        name="user.lastName"
                         label="Sobrenome"
-                        loading={isLoadingUser}
+                        loading={isLoadingResponsible}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="email"
+                        name="user.email"
                         type="email"
                         label="E-mail"
-                        loading={isLoadingUser}
+                        loading={isLoadingResponsible}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <ControlledTextField
                         control={control}
-                        name="cellPhone"
+                        name="user.cellPhone"
                         type="tel"
                         label="Celular"
-                        loading={isLoadingUser}
+                        loading={isLoadingResponsible}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

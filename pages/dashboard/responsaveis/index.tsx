@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useGetResponsiblesQuery } from "../../../src/hooks/queries/useGetResponsiblesQuery";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
-export default function Responsible() {
+export default function Responsibles() {
   const { data: responsibles = [] } = useGetResponsiblesQuery();
 
   return (

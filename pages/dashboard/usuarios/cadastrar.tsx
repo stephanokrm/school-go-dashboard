@@ -6,18 +6,17 @@ import CardContent from "@mui/material/CardContent";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import { useUserStoreMutation } from "../../../src/hooks/mutations/useUserStoreMutation";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { usersCreateSchema } from "../../../src/schemas";
+import { userCreateSchema } from "../../../src/schemas";
+import { UserCreateForm } from "../../../src/types";
 
-export type UserStoreFieldValues = yup.InferType<typeof usersCreateSchema>;
-export default function UsersCreate() {
-  const { control, handleSubmit, setError } = useForm<UserStoreFieldValues>({
-    resolver: yupResolver(usersCreateSchema),
+export default function UserCreate() {
+  const { control, handleSubmit, setError } = useForm<UserCreateForm>({
+    resolver: yupResolver(userCreateSchema),
   });
   const {
     mutate,

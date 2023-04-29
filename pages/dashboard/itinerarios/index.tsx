@@ -18,8 +18,11 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Link from "next/link";
+import { useGetItinerariesQuery } from "../../../src/hooks/queries/useGetItinerariesQuery";
 
 export default function Itineraries() {
+  const { data: itineraries = [] } = useGetItinerariesQuery();
+
   return (
     <>
       <Head>
@@ -45,93 +48,73 @@ export default function Itineraries() {
               />
               <CardContent sx={{ padding: 0 }}>
                 <List sx={{ width: "100%" }}>
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Colégio Cristo Redentor"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <DirectionsBusIcon
-                              sx={{ mr: 1 }}
-                              fontSize="small"
-                            />
-                            <Typography variant="subtitle2" display="inline">
-                              Rogério
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <CalendarMonthIcon
-                              sx={{ mr: 1 }}
-                              fontSize="small"
-                            />
-                            <Typography variant="subtitle2">
-                              Segunda, Terça e Quarta
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem
-                    alignItems="flex-start"
-                    secondaryAction={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          sx={{ mr: 0.1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  >
-                    <ListItemText
-                      primary="Colégio Cristo Redentor"
-                      secondary={
-                        <>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <DirectionsBusIcon
-                              sx={{ mr: 1 }}
-                              fontSize="small"
-                            />
-                            <Typography variant="subtitle2" display="inline">
-                              Matheus
-                            </Typography>
-                          </Box>
-                          <Box display="flex" alignItems="center" mt={1}>
-                            <CalendarMonthIcon
-                              sx={{ mr: 1 }}
-                              fontSize="small"
-                            />
-                            <Typography variant="subtitle2">
-                              Quinta e Sexta
-                            </Typography>
-                          </Box>
-                        </>
-                      }
-                    />
-                  </ListItem>
+                  {itineraries.map((itinerary) => (
+                    <>
+                      <ListItem
+                        alignItems="flex-start"
+                        secondaryAction={
+                          <>
+                            <Link
+                              href={{
+                                pathname: "/dashboard/itinerarios/[id]/editar",
+                                query: { id: itinerary.id },
+                              }}
+                              passHref
+                              legacyBehavior
+                            >
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                sx={{ mr: 0.1 }}
+                              >
+                                <EditIcon />
+                              </IconButton>
+                            </Link>
+                            <IconButton edge="end" aria-label="delete">
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        }
+                      >
+                        <ListItemText
+                          primary={itinerary.school.name}
+                          secondary={
+                            <>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <DirectionsBusIcon
+                                  sx={{ mr: 1 }}
+                                  fontSize="small"
+                                />
+                                <Typography
+                                  variant="subtitle2"
+                                  display="inline"
+                                >
+                                  {itinerary.driver.user.firstName}{" "}
+                                  {itinerary.driver.user.lastName}
+                                </Typography>
+                              </Box>
+                              <Box display="flex" alignItems="center" mt={1}>
+                                <CalendarMonthIcon
+                                  sx={{ mr: 1 }}
+                                  fontSize="small"
+                                />
+                                <Typography variant="subtitle2">
+                                  {[
+                                    ...(itinerary.monday ? ["Segunda"] : []),
+                                    ...(itinerary.tuesday ? ["Terça"] : []),
+                                    ...(itinerary.wednesday ? ["Quarta"] : []),
+                                    ...(itinerary.thursday ? ["Quinta"] : []),
+                                    ...(itinerary.friday ? ["Sexta"] : []),
+                                  ].join(", ")}
+                                </Typography>
+                              </Box>
+                            </>
+                          }
+                        />
+                      </ListItem>
+                      <Divider />
+                    </>
+                  ))}
                 </List>
               </CardContent>
             </Card>

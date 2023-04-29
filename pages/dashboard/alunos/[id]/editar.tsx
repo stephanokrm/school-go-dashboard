@@ -43,9 +43,13 @@ export default function StudentEdit() {
     message,
   } = useStudentUpdateMutation({ setError });
 
+  const school = watch("school");
   const onSubmit = handleSubmit((student) => mutate(student));
   const isLoading =
-    isLoadingSchools || isLoadingResponsibles || isUpdatingStudent;
+    isLoadingSchools ||
+    isLoadingResponsibles ||
+    isUpdatingStudent ||
+    isLoadingStudent;
 
   return (
     <>
@@ -70,6 +74,7 @@ export default function StudentEdit() {
                         control={control}
                         name="firstName"
                         label="Nome"
+                        loading={isLoadingStudent}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -77,6 +82,7 @@ export default function StudentEdit() {
                         control={control}
                         name="lastName"
                         label="Sobrenome"
+                        loading={isLoadingStudent}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -139,7 +145,7 @@ export default function StudentEdit() {
                         name="morning"
                         label="Manhã"
                         control={control}
-                        disabled={!watch("school.morning")}
+                        disabled={!school?.morning}
                       />
                     </Grid>
                     <Grid item>
@@ -147,7 +153,7 @@ export default function StudentEdit() {
                         name="afternoon"
                         label="Tarde"
                         control={control}
-                        disabled={!watch("school.afternoon")}
+                        disabled={!school?.afternoon}
                       />
                     </Grid>
                     <Grid item>
@@ -155,7 +161,7 @@ export default function StudentEdit() {
                         name="night"
                         label="Noite"
                         control={control}
-                        disabled={!watch("school.night")}
+                        disabled={!school?.night}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

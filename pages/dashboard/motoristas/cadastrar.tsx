@@ -11,11 +11,12 @@ import Alert from "@mui/material/Alert";
 import { useDriverStoreMutation } from "../../../src/hooks/mutations/useDriverStoreMutation";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { driversCreateSchema } from "../../../src/schemas";
+import { driverCreateSchema } from "../../../src/schemas";
 import { DriverCreateForm } from "../../../src/types";
-export default function DriversCreate() {
+
+export default function DriverCreate() {
   const { control, handleSubmit, setError } = useForm<DriverCreateForm>({
-    resolver: yupResolver(driversCreateSchema),
+    resolver: yupResolver(driverCreateSchema),
   });
   const {
     mutate,

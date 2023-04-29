@@ -26,14 +26,14 @@ const theme = responsiveFontSizes(
         MuiAlert: {
           styleOverrides: {
             root: {
-              borderRadius: "15px",
+              borderRadius: "10px",
             },
           },
         },
         MuiPaper: {
           styleOverrides: {
             root: {
-              borderRadius: "15px",
+              borderRadius: "10px",
             },
           },
         },
@@ -57,21 +57,21 @@ const theme = responsiveFontSizes(
           styleOverrides: {
             root: {
               textTransform: "none",
-              borderRadius: "30px",
+              borderRadius: "10px",
             },
           },
         },
         MuiCard: {
           styleOverrides: {
             root: {
-              borderRadius: "20px",
+              borderRadius: "10px",
             },
           },
         },
         MuiFilledInput: {
           styleOverrides: {
             root: {
-              borderRadius: "15px",
+              borderRadius: "10px",
               ":before": {
                 border: "none !important",
               },

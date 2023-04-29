@@ -39,10 +39,10 @@ export function ControlledAutocomplete<
         <Autocomplete
           {...rest}
           {...field}
-          onChange={async (event, value) => {
+          // @ts-ignore
+          value={field.value ?? null}
+          onChange={(event, value) => {
             field.onChange(value);
-
-            await onChange?.(value);
           }}
           renderInput={(params) => (
             <TextField

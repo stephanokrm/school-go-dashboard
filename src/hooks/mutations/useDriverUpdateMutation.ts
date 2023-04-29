@@ -1,17 +1,16 @@
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "../../axios";
-import { Driver, RawDriver, Resource } from "../../types";
+import { Driver, DriverEditForm, RawDriver, Resource } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
 import { driverToRawDriver } from "../../maps/driverToRawDriver";
-import { DriverUpdateFieldValues } from "../../../pages/dashboard/motoristas/[id]/editar";
 import { UseFormSetError } from "react-hook-form";
 import { useRouter } from "next/router";
 
 type Response = Resource<RawDriver>;
 type SuccessResponse = AxiosResponse<Response>;
 interface UseDriverUpdateMutation {
-  setError: UseFormSetError<DriverUpdateFieldValues>;
+  setError: UseFormSetError<DriverEditForm>;
 }
 
 export const useDriverUpdateMutation = ({
@@ -20,7 +19,7 @@ export const useDriverUpdateMutation = ({
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  return useFormMutation<SuccessResponse, DriverUpdateFieldValues>(
+  return useFormMutation<SuccessResponse, DriverEditForm>(
     async (driver) => {
       return axios().post<Response, SuccessResponse>(
         `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/${driver.user.id}/driver/${driver.id}`,

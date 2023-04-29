@@ -21,7 +21,7 @@ import { useGetResponsiblesQuery } from "../../../src/hooks/queries/useGetRespon
 import { useStudentStoreMutation } from "../../../src/hooks/mutations/useStudentStoreMutation";
 import { StudentCreateForm } from "../../../src/types";
 
-export default function StudentsCreate() {
+export default function StudentCreate() {
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
   const { data: responsibles = [], isLoading: isLoadingResponsibles } =
@@ -37,6 +37,7 @@ export default function StudentsCreate() {
     message,
   } = useStudentStoreMutation({ setError });
 
+  const school = watch("school");
   const onSubmit = handleSubmit((student) => mutate(student));
   const isLoading =
     isLoadingSchools || isLoadingResponsibles || isStoringStudent;
@@ -108,14 +109,14 @@ export default function StudentsCreate() {
                     <Grid item xs={12}>
                       <FormLabel>Trajetos</FormLabel>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} md={2}>
                       <ControlledCheckbox
                         name="goes"
                         label="Ida"
                         control={control}
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} md={2}>
                       <ControlledCheckbox
                         name="return"
                         label="Volta"
@@ -128,28 +129,28 @@ export default function StudentsCreate() {
                     <Grid item xs={12}>
                       <FormLabel>Turnos</FormLabel>
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} md={2}>
                       <ControlledCheckbox
                         name="morning"
                         label="Manhã"
                         control={control}
-                        disabled={!watch("school.morning")}
+                        disabled={!school?.morning}
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} md={2}>
                       <ControlledCheckbox
                         name="afternoon"
                         label="Tarde"
                         control={control}
-                        disabled={!watch("school.afternoon")}
+                        disabled={!school?.afternoon}
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} md={2}>
                       <ControlledCheckbox
                         name="night"
                         label="Noite"
                         control={control}
-                        disabled={!watch("school.night")}
+                        disabled={!school?.night}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

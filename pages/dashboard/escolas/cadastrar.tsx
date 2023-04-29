@@ -7,7 +7,6 @@ import CardHeader from "@mui/material/CardHeader";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { ControlledTextField } from "../../../src/components/ControlledTextField";
 import Alert from "@mui/material/Alert";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -15,15 +14,14 @@ import { ControlledCheckbox } from "../../../src/components/ControlledCheckbox";
 import { ControlledTimePicker } from "../../../src/components/ControlledTimePicker";
 import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
 import { useSchoolStoreMutation } from "../../../src/hooks/mutations/useSchoolStoreMutation";
-import { schoolsCreateSchema } from "../../../src/schemas";
+import { schoolCreateSchema } from "../../../src/schemas";
 import { FormLabel } from "@mui/material";
+import { SchoolCreateForm } from "../../../src/types";
 
-export type SchoolStoreFieldValues = yup.InferType<typeof schoolsCreateSchema>;
-
-export default function SchoolsCreate() {
+export default function SchoolCreate() {
   const { control, handleSubmit, watch, getValues, setError } =
-    useForm<SchoolStoreFieldValues>({
-      resolver: yupResolver(schoolsCreateSchema),
+    useForm<SchoolCreateForm>({
+      resolver: yupResolver(schoolCreateSchema),
     });
 
   const {
