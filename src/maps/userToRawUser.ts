@@ -7,12 +7,13 @@ export const userToRawUser = async (user: User): Promise<RawUser> => ({
   first_name: user.firstName,
   last_name: user.lastName,
   email: user.email,
-  email_verified_at: user.emailVerifiedAtISO,
+  email_verified_at: user.emailVerifiedAt?.toISOString() ?? null,
   cell_phone: parsePhoneNumber(user.cellPhone, "BR").number,
   password: user.password,
-  password_confirmation: user.passwordConfirmation,
-  created_at: user.createdAtISO,
-  updated_at: user.updatedAtISO,
-  deleted_at: user.deletedAtISO,
-  roles: user.roles ? await Promise.all(user.roles.map(roleToRawRole)) : [],
+  password_confirmation: user.passwordConfirmation ?? null,
+  created_at: user.createdAt.toISOString(),
+  updated_at: user.updatedAt?.toISOString() ?? null,
+  roles: Array.isArray(user.roles)
+    ? await Promise.all(user.roles.map(roleToRawRole))
+    : undefined,
 });
