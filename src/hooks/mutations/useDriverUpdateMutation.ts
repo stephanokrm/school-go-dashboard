@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { Driver, DriverEditForm, RawDriver, Resource } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,8 +21,8 @@ export const useDriverUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, DriverEditForm>(
     async (driver) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/${driver.user.id}/driver/${driver.id}`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/user/${driver.user.id}/driver/${driver.id}`,
         {
           ...(await driverToRawDriver(driver as Driver)),
           _method: "PUT",
@@ -42,7 +42,7 @@ export const useDriverUpdateMutation = ({
           "getUserById",
           response.data.data.user.id,
         ]);
-        await router.push("/dashboard/motoristas");
+        await router.push("/motoristas");
       },
     }
   );

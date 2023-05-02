@@ -1,19 +1,17 @@
 import { RawUser, Resource } from "../types";
 import { rawUserToUser } from "../maps/rawUserToUser";
-import axios from "../axios";
+import axios from "../lib/axios";
 
-interface Params {
-  authorization?: string;
+interface Options {
   signal?: AbortSignal;
 }
 
-export const getUserByMe = async ({ authorization, signal }: Params = {}) => {
+export const getUserByMe = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawUser },
-  } = await axios(authorization).get<Resource<RawUser>>(
-    `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/me`,
-    { signal }
-  );
+  } = await axios.get<Resource<RawUser>>("/api/user/me", {
+    signal,
+  });
 
   return rawUserToUser(rawUser);
 };

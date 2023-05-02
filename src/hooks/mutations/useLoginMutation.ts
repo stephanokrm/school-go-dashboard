@@ -1,19 +1,10 @@
 import { AxiosResponse } from "axios";
-import { addSeconds } from "date-fns";
 import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { useFormMutation } from "./useFormMutation";
-import { FieldValues } from "react-hook-form";
-
-type Data = {
-  grant_type: "password";
-  client_id: string;
-  client_secret: string;
-  username: string;
-  password: string;
-};
+import { useCsrfQuery } from "../queries/useCsrfQuery";
+import { LoginForm } from "../../types";
 
 type Response = {
   access_token: string;
@@ -22,34 +13,26 @@ type Response = {
 
 type SuccessResponse = AxiosResponse<Response>;
 
-export const useLoginMutation = <TFieldValues extends FieldValues>() => {
+export const useLoginMutation = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [, setCookie] = useCookies(["authorization"]);
 
-  return useFormMutation<SuccessResponse, TFieldValues>(
-    (user) => {
-      return axios().post<Response, SuccessResponse, Data>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/oauth/token`,
-        {
-          grant_type: "password",
-          client_id: process.env.NEXT_PUBLIC_CLIENT_ID ?? "",
-          client_secret: process.env.NEXT_PUBLIC_CLIENT_SECRET ?? "",
-          username: user.email,
-          password: user.password ?? "",
-        }
-      );
+  useCsrfQuery();
+
+  return useFormMutation<SuccessResponse, LoginForm>(
+    async (user) => {
+      return axios.post<Response, SuccessResponse>("/login", user);
     },
     {
-      onSuccess: async (response) => {
-        setCookie("authorization", response.data.access_token, {
-          expires: addSeconds(new Date(), response.data.expires_in),
-          sameSite: "strict",
-          secure: true,
-        });
+      onSuccess: async () => {
+        const redirect = router.query.redirect as string | undefined;
 
-        await queryClient.invalidateQueries(["getUserByMe"]);
-        await router.push("/dashboard/itinerarios");
+        if (redirect) {
+          await router.replace(redirect);
+        } else {
+          await queryClient.invalidateQueries(["getUserByMe"]);
+          await router.push("/itinerarios");
+        }
       },
     }
   );

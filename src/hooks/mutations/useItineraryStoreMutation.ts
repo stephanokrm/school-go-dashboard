@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import {
   Itinerary,
   ItineraryCreateForm,
@@ -26,8 +26,8 @@ export const useItineraryStoreMutation = ({
 
   return useFormMutation<SuccessResponse, ItineraryCreateForm>(
     async (itinerary) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/itinerary`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/itinerary`,
         await itineraryToRawItinerary(itinerary as Itinerary)
       );
     },
@@ -39,7 +39,7 @@ export const useItineraryStoreMutation = ({
           "getItineraryById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/itinerarios");
+        await router.push("/itinerarios");
       },
     }
   );

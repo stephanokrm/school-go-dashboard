@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { Student, RawStudent, Resource, StudentCreateForm } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,8 +21,8 @@ export const useStudentStoreMutation = ({
 
   return useFormMutation<SuccessResponse, StudentCreateForm>(
     async (student) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/student`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/student`,
         await studentToRawStudent(student as Student)
       );
     },
@@ -34,7 +34,7 @@ export const useStudentStoreMutation = ({
           "getStudentById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/alunos");
+        await router.push("/alunos");
       },
     }
   );

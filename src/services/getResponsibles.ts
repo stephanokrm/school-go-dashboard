@@ -1,22 +1,17 @@
 import { RawResponsible, Resource } from "../types";
 import { rawResponsibleToResponsible } from "../maps/rawResponsibleToResponsible";
-import axios from "../axios";
+import axios from "../lib/axios";
 
-interface Params {
-  authorization?: string;
+interface Options {
   signal?: AbortSignal;
 }
 
-export const getResponsibles = async ({
-  authorization,
-  signal,
-}: Params = {}) => {
+export const getResponsibles = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawResponsible },
-  } = await axios(authorization).get<Resource<RawResponsible[]>>(
-    `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/responsible`,
-    { signal }
-  );
+  } = await axios.get<Resource<RawResponsible[]>>(`/api/responsible`, {
+    signal,
+  });
 
   return Promise.all(rawResponsible.map(rawResponsibleToResponsible));
 };

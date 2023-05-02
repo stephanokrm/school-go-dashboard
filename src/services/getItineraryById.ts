@@ -1,24 +1,18 @@
 import { RawItinerary, Resource } from "../types";
-import axios from "../axios";
+import axios from "../lib/axios";
 import { rawItineraryToItinerary } from "../maps/rawItineraryToItinerary";
 
-interface Params {
+interface Options {
   id: string;
-  authorization?: string;
   signal?: AbortSignal;
 }
 
-export const getItineraryById = async ({
-  id,
-  authorization,
-  signal,
-}: Params) => {
+export const getItineraryById = async ({ id, signal }: Options) => {
   const {
     data: { data: rawItinerary },
-  } = await axios(authorization).get<Resource<RawItinerary>>(
-    `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/itinerary/${id}`,
-    { signal }
-  );
+  } = await axios.get<Resource<RawItinerary>>(`/api/itinerary/${id}`, {
+    signal,
+  });
 
   return rawItineraryToItinerary(rawItinerary);
 };

@@ -22,8 +22,8 @@ import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "next/link";
 import { Avatar } from "@mui/material";
-import { useGetUserByMeQuery } from "../hooks/queries/useGetUserByMeQuery";
 import { useLogoutMutation } from "../hooks/mutations/useLogoutMutation";
+import { useAuth } from "../hooks/useAuth";
 
 const drawerWidth = 250;
 
@@ -38,32 +38,30 @@ interface Props {
 export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   const { window, children } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { data: user, error } = useGetUserByMeQuery();
-  const { mutate } = useLogoutMutation();
+  const { user } = useAuth();
+  const { mutate: logout } = useLogoutMutation();
 
-  const isAuthenticated = !!user && !error;
+  const isAuthenticated = !!user;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const logout = () => mutate({});
-
   const menus = [
-    { text: "Itinerários", href: "/dashboard/itinerarios", Icon: RouteIcon },
-    { text: "Alunos", href: "/dashboard/alunos", Icon: FaceIcon },
-    { text: "Escolas", href: "/dashboard/escolas", Icon: SchoolIcon },
+    { text: "Itinerários", href: "/itinerarios", Icon: RouteIcon },
+    { text: "Alunos", href: "/alunos", Icon: FaceIcon },
+    { text: "Escolas", href: "/escolas", Icon: SchoolIcon },
     {
       text: "Motoristas",
-      href: "/dashboard/motoristas",
+      href: "/motoristas",
       Icon: DirectionsBusFilledIcon,
     },
     {
       text: "Responsáveis",
-      href: "/dashboard/responsaveis",
+      href: "/responsaveis",
       Icon: SupervisedUserCircleIcon,
     },
-    { text: "Usuários", href: "/dashboard/usuarios", Icon: PersonIcon },
+    { text: "Usuários", href: "/usuarios", Icon: PersonIcon },
   ];
   const drawer = (
     <Box onClick={handleDrawerToggle}>
@@ -85,7 +83,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
       <Divider />
       <List>
         <ListItem key="Stephano" disablePadding>
-          <Link href="/dashboard/usuarios/eu" passHref legacyBehavior>
+          <Link href="/usuarios/eu" passHref legacyBehavior>
             <ListItemButton>
               <ListItemIcon>
                 <Avatar

@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { Student, RawStudent, Resource, StudentEditForm } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,8 +21,8 @@ export const useStudentUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, StudentEditForm>(
     async (student) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/student/${student.id}`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/student/${student.id}`,
         {
           ...(await studentToRawStudent(student as Student)),
           _method: "PUT",
@@ -37,7 +37,7 @@ export const useStudentUpdateMutation = ({
           "getStudentById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/alunos");
+        await router.push("/alunos");
       },
     }
   );

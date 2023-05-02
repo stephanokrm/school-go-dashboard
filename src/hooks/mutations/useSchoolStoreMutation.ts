@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { School, RawSchool, Resource, SchoolCreateForm } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,8 +21,8 @@ export const useSchoolStoreMutation = ({
 
   return useFormMutation<SuccessResponse, SchoolCreateForm>(
     async (school) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/school`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/school`,
         await schoolToRawSchool(school as School)
       );
     },
@@ -34,7 +34,7 @@ export const useSchoolStoreMutation = ({
           "getSchoolById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/escolas");
+        await router.push("/escolas");
       },
     }
   );

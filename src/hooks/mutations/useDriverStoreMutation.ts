@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { Driver, DriverCreateForm, RawDriver, Resource } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,8 +21,8 @@ export const useDriverStoreMutation = ({
 
   return useFormMutation<SuccessResponse, DriverCreateForm>(
     async (driver) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/driver`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/driver`,
         await driverToRawDriver(driver as Driver)
       );
     },
@@ -39,7 +39,7 @@ export const useDriverStoreMutation = ({
           "getUserById",
           response.data.data.user.id,
         ]);
-        await router.push("/dashboard/motoristas");
+        await router.push("/motoristas");
       },
     }
   );

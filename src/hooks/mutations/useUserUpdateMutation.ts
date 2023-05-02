@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { User, RawUser, Resource, UserEditForm } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,13 +21,10 @@ export const useUserUpdateMutation = ({ setError }: UseUserUpdateMutation) => {
 
   return useFormMutation<SuccessResponse, UserEditForm>(
     async (user) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/${user.id}`,
-        {
-          ...(await userToRawUser(user as User)),
-          _method: "PUT",
-        }
-      );
+      return axios.post<Response, SuccessResponse>(`/api/user/${user.id}`, {
+        ...(await userToRawUser(user as User)),
+        _method: "PUT",
+      });
     },
     {
       setError,
@@ -41,7 +38,7 @@ export const useUserUpdateMutation = ({ setError }: UseUserUpdateMutation) => {
           await queryClient.invalidateQueries(["getUserByMe"]);
         }
 
-        await router.push("/dashboard/usuarios");
+        await router.push("/usuarios");
       },
     }
   );

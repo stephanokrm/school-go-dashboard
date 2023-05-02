@@ -1,6 +1,6 @@
 import { RawStudent, Resource } from "../types";
 import { rawStudentToStudent } from "../maps/rawStudentToStudent";
-import axios from "../axios";
+import axios from "../lib/axios";
 
 interface Params {
   morning?: boolean;
@@ -9,22 +9,17 @@ interface Params {
 }
 
 interface Options {
-  authorization?: string;
   params?: Params;
   signal?: AbortSignal;
 }
 
-export const getStudents = async ({
-  authorization,
-  params,
-  signal,
-}: Options = {}) => {
+export const getStudents = async ({ params, signal }: Options = {}) => {
   const {
     data: { data: rawStudents },
-  } = await axios(authorization).get<Resource<RawStudent[]>>(
-    `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/student`,
-    { signal, params }
-  );
+  } = await axios.get<Resource<RawStudent[]>>(`/api/student`, {
+    signal,
+    params,
+  });
 
   return Promise.all(rawStudents.map(rawStudentToStudent));
 };

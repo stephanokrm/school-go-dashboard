@@ -1,27 +1,18 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
 import { useRouter } from "next/router";
-import { useCookies } from "react-cookie";
 import { useFormMutation } from "./useFormMutation";
+import axios from "../../lib/axios";
 
 export const useLogoutMutation = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [, , removeCookie] = useCookies(["authorization"]);
 
-  return useFormMutation(
-    () => {
-      return axios().post(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/logout`
-      );
-    },
-    {
-      onMutate: async () => {
-        removeCookie("authorization");
+  return useFormMutation(async () => {
+    try {
+      await axios.post(`/logout`);
+    } catch (e) {}
 
-        await queryClient.clear();
-        await router.push("/login");
-      },
-    }
-  );
+    await queryClient.clear();
+    await router.push("/login");
+  });
 };

@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import {
   Responsible,
   RawResponsible,
@@ -26,8 +26,8 @@ export const useResponsibleStoreMutation = ({
 
   return useFormMutation<SuccessResponse, ResponsibleCreateForm>(
     async (responsible) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/responsible`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/responsible`,
         await responsibleToRawResponsible(responsible as Responsible)
       );
     },
@@ -44,7 +44,7 @@ export const useResponsibleStoreMutation = ({
           "getUserById",
           response.data.data.user.id,
         ]);
-        await router.push("/dashboard/responsaveis");
+        await router.push("/responsaveis");
       },
     }
   );

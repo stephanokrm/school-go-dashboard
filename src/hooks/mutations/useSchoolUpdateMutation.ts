@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import { School, RawSchool, Resource, SchoolEditForm } from "../../types";
 import { AxiosResponse } from "axios";
 import { useFormMutation } from "./useFormMutation";
@@ -21,13 +21,10 @@ export const useSchoolUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, SchoolEditForm>(
     async (school) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/school/${school.id}`,
-        {
-          ...(await schoolToRawSchool(school as School)),
-          _method: "PUT",
-        }
-      );
+      return axios.post<Response, SuccessResponse>(`/api/school/${school.id}`, {
+        ...(await schoolToRawSchool(school as School)),
+        _method: "PUT",
+      });
     },
     {
       setError,
@@ -37,7 +34,7 @@ export const useSchoolUpdateMutation = ({
           "getSchoolById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/escolas");
+        await router.push("/escolas");
       },
     }
   );

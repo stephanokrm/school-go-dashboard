@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import {
   Itinerary,
   ItineraryEditForm,
@@ -26,8 +26,8 @@ export const useItineraryUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, ItineraryEditForm>(
     async (itinerary) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/itinerary/${itinerary.id}`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/itinerary/${itinerary.id}`,
         {
           ...(await itineraryToRawItinerary(itinerary as Itinerary)),
           _method: "PUT",
@@ -42,7 +42,7 @@ export const useItineraryUpdateMutation = ({
           "getItineraryById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/itinerarios");
+        await router.push("/itinerarios");
       },
     }
   );

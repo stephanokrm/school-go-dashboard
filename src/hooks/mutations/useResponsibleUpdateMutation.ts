@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import axios from "../../axios";
+import axios from "../../lib/axios";
 import {
   Responsible,
   RawResponsible,
@@ -26,8 +26,8 @@ export const useResponsibleUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, ResponsibleEditForm>(
     async (responsible) => {
-      return axios().post<Response, SuccessResponse>(
-        `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/user/${responsible.user.id}/responsible/${responsible.id}`,
+      return axios.post<Response, SuccessResponse>(
+        `/api/user/${responsible.user.id}/responsible/${responsible.id}`,
         {
           ...(await responsibleToRawResponsible(responsible as Responsible)),
           _method: "PUT",
@@ -47,7 +47,7 @@ export const useResponsibleUpdateMutation = ({
           "getUserById",
           response.data.data.id,
         ]);
-        await router.push("/dashboard/responsaveis");
+        await router.push("/responsaveis");
       },
     }
   );

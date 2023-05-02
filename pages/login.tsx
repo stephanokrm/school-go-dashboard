@@ -11,26 +11,21 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { ControlledTextField } from "../src/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "../src/hooks/mutations/useLoginMutation";
-
-const schema = yup
-  .object({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-  })
-  .required();
-
-type FormData = yup.InferType<typeof schema>;
+import { LoginForm } from "../src/types";
+import { loginSchema } from "../src/schemas";
+import { useAuth } from "../src/hooks/useAuth";
 
 const Login: NextPage = () => {
-  const { control, handleSubmit } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  const { control, handleSubmit } = useForm<LoginForm>({
+    resolver: yupResolver(loginSchema),
   });
-  const { mutate, isLoading, message } = useLoginMutation<FormData>();
-  const onSubmit = handleSubmit((user) => mutate(user));
+  const { mutate, isLoading, message } = useLoginMutation();
+  const onSubmit = handleSubmit((login) => mutate(login));
+
+  useAuth({ middleware: "guest", redirectIfAuthenticated: "/itinerarios" });
 
   return (
     <>

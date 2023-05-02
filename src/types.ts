@@ -6,6 +6,7 @@ import {
   driverEditSchema,
   itineraryCreateSchema,
   itineraryEditSchema,
+  loginSchema,
   responsibleCreateSchema,
   responsibleEditSchema,
   schoolCreateSchema,
@@ -39,12 +40,11 @@ export type RawUser = {
   email: string;
   email_verified_at: string | null;
   cell_phone: string;
-  password: string | null;
+  password: string;
   password_confirmation: string | null;
   created_at: string;
   updated_at: string | null;
-  deleted_at: string | null;
-  roles: RawRole[];
+  roles?: RawRole[];
 };
 
 export type User = {
@@ -52,17 +52,12 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
-  emailVerifiedAt: Date | null;
-  emailVerifiedAtISO: string | null;
+  emailVerifiedAt?: Date;
   cellPhone: string;
-  password: string | null;
-  passwordConfirmation: string | null;
-  createdAt: Date | null;
-  createdAtISO: string;
-  updatedAt: Date | null;
-  updatedAtISO: string | null;
-  deletedAt: Date | null;
-  deletedAtISO: string | null;
+  password: string;
+  passwordConfirmation?: string;
+  createdAt: Date;
+  updatedAt?: Date;
   roles?: Role[];
 };
 
@@ -199,6 +194,8 @@ export type Itinerary = {
 };
 
 // FIELD VALUES
+
+export type LoginForm = yup.InferType<typeof loginSchema>;
 
 export type ItineraryCreateForm = yup.InferType<typeof itineraryCreateSchema>;
 export type ItineraryEditForm = yup.InferType<typeof itineraryEditSchema>;

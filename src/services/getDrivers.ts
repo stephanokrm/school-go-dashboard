@@ -1,19 +1,15 @@
 import { RawDriver, Resource } from "../types";
 import { rawDriverToDriver } from "../maps/rawDriverToDriver";
-import axios from "../axios";
+import axios from "../lib/axios";
 
-interface Params {
-  authorization?: string;
+interface Options {
   signal?: AbortSignal;
 }
 
-export const getDrivers = async ({ authorization, signal }: Params = {}) => {
+export const getDrivers = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawDriver },
-  } = await axios(authorization).get<Resource<RawDriver[]>>(
-    `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/driver`,
-    { signal }
-  );
+  } = await axios.get<Resource<RawDriver[]>>(`/api/driver`, { signal });
 
   return Promise.all(rawDriver.map(rawDriverToDriver));
 };

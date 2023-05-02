@@ -5,7 +5,7 @@ module.exports = {
     return [
       {
         source: "/",
-        destination: "/dashboard/itinerarios",
+        destination: "/itinerarios",
         permanent: true,
       },
     ];

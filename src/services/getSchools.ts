@@ -1,19 +1,15 @@
 import { RawSchool, Resource } from "../types";
 import { rawSchoolToSchool } from "../maps/rawSchoolToSchool";
-import axios from "../axios";
+import axios from "../lib/axios";
 
-interface Params {
-  authorization?: string;
+interface Options {
   signal?: AbortSignal;
 }
 
-export const getSchools = async ({ authorization, signal }: Params = {}) => {
+export const getSchools = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawSchool },
-  } = await axios(authorization).get<Resource<RawSchool[]>>(
-    `${process.env.NEXT_PUBLIC_SERVICE_URL}/api/school`,
-    { signal }
-  );
+  } = await axios.get<Resource<RawSchool[]>>(`/api/school`, { signal });
 
   return Promise.all(rawSchool.map(rawSchoolToSchool));
 };
