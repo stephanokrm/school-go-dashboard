@@ -10,7 +10,7 @@ interface Options {
 export const getItineraryById = async ({ id, signal }: Options) => {
   const {
     data: { data: rawItinerary },
-  } = await axios.get<Resource<RawItinerary>>(`/api/itinerary/${id}`, {
+  } = await axios.get<Resource<RawItinerary>>(`/itinerary/${id}`, {
     signal,
   });
 

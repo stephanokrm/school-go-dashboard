@@ -21,13 +21,10 @@ export const useStudentUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, StudentEditForm>(
     async (student) => {
-      return axios.post<Response, SuccessResponse>(
-        `/api/student/${student.id}`,
-        {
-          ...(await studentToRawStudent(student as Student)),
-          _method: "PUT",
-        }
-      );
+      return axios.post<Response, SuccessResponse>(`/student/${student.id}`, {
+        ...(await studentToRawStudent(student as Student)),
+        _method: "PUT",
+      });
     },
     {
       setError,

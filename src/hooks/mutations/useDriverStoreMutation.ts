@@ -22,7 +22,7 @@ export const useDriverStoreMutation = ({
   return useFormMutation<SuccessResponse, DriverCreateForm>(
     async (driver) => {
       return axios.post<Response, SuccessResponse>(
-        `/api/driver`,
+        `/driver`,
         await driverToRawDriver(driver as Driver)
       );
     },

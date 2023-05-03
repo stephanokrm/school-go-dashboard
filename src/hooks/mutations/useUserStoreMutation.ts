@@ -20,7 +20,7 @@ export const useUserStoreMutation = ({ setError }: UseUserStoreMutation) => {
   return useFormMutation<SuccessResponse, UserCreateForm>(
     async (user) => {
       return axios.post<Response, SuccessResponse>(
-        `/api/user`,
+        `/user`,
         await userToRawUser(user as User)
       );
     },

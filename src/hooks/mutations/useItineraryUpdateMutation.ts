@@ -27,7 +27,7 @@ export const useItineraryUpdateMutation = ({
   return useFormMutation<SuccessResponse, ItineraryEditForm>(
     async (itinerary) => {
       return axios.post<Response, SuccessResponse>(
-        `/api/itinerary/${itinerary.id}`,
+        `/itinerary/${itinerary.id}`,
         {
           ...(await itineraryToRawItinerary(itinerary as Itinerary)),
           _method: "PUT",

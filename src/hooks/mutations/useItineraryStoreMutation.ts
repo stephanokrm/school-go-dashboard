@@ -27,7 +27,7 @@ export const useItineraryStoreMutation = ({
   return useFormMutation<SuccessResponse, ItineraryCreateForm>(
     async (itinerary) => {
       return axios.post<Response, SuccessResponse>(
-        `/api/itinerary`,
+        `/itinerary`,
         await itineraryToRawItinerary(itinerary as Itinerary)
       );
     },

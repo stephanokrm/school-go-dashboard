@@ -9,7 +9,7 @@ interface Options {
 export const getSchools = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawSchool },
-  } = await axios.get<Resource<RawSchool[]>>(`/api/school`, { signal });
+  } = await axios.get<Resource<RawSchool[]>>(`/school`, { signal });
 
   return Promise.all(rawSchool.map(rawSchoolToSchool));
 };

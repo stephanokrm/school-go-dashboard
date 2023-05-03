@@ -9,7 +9,7 @@ interface Options {
 export const getDrivers = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawDriver },
-  } = await axios.get<Resource<RawDriver[]>>(`/api/driver`, { signal });
+  } = await axios.get<Resource<RawDriver[]>>(`/driver`, { signal });
 
   return Promise.all(rawDriver.map(rawDriverToDriver));
 };

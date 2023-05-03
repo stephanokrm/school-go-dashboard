@@ -16,7 +16,7 @@ interface Options {
 export const getStudents = async ({ params, signal }: Options = {}) => {
   const {
     data: { data: rawStudents },
-  } = await axios.get<Resource<RawStudent[]>>(`/api/student`, {
+  } = await axios.get<Resource<RawStudent[]>>(`/student`, {
     signal,
     params,
   });

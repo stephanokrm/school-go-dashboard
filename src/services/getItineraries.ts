@@ -9,7 +9,7 @@ interface Options {
 export const getItineraries = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawItinerary },
-  } = await axios.get<Resource<RawItinerary[]>>(`/api/itinerary`, { signal });
+  } = await axios.get<Resource<RawItinerary[]>>(`/itinerary`, { signal });
 
   return Promise.all(rawItinerary.map(rawItineraryToItinerary));
 };
