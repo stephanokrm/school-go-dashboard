@@ -10,7 +10,7 @@ interface Options {
 export const getSchoolById = async ({ id, signal }: Options) => {
   const {
     data: { data: rawSchool },
-  } = await axios.get<Resource<RawSchool>>(`/school/${id}`, { signal });
+  } = await axios.get<Resource<RawSchool>>(`/api/school/${id}`, { signal });
 
   return rawSchoolToSchool(rawSchool);
 };

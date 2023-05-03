@@ -9,7 +9,7 @@ interface Options {
 export const getResponsibles = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawResponsible },
-  } = await axios.get<Resource<RawResponsible[]>>(`/responsible`, {
+  } = await axios.get<Resource<RawResponsible[]>>(`/api/responsible`, {
     signal,
   });
 

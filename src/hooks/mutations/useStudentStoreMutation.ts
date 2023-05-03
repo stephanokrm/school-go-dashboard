@@ -22,7 +22,7 @@ export const useStudentStoreMutation = ({
   return useFormMutation<SuccessResponse, StudentCreateForm>(
     async (student) => {
       return axios.post<Response, SuccessResponse>(
-        `/student`,
+        `/api/student`,
         await studentToRawStudent(student as Student)
       );
     },

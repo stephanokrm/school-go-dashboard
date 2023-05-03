@@ -21,7 +21,7 @@ export const useUserUpdateMutation = ({ setError }: UseUserUpdateMutation) => {
 
   return useFormMutation<SuccessResponse, UserEditForm>(
     async (user) => {
-      return axios.post<Response, SuccessResponse>(`/user/${user.id}`, {
+      return axios.post<Response, SuccessResponse>(`/api/user/${user.id}`, {
         ...(await userToRawUser(user as User)),
         _method: "PUT",
       });

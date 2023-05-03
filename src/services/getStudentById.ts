@@ -10,7 +10,7 @@ interface Options {
 export const getStudentById = async ({ id, signal }: Options) => {
   const {
     data: { data: rawStudent },
-  } = await axios.get<Resource<RawStudent>>(`/student/${id}`, { signal });
+  } = await axios.get<Resource<RawStudent>>(`/api/student/${id}`, { signal });
 
   return rawStudentToStudent(rawStudent);
 };

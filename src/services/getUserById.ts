@@ -10,7 +10,7 @@ interface Options {
 export const getUserById = async ({ id, signal }: Options) => {
   const {
     data: { data: rawUser },
-  } = await axios.get<Resource<RawUser>>(`/user/${id}`, { signal });
+  } = await axios.get<Resource<RawUser>>(`/api/user/${id}`, { signal });
 
   return rawUserToUser(rawUser);
 };

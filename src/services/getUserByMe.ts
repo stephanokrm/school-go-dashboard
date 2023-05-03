@@ -9,7 +9,7 @@ interface Options {
 export const getUserByMe = async ({ signal }: Options = {}) => {
   const {
     data: { data: rawUser },
-  } = await axios.get<Resource<RawUser>>("/user/me", {
+  } = await axios.get<Resource<RawUser>>("/api/user/me", {
     signal,
   });
 

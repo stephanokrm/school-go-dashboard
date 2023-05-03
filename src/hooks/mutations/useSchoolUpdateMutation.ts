@@ -21,7 +21,7 @@ export const useSchoolUpdateMutation = ({
 
   return useFormMutation<SuccessResponse, SchoolEditForm>(
     async (school) => {
-      return axios.post<Response, SuccessResponse>(`/school/${school.id}`, {
+      return axios.post<Response, SuccessResponse>(`/api/school/${school.id}`, {
         ...(await schoolToRawSchool(school as School)),
         _method: "PUT",
       });

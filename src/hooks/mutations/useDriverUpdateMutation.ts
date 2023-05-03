@@ -22,7 +22,7 @@ export const useDriverUpdateMutation = ({
   return useFormMutation<SuccessResponse, DriverEditForm>(
     async (driver) => {
       return axios.post<Response, SuccessResponse>(
-        `/user/${driver.user.id}/driver/${driver.id}`,
+        `/api/user/${driver.user.id}/driver/${driver.id}`,
         {
           ...(await driverToRawDriver(driver as Driver)),
           _method: "PUT",

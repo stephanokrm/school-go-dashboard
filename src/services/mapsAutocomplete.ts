@@ -13,7 +13,7 @@ interface Response {
 export const mapsAutocomplete = async ({ input, signal }: Options = {}) => {
   const {
     data: { predictions },
-  } = await axios.get<Response>(`/maps/autocomplete`, {
+  } = await axios.get<Response>(`/api/maps/autocomplete`, {
     signal,
     params: { input },
   });

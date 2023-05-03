@@ -27,7 +27,7 @@ export const useResponsibleStoreMutation = ({
   return useFormMutation<SuccessResponse, ResponsibleCreateForm>(
     async (responsible) => {
       return axios.post<Response, SuccessResponse>(
-        `/responsible`,
+        `/api/responsible`,
         await responsibleToRawResponsible(responsible as Responsible)
       );
     },

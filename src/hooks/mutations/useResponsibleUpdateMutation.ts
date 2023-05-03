@@ -27,7 +27,7 @@ export const useResponsibleUpdateMutation = ({
   return useFormMutation<SuccessResponse, ResponsibleEditForm>(
     async (responsible) => {
       return axios.post<Response, SuccessResponse>(
-        `/user/${responsible.user.id}/responsible/${responsible.id}`,
+        `/api/user/${responsible.user.id}/responsible/${responsible.id}`,
         {
           ...(await responsibleToRawResponsible(responsible as Responsible)),
           _method: "PUT",
