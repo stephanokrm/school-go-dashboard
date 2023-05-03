@@ -7,6 +7,7 @@ import {
   itineraryCreateSchema,
   itineraryEditSchema,
   loginSchema,
+  passwordResetFormSchema,
   responsibleCreateSchema,
   responsibleEditSchema,
   schoolCreateSchema,
@@ -42,7 +43,7 @@ export type RawUser = {
   cell_phone: string;
   password: string;
   password_confirmation: string | null;
-  created_at: string;
+  created_at: string | null;
   updated_at: string | null;
   roles?: RawRole[];
 };
@@ -56,7 +57,7 @@ export type User = {
   cellPhone: string;
   password: string;
   passwordConfirmation?: string;
-  createdAt: Date;
+  createdAt?: Date;
   updatedAt?: Date;
   roles?: Role[];
 };
@@ -196,6 +197,7 @@ export type Itinerary = {
 // FIELD VALUES
 
 export type LoginForm = yup.InferType<typeof loginSchema>;
+export type PasswordResetForm = yup.InferType<typeof passwordResetFormSchema>;
 
 export type ItineraryCreateForm = yup.InferType<typeof itineraryCreateSchema>;
 export type ItineraryEditForm = yup.InferType<typeof itineraryEditSchema>;

@@ -7,6 +7,15 @@ export const loginSchema = yup
   })
   .required();
 
+export const passwordResetFormSchema = yup
+  .object({
+    email: yup.string().email().required(),
+    token: yup.string().required(),
+    password: yup.string().required(),
+    passwordConfirmation: yup.string().required(),
+  })
+  .required();
+
 export const userCreateSchema = yup
   .object({
     firstName: yup.string().required(),

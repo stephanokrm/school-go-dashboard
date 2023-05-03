@@ -11,7 +11,7 @@ export const userToRawUser = async (user: User): Promise<RawUser> => ({
   cell_phone: parsePhoneNumber(user.cellPhone, "BR").number,
   password: user.password,
   password_confirmation: user.passwordConfirmation ?? null,
-  created_at: user.createdAt.toISOString(),
+  created_at: user.createdAt?.toISOString() ?? null,
   updated_at: user.updatedAt?.toISOString() ?? null,
   roles: Array.isArray(user.roles)
     ? await Promise.all(user.roles.map(roleToRawRole))

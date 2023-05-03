@@ -14,7 +14,7 @@ export const rawUserToUser = async (rawUser: RawUser): Promise<User> => ({
   cellPhone: parsePhoneNumber(rawUser.cell_phone, "BR").formatNational(),
   password: rawUser.password ?? undefined,
   passwordConfirmation: rawUser.password_confirmation ?? undefined,
-  createdAt: parseISO(rawUser.created_at),
+  createdAt: rawUser.created_at ? parseISO(rawUser.created_at) : undefined,
   updatedAt: rawUser.updated_at ? parseISO(rawUser.updated_at) : undefined,
   roles: Array.isArray(rawUser.roles)
     ? await Promise.all(rawUser.roles.map(rawRoleToRole))
