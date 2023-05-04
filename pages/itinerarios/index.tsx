@@ -20,6 +20,7 @@ import Box from "@mui/material/Box";
 import Link from "next/link";
 import { useGetItinerariesQuery } from "../../src/hooks/queries/useGetItinerariesQuery";
 import { useAuth } from "../../src/hooks/useAuth";
+import RouteIcon from "@mui/icons-material/Route";
 
 export default function Itineraries() {
   const { data: itineraries = [] } = useGetItinerariesQuery();
@@ -46,75 +47,90 @@ export default function Itineraries() {
                 title="Itinerários"
               />
               <CardContent sx={{ padding: 0 }}>
-                <List sx={{ width: "100%" }}>
-                  {itineraries.map((itinerary) => (
-                    <>
-                      <ListItem
-                        alignItems="flex-start"
-                        secondaryAction={
-                          <>
-                            <Link
-                              href={{
-                                pathname: "/itinerarios/[id]/editar",
-                                query: { id: itinerary.id },
-                              }}
-                              passHref
-                              legacyBehavior
-                            >
-                              <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                sx={{ mr: 0.1 }}
-                              >
-                                <EditIcon />
-                              </IconButton>
-                            </Link>
-                            <IconButton edge="end" aria-label="delete">
-                              <DeleteIcon />
-                            </IconButton>
-                          </>
-                        }
-                      >
-                        <ListItemText
-                          primary={itinerary.school.name}
-                          secondary={
+                {itineraries.length === 0 ? (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <RouteIcon fontSize="large" />
+                    </Grid>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <Typography variant="h5">
+                        Nenhum itinerário cadastrado
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <List sx={{ width: "100%" }}>
+                    {itineraries.map((itinerary) => (
+                      <>
+                        <ListItem
+                          alignItems="flex-start"
+                          secondaryAction={
                             <>
-                              <Box display="flex" alignItems="center" mt={1}>
-                                <DirectionsBusIcon
-                                  sx={{ mr: 1 }}
-                                  fontSize="small"
-                                />
-                                <Typography
-                                  variant="subtitle2"
-                                  display="inline"
+                              <Link
+                                href={{
+                                  pathname: "/itinerarios/[id]/editar",
+                                  query: { id: itinerary.id },
+                                }}
+                                passHref
+                                legacyBehavior
+                              >
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  sx={{ mr: 0.1 }}
                                 >
-                                  {itinerary.driver.user.firstName}{" "}
-                                  {itinerary.driver.user.lastName}
-                                </Typography>
-                              </Box>
-                              <Box display="flex" alignItems="center" mt={1}>
-                                <CalendarMonthIcon
-                                  sx={{ mr: 1 }}
-                                  fontSize="small"
-                                />
-                                <Typography variant="subtitle2">
-                                  {[
-                                    ...(itinerary.monday ? ["Segunda"] : []),
-                                    ...(itinerary.tuesday ? ["Terça"] : []),
-                                    ...(itinerary.wednesday ? ["Quarta"] : []),
-                                    ...(itinerary.thursday ? ["Quinta"] : []),
-                                    ...(itinerary.friday ? ["Sexta"] : []),
-                                  ].join(", ")}
-                                </Typography>
-                              </Box>
+                                  <EditIcon />
+                                </IconButton>
+                              </Link>
+                              <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon />
+                              </IconButton>
                             </>
                           }
-                        />
-                      </ListItem>
-                      <Divider />
-                    </>
-                  ))}
-                </List>
+                        >
+                          <ListItemText
+                            primary={itinerary.school.name}
+                            secondary={
+                              <>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <DirectionsBusIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {itinerary.driver.user.firstName}{" "}
+                                    {itinerary.driver.user.lastName}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <CalendarMonthIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography variant="subtitle2">
+                                    {[
+                                      ...(itinerary.monday ? ["Segunda"] : []),
+                                      ...(itinerary.tuesday ? ["Terça"] : []),
+                                      ...(itinerary.wednesday
+                                        ? ["Quarta"]
+                                        : []),
+                                      ...(itinerary.thursday ? ["Quinta"] : []),
+                                      ...(itinerary.friday ? ["Sexta"] : []),
+                                    ].join(", ")}
+                                  </Typography>
+                                </Box>
+                              </>
+                            }
+                          />
+                        </ListItem>
+                        <Divider />
+                      </>
+                    ))}
+                  </List>
+                )}
               </CardContent>
             </Card>
           </Grid>

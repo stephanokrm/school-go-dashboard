@@ -20,6 +20,7 @@ import FaceIcon from "@mui/icons-material/Face";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import LogoutIcon from "@mui/icons-material/Logout";
+import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import Link from "next/link";
 import { Avatar } from "@mui/material";
 import { useLogoutMutation } from "../hooks/mutations/useLogoutMutation";
@@ -48,6 +49,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   };
 
   const menus = [
+    { text: "Viagens", href: "/itinerarios", Icon: TravelExploreIcon },
     { text: "Itinerários", href: "/itinerarios", Icon: RouteIcon },
     { text: "Alunos", href: "/alunos", Icon: FaceIcon },
     { text: "Escolas", href: "/escolas", Icon: SchoolIcon },
