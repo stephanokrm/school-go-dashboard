@@ -16,7 +16,15 @@ import { ResponsiveDrawer } from "../src/components/ResponsiveDrawer";
 
 const clientSideEmotionCache = createEmotionCache();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+    },
+  },
+});
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
