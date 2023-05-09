@@ -33,7 +33,7 @@ const PasswordReset: NextPage = () => {
   const { mutate, isLoading, message } = usePasswordResetMutation();
   const onSubmit = handleSubmit((reset) => mutate(reset));
 
-  useAuth({ middleware: "guest", redirectIfAuthenticated: "/itinerarios" });
+  useAuth({ middleware: "guest" });
 
   return (
     <>

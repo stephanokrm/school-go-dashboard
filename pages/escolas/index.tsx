@@ -9,7 +9,6 @@ import AddIcon from "@mui/icons-material/Add";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
@@ -20,10 +19,14 @@ import Link from "next/link";
 import { useGetSchoolsQuery } from "../../src/hooks/queries/useGetSchoolsQuery";
 import SchoolIcon from "@mui/icons-material/School";
 import { useAuth } from "../../src/hooks/useAuth";
+import { DestroyButton } from "../../src/components/DestroyButton";
+import { useSchoolDestroyMutation } from "../../src/hooks/mutations/useSchoolDestroyMutation";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Schools() {
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
+  const { mutate: destroy } = useSchoolDestroyMutation();
 
   useAuth({ middleware: "auth" });
 
@@ -47,7 +50,14 @@ export default function Schools() {
                 title="Escolas"
               />
               <CardContent sx={{ padding: 0 }}>
-                {schools.length === 0 ? (
+                {isLoadingSchools && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <CircularProgress />
+                    </Grid>
+                  </Grid>
+                )}
+                {!isLoadingSchools && schools.length === 0 ? (
                   <Grid container spacing={2}>
                     <Grid item xs={12} justifyContent="center" display="flex">
                       <SchoolIcon fontSize="large" />
@@ -82,9 +92,9 @@ export default function Schools() {
                                   <EditIcon />
                                 </IconButton>
                               </Link>
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon />
-                              </IconButton>
+                              <DestroyButton
+                                onDestroy={async () => destroy(school.id)}
+                              />
                             </>
                           }
                         >

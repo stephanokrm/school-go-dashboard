@@ -21,21 +21,22 @@ export const useSchoolStoreMutation = ({
 
   return useFormMutation<SuccessResponse, SchoolCreateForm>(
     async (school) => {
-      return axios.post<Response, SuccessResponse>(
+      const response = await axios.post<Response, SuccessResponse>(
         `/api/school`,
         await schoolToRawSchool(school as School)
       );
+
+      await queryClient.invalidateQueries(["getSchools"]);
+      await queryClient.invalidateQueries([
+        "getSchoolById",
+        response.data.data.id,
+      ]);
+      await router.push("/escolas");
+
+      return response;
     },
     {
       setError,
-      onSuccess: async (response) => {
-        await queryClient.invalidateQueries(["getSchools"]);
-        await queryClient.invalidateQueries([
-          "getSchoolById",
-          response.data.data.id,
-        ]);
-        await router.push("/escolas");
-      },
     }
   );
 };

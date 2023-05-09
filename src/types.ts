@@ -194,6 +194,32 @@ export type Itinerary = {
   students?: Student[];
 };
 
+export type RawTrip = {
+  id: number;
+  arrive_at: string;
+  latitude: number | null;
+  longitude: number | null;
+  started_at: string | null;
+  finished_at: string | null;
+  itinerary: RawItinerary;
+  created_at: string;
+  updated_at: string | null;
+  students: RawStudent[] | null;
+};
+
+export type Trip = {
+  id: number;
+  arriveAt: Date;
+  latitude?: number;
+  longitude?: number;
+  startedAt?: Date;
+  finishedAt?: Date;
+  itinerary: Itinerary;
+  createdAt: Date;
+  updatedAt?: Date;
+  students?: Student[];
+};
+
 // FIELD VALUES
 
 export type LoginForm = yup.InferType<typeof loginSchema>;

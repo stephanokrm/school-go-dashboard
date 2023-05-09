@@ -21,21 +21,22 @@ export const useStudentStoreMutation = ({
 
   return useFormMutation<SuccessResponse, StudentCreateForm>(
     async (student) => {
-      return axios.post<Response, SuccessResponse>(
+      const response = await axios.post<Response, SuccessResponse>(
         `/api/student`,
         await studentToRawStudent(student as Student)
       );
+
+      await queryClient.invalidateQueries(["getStudents"]);
+      await queryClient.invalidateQueries([
+        "getStudentById",
+        response.data.data.id,
+      ]);
+      await router.push("/alunos");
+
+      return response;
     },
     {
       setError,
-      onSuccess: async (response) => {
-        await queryClient.invalidateQueries(["getStudents"]);
-        await queryClient.invalidateQueries([
-          "getStudentById",
-          response.data.data.id,
-        ]);
-        await router.push("/alunos");
-      },
     }
   );
 };

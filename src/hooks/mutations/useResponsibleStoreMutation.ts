@@ -26,26 +26,27 @@ export const useResponsibleStoreMutation = ({
 
   return useFormMutation<SuccessResponse, ResponsibleCreateForm>(
     async (responsible) => {
-      return axios.post<Response, SuccessResponse>(
+      const response = await axios.post<Response, SuccessResponse>(
         `/api/responsible`,
         await responsibleToRawResponsible(responsible as Responsible)
       );
+
+      await queryClient.invalidateQueries(["getResponsibles"]);
+      await queryClient.invalidateQueries([
+        "getResponsibleById",
+        response.data.data.id,
+      ]);
+      await queryClient.invalidateQueries(["getUsers"]);
+      await queryClient.invalidateQueries([
+        "getUserById",
+        response.data.data.user.id,
+      ]);
+      await router.push("/responsaveis");
+
+      return response;
     },
     {
       setError,
-      onSuccess: async (response) => {
-        await queryClient.invalidateQueries(["getResponsibles"]);
-        await queryClient.invalidateQueries([
-          "getResponsibleById",
-          response.data.data.id,
-        ]);
-        await queryClient.invalidateQueries(["getUsers"]);
-        await queryClient.invalidateQueries([
-          "getUserById",
-          response.data.data.user.id,
-        ]);
-        await router.push("/responsaveis");
-      },
     }
   );
 };

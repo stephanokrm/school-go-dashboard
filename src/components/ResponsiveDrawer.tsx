@@ -49,7 +49,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   };
 
   const menus = [
-    { text: "Viagens", href: "/itinerarios", Icon: TravelExploreIcon },
+    { text: "Viagens", href: "/trips", Icon: TravelExploreIcon },
     { text: "Itinerários", href: "/itinerarios", Icon: RouteIcon },
     { text: "Alunos", href: "/alunos", Icon: FaceIcon },
     { text: "Escolas", href: "/escolas", Icon: SchoolIcon },
@@ -150,6 +150,7 @@ export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
               onClose={handleDrawerToggle}
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
+                disableScrollLock: true,
               }}
               sx={{
                 display: { xs: "block", sm: "none" },

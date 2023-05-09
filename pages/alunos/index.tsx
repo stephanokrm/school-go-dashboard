@@ -12,7 +12,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import EditIcon from "@mui/icons-material/Edit";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -22,9 +21,14 @@ import React from "react";
 import { useGetStudentsQuery } from "../../src/hooks/queries/useGetStudentsQuery";
 import FaceIcon from "@mui/icons-material/Face";
 import { useAuth } from "../../src/hooks/useAuth";
+import { DestroyButton } from "../../src/components/DestroyButton";
+import { useStudentDestroyMutation } from "../../src/hooks/mutations/useStudentDestroyMutation";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Students() {
-  const { data: students = [] } = useGetStudentsQuery();
+  const { data: students = [], isLoading: isLoadingStudents } =
+    useGetStudentsQuery();
+  const { mutate: destroy } = useStudentDestroyMutation();
 
   useAuth({ middleware: "auth" });
 
@@ -48,7 +52,14 @@ export default function Students() {
                 title="Alunos"
               />
               <CardContent sx={{ padding: 0 }}>
-                {students.length === 0 ? (
+                {isLoadingStudents && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <CircularProgress />
+                    </Grid>
+                  </Grid>
+                )}
+                {!isLoadingStudents && students.length === 0 ? (
                   <Grid container spacing={2}>
                     <Grid item xs={12} justifyContent="center" display="flex">
                       <FaceIcon fontSize="large" />
@@ -82,9 +93,9 @@ export default function Students() {
                                   <EditIcon />
                                 </IconButton>
                               </Link>
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon />
-                              </IconButton>
+                              <DestroyButton
+                                onDestroy={async () => destroy(student.id)}
+                              />
                             </>
                           }
                         >

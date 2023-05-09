@@ -6,7 +6,6 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -21,9 +20,14 @@ import Link from "next/link";
 import { useGetItinerariesQuery } from "../../src/hooks/queries/useGetItinerariesQuery";
 import { useAuth } from "../../src/hooks/useAuth";
 import RouteIcon from "@mui/icons-material/Route";
+import { DestroyButton } from "../../src/components/DestroyButton";
+import { useItineraryDestroyMutation } from "../../src/hooks/mutations/useItineraryDestroyMutation";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Itineraries() {
-  const { data: itineraries = [] } = useGetItinerariesQuery();
+  const { data: itineraries = [], isLoading: isLoadingItineraries } =
+    useGetItinerariesQuery();
+  const { mutate: destroy } = useItineraryDestroyMutation();
 
   useAuth({ middleware: "auth" });
 
@@ -47,7 +51,14 @@ export default function Itineraries() {
                 title="Itinerários"
               />
               <CardContent sx={{ padding: 0 }}>
-                {itineraries.length === 0 ? (
+                {isLoadingItineraries && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <CircularProgress />
+                    </Grid>
+                  </Grid>
+                )}
+                {!isLoadingItineraries && itineraries.length === 0 ? (
                   <Grid container spacing={2}>
                     <Grid item xs={12} justifyContent="center" display="flex">
                       <RouteIcon fontSize="large" />
@@ -82,9 +93,9 @@ export default function Itineraries() {
                                   <EditIcon />
                                 </IconButton>
                               </Link>
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon />
-                              </IconButton>
+                              <DestroyButton
+                                onDestroy={async () => destroy(itinerary.id)}
+                              />
                             </>
                           }
                         >

@@ -25,7 +25,7 @@ const Login: NextPage = () => {
   const { mutate, isLoading, message } = useLoginMutation();
   const onSubmit = handleSubmit((login) => mutate(login));
 
-  useAuth({ middleware: "guest", redirectIfAuthenticated: "/itinerarios" });
+  useAuth({ middleware: "guest" });
 
   return (
     <>

@@ -12,7 +12,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import DeleteIcon from "@mui/icons-material/Delete";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -22,10 +21,14 @@ import Link from "next/link";
 import { useGetDriversQuery } from "../../src/hooks/queries/useGetDriversQuery";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import { useAuth } from "../../src/hooks/useAuth";
+import { DestroyButton } from "../../src/components/DestroyButton";
+import { useDriverDestroyMutation } from "../../src/hooks/mutations/useDriverDestroyMutation";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Drivers() {
   const { data: drivers = [], isLoading: isLoadingDrivers } =
     useGetDriversQuery();
+  const { mutate: destroy } = useDriverDestroyMutation();
 
   useAuth({ middleware: "auth" });
 
@@ -49,7 +52,14 @@ export default function Drivers() {
                 title="Motoristas"
               />
               <CardContent sx={{ padding: 0 }}>
-                {drivers.length === 0 ? (
+                {isLoadingDrivers && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <CircularProgress />
+                    </Grid>
+                  </Grid>
+                )}
+                {!isLoadingDrivers && drivers.length === 0 ? (
                   <Grid container spacing={2}>
                     <Grid item xs={12} justifyContent="center" display="flex">
                       <DirectionsBusFilledIcon fontSize="large" />
@@ -84,9 +94,9 @@ export default function Drivers() {
                                   <EditIcon />
                                 </IconButton>
                               </Link>
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon />
-                              </IconButton>
+                              <DestroyButton
+                                onDestroy={async () => destroy(driver.id)}
+                              />
                             </>
                           }
                         >

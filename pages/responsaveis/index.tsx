@@ -11,7 +11,6 @@ import ListItem from "@mui/material/ListItem";
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import DeleteIcon from "@mui/icons-material/Delete";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -21,9 +20,14 @@ import Link from "next/link";
 import { useGetResponsiblesQuery } from "../../src/hooks/queries/useGetResponsiblesQuery";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import { useAuth } from "../../src/hooks/useAuth";
+import { DestroyButton } from "../../src/components/DestroyButton";
+import { useResponsibleDestroyMutation } from "../../src/hooks/mutations/useResponsibleDestroyMutation";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Responsibles() {
-  const { data: responsibles = [] } = useGetResponsiblesQuery();
+  const { data: responsibles = [], isLoading: isLoadingResponsibles } =
+    useGetResponsiblesQuery();
+  const { mutate: destroy } = useResponsibleDestroyMutation();
 
   useAuth({ middleware: "auth" });
 
@@ -47,7 +51,14 @@ export default function Responsibles() {
                 title="Responsáveis"
               />
               <CardContent sx={{ padding: 0 }}>
-                {responsibles.length === 0 ? (
+                {isLoadingResponsibles && (
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} justifyContent="center" display="flex">
+                      <CircularProgress />
+                    </Grid>
+                  </Grid>
+                )}
+                {!isLoadingResponsibles && responsibles.length === 0 ? (
                   <Grid container spacing={2}>
                     <Grid item xs={12} justifyContent="center" display="flex">
                       <SupervisedUserCircleIcon fontSize="large" />
@@ -82,9 +93,9 @@ export default function Responsibles() {
                                   <EditIcon />
                                 </IconButton>
                               </Link>
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon />
-                              </IconButton>
+                              <DestroyButton
+                                onDestroy={async () => destroy(responsible.id)}
+                              />
                             </>
                           }
                         >
