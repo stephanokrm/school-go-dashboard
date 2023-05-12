@@ -23,6 +23,7 @@ import RouteIcon from "@mui/icons-material/Route";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useItineraryDestroyMutation } from "../../src/hooks/mutations/useItineraryDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 export default function Itineraries() {
   const { data: itineraries = [], isLoading: isLoadingItineraries } =
@@ -114,6 +115,18 @@ export default function Itineraries() {
                                   >
                                     {itinerary.driver.user.firstName}{" "}
                                     {itinerary.driver.user.lastName}
+                                  </Typography>
+                                </Box>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                  <LocationOnIcon
+                                    sx={{ mr: 1 }}
+                                    fontSize="small"
+                                  />
+                                  <Typography
+                                    variant="subtitle2"
+                                    display="inline"
+                                  >
+                                    {itinerary.address.description}
                                   </Typography>
                                 </Box>
                                 <Box display="flex" alignItems="center" mt={1}>

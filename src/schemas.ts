@@ -189,6 +189,7 @@ export const studentEditSchema = yup
 
 export const itineraryCreateSchema = yup
   .object({
+    address: addressCreateSchema,
     driver: driverCreateSchema,
     school: schoolCreateSchema,
     students: yup.array().of(studentCreateSchema),
@@ -206,6 +207,7 @@ export const itineraryCreateSchema = yup
 export const itineraryEditSchema = yup
   .object({
     id: yup.number().required(),
+    address: addressEditSchema,
     driver: driverEditSchema,
     school: schoolEditSchema,
     students: yup.array().of(studentEditSchema),

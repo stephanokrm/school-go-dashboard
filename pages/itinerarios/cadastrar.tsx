@@ -22,6 +22,7 @@ import { ControlledCheckbox } from "../../src/components/ControlledCheckbox";
 import Divider from "@mui/material/Divider";
 import { useItineraryStoreMutation } from "../../src/hooks/mutations/useItineraryStoreMutation";
 import { useAuth } from "../../src/hooks/useAuth";
+import { ControlledGoogleMaps } from "../../src/components/ControlledGoogleMaps";
 
 export default function ItineraryCreate() {
   const { data: drivers = [], isLoading: isLoadingDrivers } =
@@ -93,6 +94,13 @@ export default function ItineraryCreate() {
                         name="school"
                         label="Escola"
                         getOptionLabel={(school) => school.name}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <ControlledGoogleMaps
+                        label="Endereço de Partida"
+                        control={control}
+                        name="address"
                       />
                     </Grid>
                     <Grid item xs={12}>

@@ -24,6 +24,7 @@ import { useItineraryUpdateMutation } from "../../../src/hooks/mutations/useItin
 import { useRouter } from "next/router";
 import { useGetItineraryByIdQuery } from "../../../src/hooks/queries/useGetItineraryByIdQuery";
 import { useAuth } from "../../../src/hooks/useAuth";
+import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
 
 export default function ItineraryEdit() {
   const router = useRouter();
@@ -101,6 +102,13 @@ export default function ItineraryEdit() {
                         name="school"
                         label="Escola"
                         getOptionLabel={(school) => school.name}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <ControlledGoogleMaps
+                        label="Endereço de Partida"
+                        control={control}
+                        name="address"
                       />
                     </Grid>
                     <Grid item xs={12}>

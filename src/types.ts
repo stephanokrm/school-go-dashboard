@@ -174,6 +174,7 @@ export type RawItinerary = {
   wednesday: boolean;
   thursday: boolean;
   friday: boolean;
+  address: RawAddress;
   driver: RawDriver;
   school: RawSchool;
   students?: RawStudent[];
@@ -189,6 +190,7 @@ export type Itinerary = {
   wednesday: boolean;
   thursday: boolean;
   friday: boolean;
+  address: Address;
   driver: Driver;
   school: School;
   students?: Student[];
