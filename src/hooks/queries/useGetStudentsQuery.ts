@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getStudents } from "../../services/getStudents";
 
 interface Params {
-  responsible?: boolean;
+  morning?: boolean;
+  afternoon?: boolean;
+  night?: boolean;
 }
 
 export const useGetStudentsQuery = (params: Params = {}) => {

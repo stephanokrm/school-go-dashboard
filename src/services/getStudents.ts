@@ -3,7 +3,9 @@ import { rawStudentToStudent } from "../maps/rawStudentToStudent";
 import axios from "../lib/axios";
 
 interface Params {
-  responsible?: boolean;
+  morning?: boolean;
+  afternoon?: boolean;
+  night?: boolean;
 }
 
 interface Options {
