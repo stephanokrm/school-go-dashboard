@@ -148,6 +148,7 @@ export type RawStudent = {
   address: RawAddress;
   responsible: RawResponsible;
   school: RawSchool;
+  trips: RawTrip[] | null;
 };
 
 export type Student = {
@@ -162,6 +163,7 @@ export type Student = {
   address: Address;
   responsible: Responsible;
   school: School;
+  trips?: Trip[];
 };
 
 export type RawItinerary = {

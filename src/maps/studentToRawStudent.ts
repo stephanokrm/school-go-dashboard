@@ -17,4 +17,5 @@ export const studentToRawStudent = async (
   address: await addressToRawAddress(student.address),
   responsible: await responsibleToRawResponsible(student.responsible),
   school: await schoolToRawSchool(student.school),
+  trips: null,
 });

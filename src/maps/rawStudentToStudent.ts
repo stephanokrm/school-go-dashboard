@@ -2,6 +2,7 @@ import { RawStudent, Student } from "../types";
 import { rawAddressToAddress } from "./rawAddressToAddress";
 import { rawResponsibleToResponsible } from "./rawResponsibleToResponsible";
 import { rawSchoolToSchool } from "./rawSchoolToSchool";
+import { rawTripToTrip } from "./rawTripToTrip";
 
 export const rawStudentToStudent = async (
   rawStudent: RawStudent
@@ -17,4 +18,7 @@ export const rawStudentToStudent = async (
   address: await rawAddressToAddress(rawStudent.address),
   responsible: await rawResponsibleToResponsible(rawStudent.responsible),
   school: await rawSchoolToSchool(rawStudent.school),
+  trips: rawStudent.trips
+    ? await Promise.all(rawStudent.trips.map(rawTripToTrip))
+    : undefined,
 });

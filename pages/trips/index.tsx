@@ -58,7 +58,13 @@ export default function Trips() {
                       <>
                         <ListItem alignItems="flex-start">
                           <ListItemText
-                            primary={trip.itinerary.school.name}
+                            primary={`${trip.itinerary.school.name}${
+                              trip.startedAt
+                                ? trip.finishedAt
+                                  ? " (Finalizada)"
+                                  : " (Em Andamento)"
+                                : ""
+                            }`}
                             secondary={
                               <>
                                 <Box display="flex" alignItems="center" mt={1}>
@@ -80,7 +86,12 @@ export default function Trips() {
                                     fontSize="small"
                                   />
                                   <Typography variant="subtitle2">
-                                    {trip.arriveAt.toLocaleTimeString()}
+                                    {new Intl.DateTimeFormat("default", {
+                                      day: "numeric",
+                                      month: "numeric",
+                                      hour: "numeric",
+                                      minute: "numeric",
+                                    }).format(trip.arriveAt)}
                                   </Typography>
                                 </Box>
                                 {trip.startedAt && (
@@ -94,7 +105,12 @@ export default function Trips() {
                                       fontSize="small"
                                     />
                                     <Typography variant="subtitle2">
-                                      {trip.startedAt.toLocaleTimeString()}
+                                      {new Intl.DateTimeFormat("default", {
+                                        day: "numeric",
+                                        month: "numeric",
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                      }).format(trip.startedAt)}
                                     </Typography>
                                   </Box>
                                 )}
@@ -109,7 +125,12 @@ export default function Trips() {
                                       fontSize="small"
                                     />
                                     <Typography variant="subtitle2">
-                                      {trip.finishedAt.toLocaleTimeString()}
+                                      {new Intl.DateTimeFormat("default", {
+                                        day: "numeric",
+                                        month: "numeric",
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                      }).format(trip.finishedAt)}
                                     </Typography>
                                   </Box>
                                 )}
