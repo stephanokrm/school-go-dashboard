@@ -8,21 +8,23 @@ interface UseAuth {
 }
 export const useAuth = ({ middleware }: UseAuth = {}) => {
   const router = useRouter();
-
-  const { data: user, isLoading, isFetching } = useGetUserByMeQuery();
+  const { data: user, isLoading, isFetching, error } = useGetUserByMeQuery();
   const { mutate: logout } = useLogoutMutation();
 
-  const isSyncing = isLoading || isFetching;
+  const isSyncing = (isLoading || isFetching) && !error;
+  const isAuthenticated = !!user && !error;
 
   useEffect(() => {
-    if (middleware === "guest" && user && !isSyncing) {
+    if (isSyncing) return;
+
+    if (middleware === "guest" && isAuthenticated) {
       router.push("/trips");
     }
 
-    if (middleware === "auth" && !user && !isSyncing) {
+    if (middleware === "auth" && !isAuthenticated) {
       logout({});
     }
-  }, [user, logout, middleware, router, isSyncing]);
+  }, [isAuthenticated, logout, middleware, router, isSyncing]);
 
   return {
     user,
