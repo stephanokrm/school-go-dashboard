@@ -39,10 +39,8 @@ interface Props {
 export const ResponsiveDrawer: FC<PropsWithChildren<Props>> = (props) => {
   const { window, children } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { mutate: logout } = useLogoutMutation();
-
-  const isAuthenticated = !!user;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

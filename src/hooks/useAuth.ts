@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useGetUserByMeQuery } from "./queries/useGetUserByMeQuery";
 import { useLogoutMutation } from "./mutations/useLogoutMutation";
@@ -10,9 +10,13 @@ export const useAuth = ({ middleware }: UseAuth = {}) => {
   const router = useRouter();
   const { data: user, isLoading, isFetching, error } = useGetUserByMeQuery();
   const { mutate: logout } = useLogoutMutation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const isSyncing = (isLoading || isFetching) && !error;
-  const isAuthenticated = !!user && !error;
+
+  useEffect(() => {
+    setIsAuthenticated(!!user && !error);
+  }, [user, error]);
 
   useEffect(() => {
     if (isSyncing) return;
@@ -28,5 +32,6 @@ export const useAuth = ({ middleware }: UseAuth = {}) => {
 
   return {
     user,
+    isAuthenticated,
   };
 };
