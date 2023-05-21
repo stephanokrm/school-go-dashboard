@@ -24,6 +24,20 @@ export type Resource<T> = {
 
 // MODELS
 
+export type RawStudentTripPivot = {
+  order: number;
+  absent: boolean;
+  embarked_at: string | null;
+  disembarked_at: string | null;
+};
+
+export type StudentTripPivot = {
+  order: number;
+  absent: boolean;
+  embarkedAt?: Date;
+  disembarkedAt?: Date;
+};
+
 export type RawRole = {
   id: number;
   role: string;
@@ -148,6 +162,7 @@ export type RawStudent = {
   address: RawAddress;
   responsible: RawResponsible;
   school: RawSchool;
+  pivot: RawStudentTripPivot | null;
   trips: RawTrip[] | null;
 };
 
@@ -163,6 +178,7 @@ export type Student = {
   address: Address;
   responsible: Responsible;
   school: School;
+  pivot?: StudentTripPivot;
   trips?: Trip[];
 };
 
@@ -200,12 +216,14 @@ export type Itinerary = {
 
 export type RawTrip = {
   id: number;
+  round: boolean;
   arrive_at: string;
   latitude: number | null;
   longitude: number | null;
   started_at: string | null;
   finished_at: string | null;
   itinerary: RawItinerary;
+  pivot: RawStudentTripPivot | null;
   created_at: string;
   updated_at: string | null;
   students: RawStudent[] | null;
@@ -213,12 +231,14 @@ export type RawTrip = {
 
 export type Trip = {
   id: number;
+  round: boolean;
   arriveAt: Date;
   latitude?: number;
   longitude?: number;
   startedAt?: Date;
   finishedAt?: Date;
   itinerary: Itinerary;
+  pivot?: StudentTripPivot;
   createdAt: Date;
   updatedAt?: Date;
   students?: Student[];

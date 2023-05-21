@@ -5,6 +5,7 @@ import { rawTripToTrip } from "../../maps/rawTripToTrip";
 
 interface Params {
   driver?: boolean;
+  administrator?: boolean;
 }
 
 export const useTripsQuery = (params: Params = {}) => {

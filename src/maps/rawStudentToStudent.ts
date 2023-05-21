@@ -3,6 +3,7 @@ import { rawAddressToAddress } from "./rawAddressToAddress";
 import { rawResponsibleToResponsible } from "./rawResponsibleToResponsible";
 import { rawSchoolToSchool } from "./rawSchoolToSchool";
 import { rawTripToTrip } from "./rawTripToTrip";
+import { rawStudentTripPivotToStudentTripPivot } from "./rawStudentTripPivotToStudentTripPivot";
 
 export const rawStudentToStudent = async (
   rawStudent: RawStudent
@@ -18,6 +19,9 @@ export const rawStudentToStudent = async (
   address: await rawAddressToAddress(rawStudent.address),
   responsible: await rawResponsibleToResponsible(rawStudent.responsible),
   school: await rawSchoolToSchool(rawStudent.school),
+  pivot: rawStudent.pivot
+    ? await rawStudentTripPivotToStudentTripPivot(rawStudent.pivot)
+    : undefined,
   trips: rawStudent.trips
     ? await Promise.all(rawStudent.trips.map(rawTripToTrip))
     : undefined,

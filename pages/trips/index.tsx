@@ -1,27 +1,34 @@
+import React from "react";
 import Container from "@mui/material/Container";
 import Head from "next/head";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
-import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
-import React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import DepartureBoardIcon from "@mui/icons-material/DepartureBoard";
-import Box from "@mui/material/Box";
-import { useAuth } from "../../src/hooks/useAuth";
-import { useTripsQuery } from "../../src/hooks/queries/useTripsQuery";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import CircularProgress from "@mui/material/CircularProgress";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Chip from "@mui/material/Chip";
+import Timeline from "@mui/lab/Timeline";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineDot from "@mui/lab/TimelineDot";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import { timelineOppositeContentClasses } from "@mui/lab";
+import { format } from "date-fns";
+import { useAuth } from "../../src/hooks/useAuth";
+import { useTripsQuery } from "../../src/hooks/queries/useTripsQuery";
 
 export default function Trips() {
-  const { data: trips = [], isLoading: isLoadingTrips } = useTripsQuery();
+  const { data: trips = [], isLoading: isLoadingTrips } = useTripsQuery({
+    administrator: true,
+  });
 
   useAuth({ middleware: "auth" });
 
@@ -53,95 +60,149 @@ export default function Trips() {
                     </Grid>
                   </Grid>
                 ) : (
-                  <List sx={{ width: "100%" }}>
-                    {trips.map((trip) => (
-                      <>
-                        <ListItem alignItems="flex-start">
-                          <ListItemText
-                            primary={`${trip.itinerary.school.name}${
-                              trip.startedAt
-                                ? trip.finishedAt
-                                  ? " (Finalizada)"
-                                  : " (Em Andamento)"
-                                : ""
-                            }`}
-                            secondary={
-                              <>
-                                <Box display="flex" alignItems="center" mt={1}>
-                                  <DirectionsBusIcon
-                                    sx={{ mr: 1 }}
-                                    fontSize="small"
-                                  />
-                                  <Typography
-                                    variant="subtitle2"
-                                    display="inline"
-                                  >
-                                    {trip.itinerary.driver.user.firstName}{" "}
-                                    {trip.itinerary.driver.user.lastName}
-                                  </Typography>
-                                </Box>
-                                <Box display="flex" alignItems="center" mt={1}>
-                                  <DepartureBoardIcon
-                                    sx={{ mr: 1 }}
-                                    fontSize="small"
-                                  />
-                                  <Typography variant="subtitle2">
-                                    {new Intl.DateTimeFormat("default", {
-                                      day: "numeric",
-                                      month: "numeric",
-                                      hour: "numeric",
-                                      minute: "numeric",
-                                    }).format(trip.arriveAt)}
-                                  </Typography>
-                                </Box>
-                                {trip.startedAt && (
-                                  <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    mt={1}
-                                  >
-                                    <PlayArrowIcon
-                                      sx={{ mr: 1 }}
-                                      fontSize="small"
-                                    />
-                                    <Typography variant="subtitle2">
-                                      {new Intl.DateTimeFormat("default", {
-                                        day: "numeric",
-                                        month: "numeric",
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                      }).format(trip.startedAt)}
-                                    </Typography>
-                                  </Box>
-                                )}
-                                {trip.finishedAt && (
-                                  <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    mt={1}
-                                  >
-                                    <CheckCircleOutlineIcon
-                                      sx={{ mr: 1 }}
-                                      fontSize="small"
-                                    />
-                                    <Typography variant="subtitle2">
-                                      {new Intl.DateTimeFormat("default", {
-                                        day: "numeric",
-                                        month: "numeric",
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                      }).format(trip.finishedAt)}
-                                    </Typography>
-                                  </Box>
-                                )}
-                              </>
-                            }
-                          />
-                        </ListItem>
-                        <Divider />
-                      </>
-                    ))}
-                  </List>
+                  trips.map((trip) => (
+                    <Accordion key={trip.id}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                      >
+                        <Grid
+                          container
+                          spacing={1}
+                          justifyContent="space-between"
+                        >
+                          <Grid item>
+                            <Typography gutterBottom>
+                              {trip.round ? "Volta do" : "Ida para"}{" "}
+                              {trip.itinerary.school.name}
+                            </Typography>
+                            <Typography variant="body2" color="darkgray">
+                              {format(trip.arriveAt, "MMM dd, H:mm")} -{" "}
+                              {trip.itinerary.driver.user.firstName}{" "}
+                              {trip.itinerary.driver.user.lastName}
+                            </Typography>
+                          </Grid>
+                          {trip.startedAt ? (
+                            <Grid item display="flex" alignItems="center">
+                              <Chip
+                                color={trip.finishedAt ? "success" : "primary"}
+                                label={
+                                  trip.finishedAt
+                                    ? "Finalizada"
+                                    : "Em Andamento"
+                                }
+                              />
+                            </Grid>
+                          ) : null}
+                        </Grid>
+                      </AccordionSummary>
+                      <AccordionDetails sx={{ padding: 0 }}>
+                        <Timeline
+                          sx={{
+                            padding: 0,
+                            [`& .${timelineOppositeContentClasses.root}`]: {
+                              flex: 0.1,
+                            },
+                          }}
+                        >
+                          <TimelineItem>
+                            <TimelineOppositeContent color="text.secondary">
+                              {trip.startedAt
+                                ? format(trip.startedAt, "MMM dd, H:mm")
+                                : "-"}
+                            </TimelineOppositeContent>
+                            <TimelineSeparator>
+                              <TimelineDot
+                                color={trip.startedAt ? "success" : undefined}
+                              />
+                              <TimelineConnector
+                                sx={{
+                                  bgcolor: trip.startedAt
+                                    ? "success.main"
+                                    : undefined,
+                                }}
+                              />
+                            </TimelineSeparator>
+                            <TimelineContent>
+                              <Typography gutterBottom>Partida</Typography>
+                              <Typography variant="body2" color="darkgray">
+                                {trip.round
+                                  ? trip.itinerary.school.address.description
+                                  : trip.itinerary.address.description}
+                              </Typography>
+                            </TimelineContent>
+                          </TimelineItem>
+                          {trip.students?.map((student) => (
+                            <TimelineItem key={student.id}>
+                              <TimelineOppositeContent color="text.secondary">
+                                {student.pivot?.embarkedAt
+                                  ? format(
+                                      student.pivot.embarkedAt,
+                                      "MMM dd, H:mm"
+                                    )
+                                  : student.pivot?.absent
+                                  ? "Ausente"
+                                  : "-"}
+                              </TimelineOppositeContent>
+                              <TimelineSeparator>
+                                <TimelineDot
+                                  color={
+                                    student.pivot?.absent
+                                      ? "error"
+                                      : (trip.round &&
+                                          student.pivot?.disembarkedAt) ||
+                                        (!trip.round &&
+                                          student.pivot?.embarkedAt)
+                                      ? "success"
+                                      : undefined
+                                  }
+                                />
+                                <TimelineConnector
+                                  sx={{
+                                    bgcolor:
+                                      (trip.round &&
+                                        student.pivot?.disembarkedAt) ||
+                                      (!trip.round && student.pivot?.embarkedAt)
+                                        ? "success.main"
+                                        : undefined,
+                                  }}
+                                />
+                              </TimelineSeparator>
+                              <TimelineContent>
+                                <Typography gutterBottom>
+                                  {student.firstName} {student.lastName}
+                                </Typography>
+                                <Typography variant="body2" color="darkgray">
+                                  {student.address.description}
+                                </Typography>
+                              </TimelineContent>
+                            </TimelineItem>
+                          ))}
+                          <TimelineItem>
+                            <TimelineOppositeContent color="text.secondary">
+                              {trip.finishedAt
+                                ? format(trip.finishedAt, "MMM dd, H:mm")
+                                : "-"}
+                            </TimelineOppositeContent>
+                            <TimelineSeparator>
+                              <TimelineDot
+                                color={trip.finishedAt ? "success" : undefined}
+                              />
+                            </TimelineSeparator>
+                            <TimelineContent>
+                              <Typography gutterBottom>Finalizada</Typography>
+                              <Typography variant="body2" color="darkgray">
+                                {trip.round
+                                  ? trip.itinerary.address.description
+                                  : trip.itinerary.school.address.description}
+                              </Typography>
+                            </TimelineContent>
+                          </TimelineItem>
+                        </Timeline>
+                      </AccordionDetails>
+                    </Accordion>
+                  ))
                 )}
               </CardContent>
             </Card>

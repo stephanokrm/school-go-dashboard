@@ -18,4 +18,5 @@ export const studentToRawStudent = async (
   responsible: await responsibleToRawResponsible(student.responsible),
   school: await schoolToRawSchool(student.school),
   trips: null,
+  pivot: null,
 });
