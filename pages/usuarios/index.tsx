@@ -22,6 +22,7 @@ import { useGetUsersQuery } from "../../src/hooks/queries/useGetUsersQuery";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useUserDestroyMutation } from "../../src/hooks/mutations/useUserDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Users() {
   const { data: users = [], isLoading: isLoadingUsers } = useGetUsersQuery();
