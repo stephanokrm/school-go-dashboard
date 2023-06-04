@@ -59,6 +59,7 @@ export default function MyApp(props: MyAppProps) {
             {globalStyles}
             {/*@ts-ignore*/}
             <ResponsiveDrawer>
+              {/*@ts-ignore*/}
               <Component {...pageProps} />
             </ResponsiveDrawer>
           </LocalizationProvider>
