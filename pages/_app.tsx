@@ -45,7 +45,6 @@ export default function MyApp(props: MyAppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
-      {/*@ts-ignore*/}
       <CacheProvider value={emotionCache}>
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -57,9 +56,7 @@ export default function MyApp(props: MyAppProps) {
           >
             <CssBaseline />
             {globalStyles}
-            {/*@ts-ignore*/}
             <ResponsiveDrawer>
-              {/*@ts-ignore*/}
               <Component {...pageProps} />
             </ResponsiveDrawer>
           </LocalizationProvider>
