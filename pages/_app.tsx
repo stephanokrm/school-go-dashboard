@@ -57,6 +57,7 @@ export default function MyApp(props: MyAppProps) {
           >
             <CssBaseline />
             {globalStyles}
+            {/*@ts-ignore*/}
             <ResponsiveDrawer>
               <Component {...pageProps} />
             </ResponsiveDrawer>
