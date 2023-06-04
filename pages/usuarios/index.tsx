@@ -19,7 +19,6 @@ import Divider from "@mui/material/Divider";
 import React from "react";
 import Link from "next/link";
 import { useGetUsersQuery } from "../../src/hooks/queries/useGetUsersQuery";
-import { useAuth } from "../../src/hooks/useAuth";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useUserDestroyMutation } from "../../src/hooks/mutations/useUserDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,7 +26,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 export default function Users() {
   const { data: users = [], isLoading: isLoadingUsers } = useGetUsersQuery();
   const { mutate: destroy } = useUserDestroyMutation();
-  const { user: me } = useAuth({ middleware: "auth" });
+  const { user: me } = useAuth();
 
   return (
     <>

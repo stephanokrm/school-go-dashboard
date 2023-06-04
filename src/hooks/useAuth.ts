@@ -1,37 +1,23 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useGetUserByMeQuery } from "./queries/useGetUserByMeQuery";
 import { useLogoutMutation } from "./mutations/useLogoutMutation";
 
-interface UseAuth {
-  middleware?: "auth" | "guest";
-}
-export const useAuth = ({ middleware }: UseAuth = {}) => {
-  const router = useRouter();
+export const useAuth = () => {
   const { data: user, isLoading, isFetching, error } = useGetUserByMeQuery();
   const { mutate: logout } = useLogoutMutation();
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const isSyncing = (isLoading || isFetching) && !error;
 
   useEffect(() => {
-    setIsAuthenticated(!!user && !error);
-  }, [user, error]);
-
-  useEffect(() => {
     if (isSyncing) return;
 
-    if (middleware === "guest" && isAuthenticated) {
-      router.push("/trips");
-    }
-
-    if (middleware === "auth" && !isAuthenticated) {
+    if (error) {
       logout({});
     }
-  }, [isAuthenticated, logout, middleware, router, isSyncing]);
+  }, [error, isSyncing, logout]);
 
   return {
     user,
-    isAuthenticated,
+    isAuthenticated: !!user && !error,
   };
 };

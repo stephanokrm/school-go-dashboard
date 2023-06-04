@@ -13,7 +13,6 @@ import { ControlledTextField } from "../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
 import { driverCreateSchema } from "../../src/schemas";
 import { DriverCreateForm } from "../../src/types";
-import { useAuth } from "../../src/hooks/useAuth";
 
 export default function DriverCreate() {
   const { control, handleSubmit, setError } = useForm<DriverCreateForm>({
@@ -24,8 +23,6 @@ export default function DriverCreate() {
     isLoading: isStoringDriver,
     message,
   } = useDriverStoreMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((driver) => mutate(driver));
 

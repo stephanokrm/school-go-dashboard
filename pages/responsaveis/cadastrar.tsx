@@ -13,7 +13,6 @@ import CardHeader from "@mui/material/CardHeader";
 import { responsibleCreateSchema } from "../../src/schemas";
 import { ResponsibleCreateForm } from "../../src/types";
 import { useResponsibleStoreMutation } from "../../src/hooks/mutations/useResponsibleStoreMutation";
-import { useAuth } from "../../src/hooks/useAuth";
 
 export default function ResponsibleCreate() {
   const { control, handleSubmit, setError } = useForm<ResponsibleCreateForm>({
@@ -24,8 +23,6 @@ export default function ResponsibleCreate() {
     isLoading: isStoringResponsible,
     message,
   } = useResponsibleStoreMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((responsible) => mutate(responsible));
 

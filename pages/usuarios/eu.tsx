@@ -15,7 +15,6 @@ import Alert from "@mui/material/Alert";
 import CardHeader from "@mui/material/CardHeader";
 import { userEditSchema } from "../../src/schemas";
 import { UserEditForm } from "../../src/types";
-import { useAuth } from "../../src/hooks/useAuth";
 
 export default function UserMe() {
   const { data: user, isLoading: isLoadingUser } = useGetUserByMeQuery();
@@ -28,8 +27,6 @@ export default function UserMe() {
     isLoading: isUpdatingUser,
     message,
   } = useUserUpdateMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((user) => mutate(user));
 

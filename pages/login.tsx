@@ -11,12 +11,11 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
 import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ControlledTextField } from "../src/components/ControlledTextField";
+import { ControlledTextField } from "@/components/ControlledTextField";
 import { useForm } from "react-hook-form";
-import { useLoginMutation } from "../src/hooks/mutations/useLoginMutation";
-import { LoginForm } from "../src/types";
-import { loginSchema } from "../src/schemas";
-import { useAuth } from "../src/hooks/useAuth";
+import { useLoginMutation } from "@/hooks/mutations/useLoginMutation";
+import { LoginForm } from "@/types";
+import { loginSchema } from "@/schemas";
 
 const Login: NextPage = () => {
   const { control, handleSubmit } = useForm<LoginForm>({
@@ -24,8 +23,6 @@ const Login: NextPage = () => {
   });
   const { mutate, isLoading, message } = useLoginMutation();
   const onSubmit = handleSubmit((login) => mutate(login));
-
-  useAuth({ middleware: "guest" });
 
   return (
     <>

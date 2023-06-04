@@ -23,7 +23,6 @@ import Divider from "@mui/material/Divider";
 import { useItineraryUpdateMutation } from "../../../src/hooks/mutations/useItineraryUpdateMutation";
 import { useRouter } from "next/router";
 import { useGetItineraryByIdQuery } from "../../../src/hooks/queries/useGetItineraryByIdQuery";
-import { useAuth } from "../../../src/hooks/useAuth";
 import { ControlledGoogleMaps } from "../../../src/components/ControlledGoogleMaps";
 
 export default function ItineraryEdit() {
@@ -52,8 +51,6 @@ export default function ItineraryEdit() {
       afternoon: watch("afternoon"),
       night: watch("night"),
     });
-
-  useAuth({ middleware: "auth" });
 
   const school = watch("school");
   const onSubmit = handleSubmit((itinerary) => mutate(itinerary));

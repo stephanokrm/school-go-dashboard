@@ -20,7 +20,6 @@ import Divider from "@mui/material/Divider";
 import React from "react";
 import { useGetStudentsQuery } from "../../src/hooks/queries/useGetStudentsQuery";
 import FaceIcon from "@mui/icons-material/Face";
-import { useAuth } from "../../src/hooks/useAuth";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useStudentDestroyMutation } from "../../src/hooks/mutations/useStudentDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -29,8 +28,6 @@ export default function Students() {
   const { data: students = [], isLoading: isLoadingStudents } =
     useGetStudentsQuery();
   const { mutate: destroy } = useStudentDestroyMutation();
-
-  useAuth({ middleware: "auth" });
 
   return (
     <>

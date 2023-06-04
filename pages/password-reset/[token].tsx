@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
 import { usePasswordResetMutation } from "../../src/hooks/mutations/usePasswordResetMutation";
 import { PasswordResetForm } from "../../src/types";
 import { passwordResetFormSchema } from "../../src/schemas";
-import { useAuth } from "../../src/hooks/useAuth";
 import { useRouter } from "next/router";
 
 const PasswordReset: NextPage = () => {
@@ -32,8 +31,6 @@ const PasswordReset: NextPage = () => {
   });
   const { mutate, isLoading, message } = usePasswordResetMutation();
   const onSubmit = handleSubmit((reset) => mutate(reset));
-
-  useAuth({ middleware: "guest" });
 
   return (
     <>

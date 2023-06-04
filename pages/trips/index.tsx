@@ -22,15 +22,12 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import { timelineOppositeContentClasses } from "@mui/lab";
 import { format } from "date-fns";
-import { useAuth } from "../../src/hooks/useAuth";
 import { useTripsQuery } from "../../src/hooks/queries/useTripsQuery";
 
 export default function Trips() {
   const { data: trips = [], isLoading: isLoadingTrips } = useTripsQuery({
     administrator: true,
   });
-
-  useAuth({ middleware: "auth" });
 
   return (
     <>

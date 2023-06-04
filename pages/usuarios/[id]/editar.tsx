@@ -15,7 +15,6 @@ import CardHeader from "@mui/material/CardHeader";
 import { useRouter } from "next/router";
 import { userEditSchema } from "../../../src/schemas";
 import { UserEditForm } from "../../../src/types";
-import { useAuth } from "../../../src/hooks/useAuth";
 
 export default function UserEdit() {
   const router = useRouter();
@@ -32,8 +31,6 @@ export default function UserEdit() {
     isLoading: isUpdatingUser,
     message,
   } = useUserUpdateMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((user) => mutate(user));
   const isLoading = isLoadingUser || isUpdatingUser;

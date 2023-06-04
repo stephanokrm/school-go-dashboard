@@ -20,7 +20,6 @@ import React from "react";
 import Link from "next/link";
 import { useGetDriversQuery } from "../../src/hooks/queries/useGetDriversQuery";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
-import { useAuth } from "../../src/hooks/useAuth";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useDriverDestroyMutation } from "../../src/hooks/mutations/useDriverDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -29,8 +28,6 @@ export default function Drivers() {
   const { data: drivers = [], isLoading: isLoadingDrivers } =
     useGetDriversQuery();
   const { mutate: destroy } = useDriverDestroyMutation();
-
-  useAuth({ middleware: "auth" });
 
   return (
     <>

@@ -13,7 +13,6 @@ import { ControlledTextField } from "../../src/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
 import { userCreateSchema } from "../../src/schemas";
 import { UserCreateForm } from "../../src/types";
-import { useAuth } from "../../src/hooks/useAuth";
 
 export default function UserCreate() {
   const { control, handleSubmit, setError } = useForm<UserCreateForm>({
@@ -24,8 +23,6 @@ export default function UserCreate() {
     isLoading: isStoringUser,
     message,
   } = useUserStoreMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((user) => mutate(user));
 

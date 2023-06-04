@@ -18,7 +18,6 @@ import React from "react";
 import Link from "next/link";
 import { useGetSchoolsQuery } from "../../src/hooks/queries/useGetSchoolsQuery";
 import SchoolIcon from "@mui/icons-material/School";
-import { useAuth } from "../../src/hooks/useAuth";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useSchoolDestroyMutation } from "../../src/hooks/mutations/useSchoolDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -27,8 +26,6 @@ export default function Schools() {
   const { data: schools = [], isLoading: isLoadingSchools } =
     useGetSchoolsQuery();
   const { mutate: destroy } = useSchoolDestroyMutation();
-
-  useAuth({ middleware: "auth" });
 
   return (
     <>

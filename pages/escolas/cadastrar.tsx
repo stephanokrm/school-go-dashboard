@@ -17,7 +17,6 @@ import { useSchoolStoreMutation } from "../../src/hooks/mutations/useSchoolStore
 import { schoolCreateSchema } from "../../src/schemas";
 import { FormLabel } from "@mui/material";
 import { SchoolCreateForm } from "../../src/types";
-import { useAuth } from "../../src/hooks/useAuth";
 
 export default function SchoolCreate() {
   const { control, handleSubmit, watch, getValues, setError } =
@@ -30,8 +29,6 @@ export default function SchoolCreate() {
     isLoading: isStoringSchool,
     message,
   } = useSchoolStoreMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((school) => mutate(school));
 

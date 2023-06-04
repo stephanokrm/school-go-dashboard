@@ -15,7 +15,6 @@ import { ResponsibleEditForm } from "../../../src/types";
 import { useResponsibleUpdateMutation } from "../../../src/hooks/mutations/useResponsibleUpdateMutation";
 import { useRouter } from "next/router";
 import { useGetResponsibleByIdQuery } from "../../../src/hooks/queries/useGetResponsibleByIdQuery";
-import { useAuth } from "../../../src/hooks/useAuth";
 
 export default function ResponsibleEdit() {
   const router = useRouter();
@@ -31,8 +30,6 @@ export default function ResponsibleEdit() {
     isLoading: isUpdatingResponsible,
     message,
   } = useResponsibleUpdateMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const isLoading = isLoadingResponsible || isUpdatingResponsible;
   const onSubmit = handleSubmit((responsible) => mutate(responsible));

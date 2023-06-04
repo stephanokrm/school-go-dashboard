@@ -19,7 +19,6 @@ import React from "react";
 import Link from "next/link";
 import { useGetResponsiblesQuery } from "../../src/hooks/queries/useGetResponsiblesQuery";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
-import { useAuth } from "../../src/hooks/useAuth";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useResponsibleDestroyMutation } from "../../src/hooks/mutations/useResponsibleDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -28,8 +27,6 @@ export default function Responsibles() {
   const { data: responsibles = [], isLoading: isLoadingResponsibles } =
     useGetResponsiblesQuery();
   const { mutate: destroy } = useResponsibleDestroyMutation();
-
-  useAuth({ middleware: "auth" });
 
   return (
     <>

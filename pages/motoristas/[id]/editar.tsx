@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 import { useGetDriverByIdQuery } from "../../../src/hooks/queries/useGetDriverByIdQuery";
 import { driverEditSchema } from "../../../src/schemas";
 import { DriverEditForm } from "../../../src/types";
-import { useAuth } from "../../../src/hooks/useAuth";
 export default function DriverEdit() {
   const router = useRouter();
   const { id } = router.query;
@@ -31,8 +30,6 @@ export default function DriverEdit() {
     isLoading: isUpdatingDriver,
     message,
   } = useDriverUpdateMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((driver) => mutate(driver));
   const isLoading = isLoadingDriver || isUpdatingDriver;

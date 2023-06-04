@@ -22,7 +22,6 @@ import { studentEditSchema } from "../../../src/schemas";
 import { StudentEditForm } from "../../../src/types";
 import { useGetStudentByIdQuery } from "../../../src/hooks/queries/useGetStudentByIdQuery";
 import { useStudentUpdateMutation } from "../../../src/hooks/mutations/useStudentUpdateMutation";
-import { useAuth } from "../../../src/hooks/useAuth";
 
 export default function StudentEdit() {
   const router = useRouter();
@@ -43,8 +42,6 @@ export default function StudentEdit() {
     isLoading: isUpdatingStudent,
     message,
   } = useStudentUpdateMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const school = watch("school");
   const onSubmit = handleSubmit((student) => mutate(student));

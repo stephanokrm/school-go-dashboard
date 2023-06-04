@@ -18,7 +18,6 @@ import { useRouter } from "next/router";
 import { useGetSchoolByIdQuery } from "../../../src/hooks/queries/useGetSchoolByIdQuery";
 import { schoolEditSchema } from "../../../src/schemas";
 import { SchoolEditForm } from "../../../src/types";
-import { useAuth } from "../../../src/hooks/useAuth";
 
 export default function SchoolEdit() {
   const router = useRouter();
@@ -35,8 +34,6 @@ export default function SchoolEdit() {
     isLoading: isUpdatingSchool,
     message,
   } = useSchoolUpdateMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const onSubmit = handleSubmit((school) => mutate(school));
   const isLoading = isLoadingSchool || isUpdatingSchool;

@@ -21,7 +21,6 @@ import { FormLabel } from "@mui/material";
 import { ControlledCheckbox } from "../../src/components/ControlledCheckbox";
 import Divider from "@mui/material/Divider";
 import { useItineraryStoreMutation } from "../../src/hooks/mutations/useItineraryStoreMutation";
-import { useAuth } from "../../src/hooks/useAuth";
 import { ControlledGoogleMaps } from "../../src/components/ControlledGoogleMaps";
 
 export default function ItineraryCreate() {
@@ -45,8 +44,6 @@ export default function ItineraryCreate() {
       afternoon: watch("afternoon"),
       night: watch("night"),
     });
-
-  useAuth({ middleware: "auth" });
 
   const school = watch("school");
   const onSubmit = handleSubmit((itinerary) => mutate(itinerary));

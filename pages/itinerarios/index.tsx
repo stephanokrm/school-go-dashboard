@@ -18,7 +18,6 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Link from "next/link";
 import { useGetItinerariesQuery } from "../../src/hooks/queries/useGetItinerariesQuery";
-import { useAuth } from "../../src/hooks/useAuth";
 import RouteIcon from "@mui/icons-material/Route";
 import { DestroyButton } from "../../src/components/DestroyButton";
 import { useItineraryDestroyMutation } from "../../src/hooks/mutations/useItineraryDestroyMutation";
@@ -29,8 +28,6 @@ export default function Itineraries() {
   const { data: itineraries = [], isLoading: isLoadingItineraries } =
     useGetItinerariesQuery();
   const { mutate: destroy } = useItineraryDestroyMutation();
-
-  useAuth({ middleware: "auth" });
 
   return (
     <>

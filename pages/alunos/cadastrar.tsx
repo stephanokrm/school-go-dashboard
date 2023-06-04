@@ -20,7 +20,6 @@ import { FormLabel } from "@mui/material";
 import { useGetResponsiblesQuery } from "../../src/hooks/queries/useGetResponsiblesQuery";
 import { useStudentStoreMutation } from "../../src/hooks/mutations/useStudentStoreMutation";
 import { StudentCreateForm } from "../../src/types";
-import { useAuth } from "../../src/hooks/useAuth";
 
 export default function StudentCreate() {
   const { data: schools = [], isLoading: isLoadingSchools } =
@@ -37,8 +36,6 @@ export default function StudentCreate() {
     isLoading: isStoringStudent,
     message,
   } = useStudentStoreMutation({ setError });
-
-  useAuth({ middleware: "auth" });
 
   const school = watch("school");
   const onSubmit = handleSubmit((student) => mutate(student));
