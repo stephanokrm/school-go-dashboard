@@ -10,7 +10,7 @@ export const useAuth = ({ middleware }: UseAuth = {}) => {
   const router = useRouter();
   const { data: user, isLoading, isFetching, error } = useGetUserByMeQuery();
   const { mutate: logout } = useLogoutMutation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const isSyncing = (isLoading || isFetching) && !error;
 
