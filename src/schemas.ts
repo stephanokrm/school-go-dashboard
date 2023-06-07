@@ -1,7 +1,7 @@
 import * as yup from "yup";
-import { pl } from "yup-locales";
+import { pt } from "yup-locales";
 
-yup.setLocale(pl);
+yup.setLocale(pt);
 
 export const loginSchema = yup
   .object({
