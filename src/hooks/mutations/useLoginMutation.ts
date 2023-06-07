@@ -31,7 +31,7 @@ export const useLoginMutation = () => {
           await router.replace(redirect);
         } else {
           await queryClient.invalidateQueries(["getUserByMe"]);
-          await router.push("/itinerarios");
+          await router.push("/trips");
         }
       },
     }
