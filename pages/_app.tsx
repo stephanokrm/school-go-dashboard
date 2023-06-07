@@ -7,12 +7,15 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { ptBR } from "date-fns/locale";
+import ptBR from "date-fns/locale/pt-BR";
+import setDefaultOptions from "date-fns/setDefaultOptions";
 import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ResponsiveDrawer } from "@/components/ResponsiveDrawer";
+
+setDefaultOptions({ locale: ptBR });
 
 const clientSideEmotionCache = createEmotionCache();
 
