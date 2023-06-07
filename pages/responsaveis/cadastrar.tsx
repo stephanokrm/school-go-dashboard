@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
-import { ControlledTextField } from "../../src/components/ControlledTextField";
+import { ControlledTextField } from "@/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { responsibleCreateSchema } from "../../src/schemas";
-import { ResponsibleCreateForm } from "../../src/types";
-import { useResponsibleStoreMutation } from "../../src/hooks/mutations/useResponsibleStoreMutation";
+import { responsibleCreateSchema } from "@/schemas";
+import { ResponsibleCreateForm } from "@/types";
+import { useResponsibleStoreMutation } from "@/hooks/mutations/useResponsibleStoreMutation";
+import { AsYouType } from "libphonenumber-js";
 
 export default function ResponsibleCreate() {
   const { control, handleSubmit, setError } = useForm<ResponsibleCreateForm>({
@@ -72,6 +73,7 @@ export default function ResponsibleCreate() {
                         name="user.cellPhone"
                         type="tel"
                         label="Celular"
+                        transform={(value) => new AsYouType("BR").input(value)}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

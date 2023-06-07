@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
-import { useDriverStoreMutation } from "../../src/hooks/mutations/useDriverStoreMutation";
-import { ControlledTextField } from "../../src/components/ControlledTextField";
+import { useDriverStoreMutation } from "@/hooks/mutations/useDriverStoreMutation";
+import { ControlledTextField } from "@/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { driverCreateSchema } from "../../src/schemas";
-import { DriverCreateForm } from "../../src/types";
+import { driverCreateSchema } from "@/schemas";
+import { DriverCreateForm } from "@/types";
+import { AsYouType } from "libphonenumber-js";
 
 export default function DriverCreate() {
   const { control, handleSubmit, setError } = useForm<DriverCreateForm>({
@@ -72,6 +73,7 @@ export default function DriverCreate() {
                         name="user.cellPhone"
                         type="tel"
                         label="Celular"
+                        transform={(value) => new AsYouType("BR").input(value)}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>

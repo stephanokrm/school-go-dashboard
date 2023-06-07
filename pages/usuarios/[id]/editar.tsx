@@ -8,13 +8,14 @@ import { ControlledTextField } from "../../../src/components/ControlledTextField
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useGetUserByIdQuery } from "../../../src/hooks/queries/useGetUserByIdQuery";
-import { useUserUpdateMutation } from "../../../src/hooks/mutations/useUserUpdateMutation";
+import { useGetUserByIdQuery } from "@/hooks/queries/useGetUserByIdQuery";
+import { useUserUpdateMutation } from "@/hooks/mutations/useUserUpdateMutation";
 import Alert from "@mui/material/Alert";
 import CardHeader from "@mui/material/CardHeader";
 import { useRouter } from "next/router";
-import { userEditSchema } from "../../../src/schemas";
-import { UserEditForm } from "../../../src/types";
+import { userEditSchema } from "@/schemas";
+import { UserEditForm } from "@/types";
+import { AsYouType } from "libphonenumber-js";
 
 export default function UserEdit() {
   const router = useRouter();
@@ -85,6 +86,7 @@ export default function UserEdit() {
                         type="tel"
                         label="Celular"
                         loading={isLoadingUser}
+                        transform={(value) => new AsYouType("BR").input(value)}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

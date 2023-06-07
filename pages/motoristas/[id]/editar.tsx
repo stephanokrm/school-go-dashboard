@@ -8,13 +8,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
-import { useDriverUpdateMutation } from "../../../src/hooks/mutations/useDriverUpdateMutation";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
+import { useDriverUpdateMutation } from "@/hooks/mutations/useDriverUpdateMutation";
+import { ControlledTextField } from "@/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
 import { useRouter } from "next/router";
-import { useGetDriverByIdQuery } from "../../../src/hooks/queries/useGetDriverByIdQuery";
-import { driverEditSchema } from "../../../src/schemas";
-import { DriverEditForm } from "../../../src/types";
+import { useGetDriverByIdQuery } from "@/hooks/queries/useGetDriverByIdQuery";
+import { driverEditSchema } from "@/schemas";
+import { DriverEditForm } from "@/types";
+import { AsYouType } from "libphonenumber-js";
 export default function DriverEdit() {
   const router = useRouter();
   const { id } = router.query;
@@ -84,6 +85,7 @@ export default function DriverEdit() {
                         type="tel"
                         label="Celular"
                         loading={isLoadingDriver}
+                        transform={(value) => new AsYouType("BR").input(value)}
                       />
                     </Grid>
                     <Grid item xs={12} md={6}>

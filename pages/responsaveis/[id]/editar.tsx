@@ -8,13 +8,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Alert from "@mui/material/Alert";
-import { ControlledTextField } from "../../../src/components/ControlledTextField";
+import { ControlledTextField } from "@/components/ControlledTextField";
 import CardHeader from "@mui/material/CardHeader";
-import { responsibleEditSchema } from "../../../src/schemas";
-import { ResponsibleEditForm } from "../../../src/types";
-import { useResponsibleUpdateMutation } from "../../../src/hooks/mutations/useResponsibleUpdateMutation";
+import { responsibleEditSchema } from "@/schemas";
+import { ResponsibleEditForm } from "@/types";
+import { useResponsibleUpdateMutation } from "@/hooks/mutations/useResponsibleUpdateMutation";
 import { useRouter } from "next/router";
-import { useGetResponsibleByIdQuery } from "../../../src/hooks/queries/useGetResponsibleByIdQuery";
+import { useGetResponsibleByIdQuery } from "@/hooks/queries/useGetResponsibleByIdQuery";
+import { AsYouType } from "libphonenumber-js";
 
 export default function ResponsibleEdit() {
   const router = useRouter();
@@ -84,6 +85,7 @@ export default function ResponsibleEdit() {
                         type="tel"
                         label="Celular"
                         loading={isLoadingResponsible}
+                        transform={(value) => new AsYouType("BR").input(value)}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">

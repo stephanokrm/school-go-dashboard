@@ -4,17 +4,17 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import React from "react";
-import { ControlledTextField } from "../../src/components/ControlledTextField";
+import { ControlledTextField } from "@/components/ControlledTextField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useGetUserByMeQuery } from "../../src/hooks/queries/useGetUserByMeQuery";
-import { useUserUpdateMutation } from "../../src/hooks/mutations/useUserUpdateMutation";
+import { useGetUserByMeQuery } from "@/hooks/queries/useGetUserByMeQuery";
+import { useUserUpdateMutation } from "@/hooks/mutations/useUserUpdateMutation";
 import Alert from "@mui/material/Alert";
 import CardHeader from "@mui/material/CardHeader";
-import { userEditSchema } from "../../src/schemas";
-import { UserEditForm } from "../../src/types";
+import { userEditSchema } from "@/schemas";
+import { UserEditForm } from "@/types";
+import { AsYouType } from "libphonenumber-js";
 
 export default function UserMe() {
   const { data: user, isLoading: isLoadingUser } = useGetUserByMeQuery();
@@ -82,6 +82,7 @@ export default function UserMe() {
                         type="tel"
                         label="Celular"
                         loading={isLoadingUser}
+                        transform={(value) => new AsYouType("BR").input(value)}
                       />
                     </Grid>
                     <Grid item xs={12} display="flex" justifyContent="end">
