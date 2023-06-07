@@ -23,6 +23,7 @@ import { DestroyButton } from "../../src/components/DestroyButton";
 import { useUserDestroyMutation } from "../../src/hooks/mutations/useUserDestroyMutation";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useAuth } from "@/hooks/useAuth";
+import Chip from "@mui/material/Chip";
 
 export default function Users() {
   const { data: users = [], isLoading: isLoadingUsers } = useGetUsersQuery();
@@ -88,9 +89,18 @@ export default function Users() {
                         }
                       >
                         <ListItemText
-                          primary={`${user.firstName} ${user.lastName} ${
-                            user.id === me?.id ? "(Você)" : ""
-                          }`}
+                          primary={
+                            <>
+                              {user.firstName} {user.lastName}
+                              {user.id === me?.id ? (
+                                <Chip
+                                  label="Você"
+                                  color="primary"
+                                  sx={{ ml: 1 }}
+                                />
+                              ) : null}
+                            </>
+                          }
                           secondary={
                             <>
                               <Box display="flex" alignItems="center" mt={1}>

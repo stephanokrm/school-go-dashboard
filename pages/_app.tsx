@@ -12,18 +12,11 @@ import theme from "../src/theme";
 import createEmotionCache from "../src/createEmotionCache";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ResponsiveDrawer } from "../src/components/ResponsiveDrawer";
+import { ResponsiveDrawer } from "@/components/ResponsiveDrawer";
 
 const clientSideEmotionCache = createEmotionCache();
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      retryOnMount: false,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
