@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { getUserByMe } from "../../services/getUserByMe";
 import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { getUserByMe } from "@/services/getUserByMe";
 
 export const useGetUserByMeQuery = () => {
   const router = useRouter();
@@ -12,6 +12,8 @@ export const useGetUserByMeQuery = () => {
       return getUserByMe({ signal });
     },
     {
+      retry: false,
+      retryOnMount: false,
       onError: async (error: AxiosError) => {
         if (error.response?.status !== 409) throw error;
 
