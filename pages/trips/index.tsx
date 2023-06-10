@@ -21,7 +21,7 @@ import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import { timelineOppositeContentClasses } from "@mui/lab";
-import { format, isToday, isYesterday, parseISO } from "date-fns";
+import { format, isAfter, isToday, isYesterday, parseISO } from "date-fns";
 import { useTripsQuery } from "@/hooks/queries/useTripsQuery";
 import { Trip } from "@/types";
 import Box from "@mui/material/Box";
@@ -87,191 +87,217 @@ export default function Trips() {
                               ? "Hoje"
                               : dateIsYesterday
                               ? "Ontem"
-                              : format(groupDate, "PPP")}
+                              : format(groupDate, "PPPP")}
                           </Typography>
                         </Box>
                         <Box>
-                          {groupedTrips[date].map((trip) => (
-                            <Accordion key={trip.id}>
-                              <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                              >
-                                <Grid
-                                  container
-                                  spacing={1}
-                                  justifyContent="space-between"
+                          {groupedTrips[date].map((trip) => {
+                            const tripIsLate = isAfter(
+                              trip.arriveAt,
+                              new Date()
+                            );
+
+                            return (
+                              <Accordion key={trip.id}>
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel1a-content"
+                                  id="panel1a-header"
                                 >
-                                  <Grid item>
-                                    <Typography gutterBottom>
-                                      {trip.round ? "Volta do" : "Ida para"}{" "}
-                                      {trip.itinerary.school.name}
-                                    </Typography>
-                                    <Typography
-                                      variant="body2"
-                                      color="darkgray"
-                                    >
-                                      {format(trip.arriveAt, "H:mm")} -{" "}
-                                      {trip.itinerary.driver.user.firstName}{" "}
-                                      {trip.itinerary.driver.user.lastName}
-                                    </Typography>
-                                  </Grid>
-                                  {trip.startedAt ? (
-                                    <Grid
-                                      item
-                                      display="flex"
-                                      alignItems="center"
-                                    >
-                                      <Chip
-                                        color={
-                                          trip.finishedAt
-                                            ? "success"
-                                            : "primary"
-                                        }
-                                        label={
-                                          trip.finishedAt
-                                            ? "Finalizada"
-                                            : "Em Andamento"
-                                        }
-                                      />
-                                    </Grid>
-                                  ) : null}
-                                </Grid>
-                              </AccordionSummary>
-                              <AccordionDetails sx={{ padding: 0 }}>
-                                <Timeline
-                                  sx={{
-                                    padding: 0,
-                                    [`& .${timelineOppositeContentClasses.root}`]:
-                                      {
-                                        flex: 0.1,
-                                      },
-                                  }}
-                                >
-                                  <TimelineItem>
-                                    <TimelineOppositeContent color="text.secondary">
-                                      {trip.startedAt
-                                        ? format(trip.startedAt, "MMM dd, H:mm")
-                                        : "-"}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                      <TimelineDot
-                                        color={
-                                          trip.startedAt ? "success" : undefined
-                                        }
-                                      />
-                                      <TimelineConnector
-                                        sx={{
-                                          bgcolor: trip.startedAt
-                                            ? "success.main"
-                                            : undefined,
-                                        }}
-                                      />
-                                    </TimelineSeparator>
-                                    <TimelineContent>
+                                  <Grid
+                                    container
+                                    spacing={1}
+                                    justifyContent="space-between"
+                                  >
+                                    <Grid item>
                                       <Typography gutterBottom>
-                                        Partida
+                                        {trip.round ? "Volta do" : "Ida para"}{" "}
+                                        {trip.itinerary.school.name}
                                       </Typography>
                                       <Typography
                                         variant="body2"
                                         color="darkgray"
                                       >
-                                        {trip.round
-                                          ? trip.itinerary.school.address
-                                              .description
-                                          : trip.itinerary.address.description}
+                                        {format(trip.arriveAt, "H:mm")} -{" "}
+                                        {trip.itinerary.driver.user.firstName}{" "}
+                                        {trip.itinerary.driver.user.lastName}
                                       </Typography>
-                                    </TimelineContent>
-                                  </TimelineItem>
-                                  {trip.students?.map((student) => (
-                                    <TimelineItem key={student.id}>
+                                    </Grid>
+                                    {trip.startedAt ? (
+                                      <Grid
+                                        item
+                                        display="flex"
+                                        alignItems="center"
+                                      >
+                                        <Chip
+                                          color={
+                                            trip.finishedAt
+                                              ? "success"
+                                              : tripIsLate
+                                              ? "error"
+                                              : "primary"
+                                          }
+                                          label={
+                                            trip.finishedAt
+                                              ? "Finalizada"
+                                              : tripIsLate
+                                              ? "Atrasada"
+                                              : "Em Andamento"
+                                          }
+                                        />
+                                      </Grid>
+                                    ) : null}
+                                  </Grid>
+                                </AccordionSummary>
+                                <AccordionDetails sx={{ padding: 0 }}>
+                                  <Timeline
+                                    sx={{
+                                      padding: 0,
+                                      [`& .${timelineOppositeContentClasses.root}`]:
+                                        {
+                                          flex: 0.1,
+                                        },
+                                    }}
+                                  >
+                                    <TimelineItem>
                                       <TimelineOppositeContent color="text.secondary">
-                                        {student.pivot?.embarkedAt
+                                        {trip.startedAt
                                           ? format(
-                                              student.pivot.embarkedAt,
+                                              trip.startedAt,
                                               "MMM dd, H:mm"
                                             )
-                                          : student.pivot?.absent
-                                          ? "Ausente"
                                           : "-"}
                                       </TimelineOppositeContent>
                                       <TimelineSeparator>
                                         <TimelineDot
                                           color={
-                                            student.pivot?.absent
-                                              ? "error"
-                                              : (trip.round &&
-                                                  student.pivot
-                                                    ?.disembarkedAt) ||
-                                                (!trip.round &&
-                                                  student.pivot?.embarkedAt)
+                                            trip.startedAt
                                               ? "success"
                                               : undefined
                                           }
                                         />
                                         <TimelineConnector
                                           sx={{
-                                            bgcolor:
-                                              (trip.round &&
-                                                student.pivot?.disembarkedAt) ||
-                                              (!trip.round &&
-                                                student.pivot?.embarkedAt)
-                                                ? "success.main"
-                                                : undefined,
+                                            bgcolor: trip.startedAt
+                                              ? "success.main"
+                                              : undefined,
                                           }}
                                         />
                                       </TimelineSeparator>
                                       <TimelineContent>
                                         <Typography gutterBottom>
-                                          {student.firstName} {student.lastName}
+                                          Partida
                                         </Typography>
                                         <Typography
                                           variant="body2"
                                           color="darkgray"
                                         >
-                                          {student.address.description}
+                                          {trip.round
+                                            ? trip.itinerary.school.address
+                                                .description
+                                            : trip.itinerary.address
+                                                .description}
                                         </Typography>
                                       </TimelineContent>
                                     </TimelineItem>
-                                  ))}
-                                  <TimelineItem>
-                                    <TimelineOppositeContent color="text.secondary">
-                                      {trip.finishedAt
-                                        ? format(
-                                            trip.finishedAt,
-                                            "MMM dd, H:mm"
-                                          )
-                                        : "-"}
-                                    </TimelineOppositeContent>
-                                    <TimelineSeparator>
-                                      <TimelineDot
-                                        color={
-                                          trip.finishedAt
-                                            ? "success"
-                                            : undefined
-                                        }
-                                      />
-                                    </TimelineSeparator>
-                                    <TimelineContent>
-                                      <Typography gutterBottom>
-                                        Finalizada
-                                      </Typography>
-                                      <Typography
-                                        variant="body2"
-                                        color="darkgray"
-                                      >
-                                        {trip.round
-                                          ? trip.itinerary.address.description
-                                          : trip.itinerary.school.address
-                                              .description}
-                                      </Typography>
-                                    </TimelineContent>
-                                  </TimelineItem>
-                                </Timeline>
-                              </AccordionDetails>
-                            </Accordion>
-                          ))}
+                                    {trip.students?.map((student) => (
+                                      <TimelineItem key={student.id}>
+                                        <TimelineOppositeContent color="text.secondary">
+                                          {trip.round &&
+                                          student.pivot?.disembarkedAt
+                                            ? format(
+                                                student.pivot.disembarkedAt,
+                                                "MMM dd, H:mm"
+                                              )
+                                            : !trip.round &&
+                                              student.pivot?.embarkedAt
+                                            ? format(
+                                                student.pivot.embarkedAt,
+                                                "MMM dd, H:mm"
+                                              )
+                                            : student.pivot?.absent
+                                            ? "Ausente"
+                                            : "-"}
+                                        </TimelineOppositeContent>
+                                        <TimelineSeparator>
+                                          <TimelineDot
+                                            color={
+                                              student.pivot?.absent
+                                                ? "error"
+                                                : (trip.round &&
+                                                    student.pivot
+                                                      ?.disembarkedAt) ||
+                                                  (!trip.round &&
+                                                    student.pivot?.embarkedAt)
+                                                ? "success"
+                                                : undefined
+                                            }
+                                          />
+                                          <TimelineConnector
+                                            sx={{
+                                              bgcolor:
+                                                (trip.round &&
+                                                  student.pivot
+                                                    ?.disembarkedAt) ||
+                                                (!trip.round &&
+                                                  student.pivot?.embarkedAt)
+                                                  ? "success.main"
+                                                  : undefined,
+                                            }}
+                                          />
+                                        </TimelineSeparator>
+                                        <TimelineContent>
+                                          <Typography gutterBottom>
+                                            {student.firstName}{" "}
+                                            {student.lastName}
+                                          </Typography>
+                                          <Typography
+                                            variant="body2"
+                                            color="darkgray"
+                                          >
+                                            {student.address.description}
+                                          </Typography>
+                                        </TimelineContent>
+                                      </TimelineItem>
+                                    ))}
+                                    <TimelineItem>
+                                      <TimelineOppositeContent color="text.secondary">
+                                        {trip.finishedAt
+                                          ? format(
+                                              trip.finishedAt,
+                                              "MMM dd, H:mm"
+                                            )
+                                          : "-"}
+                                      </TimelineOppositeContent>
+                                      <TimelineSeparator>
+                                        <TimelineDot
+                                          color={
+                                            trip.finishedAt
+                                              ? "success"
+                                              : undefined
+                                          }
+                                        />
+                                      </TimelineSeparator>
+                                      <TimelineContent>
+                                        <Typography gutterBottom>
+                                          Finalizada
+                                        </Typography>
+                                        <Typography
+                                          variant="body2"
+                                          color="darkgray"
+                                        >
+                                          {trip.round
+                                            ? trip.itinerary.address.description
+                                            : trip.itinerary.school.address
+                                                .description}
+                                        </Typography>
+                                      </TimelineContent>
+                                    </TimelineItem>
+                                  </Timeline>
+                                </AccordionDetails>
+                              </Accordion>
+                            );
+                          })}
                         </Box>
                       </Box>
                     );
