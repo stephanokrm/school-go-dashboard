@@ -8,6 +8,8 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 import CircularProgress from "@mui/material/CircularProgress";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -25,13 +27,22 @@ import { format, isAfter, isToday, isYesterday, parseISO } from "date-fns";
 import { useTripsQuery } from "@/hooks/queries/useTripsQuery";
 import { Trip } from "@/types";
 import Box from "@mui/material/Box";
+import { useTripStudentPresentMutation } from "@/hooks/mutations/useTripStudentPresentMutation";
+import { useTripStudentAbsentMutation } from "@/hooks/mutations/useTripStudentAbsentMutation";
+import Button from "@mui/material/Button";
+import { useTripStartMutation } from "@/hooks/mutations/useTripStartMutation";
+import { useTripEndMutation } from "@/hooks/mutations/useTripEndMutation";
 
 export default function Trips() {
   const { data: trips = [], isLoading: isLoadingTrips } = useTripsQuery({
     administrator: true,
   });
+  const { mutate: present } = useTripStudentPresentMutation();
+  const { mutate: absent } = useTripStudentAbsentMutation();
+  const { mutate: start } = useTripStartMutation();
+  const { mutate: end } = useTripEndMutation();
 
-  const groupedTrips = trips.reduce<{ [key: string]: Trip[] }>(
+  const groupedTrips = trips.reduce<{ [date: string]: Trip[] }>(
     (grouped, trip) => {
       const day = format(trip.arriveAt, "yyyy-MM-dd");
 
@@ -78,17 +89,16 @@ export default function Trips() {
                     const groupDate = parseISO(date);
                     const dateIsToday = isToday(groupDate);
                     const dateIsYesterday = isYesterday(groupDate);
+                    const groupLabel = dateIsToday
+                      ? "Hoje"
+                      : dateIsYesterday
+                      ? "Ontem"
+                      : format(groupDate, "PPPP");
 
                     return (
                       <Box key={date} mb={2}>
                         <Box pl={2}>
-                          <Typography variant="h6">
-                            {dateIsToday
-                              ? "Hoje"
-                              : dateIsYesterday
-                              ? "Ontem"
-                              : format(groupDate, "PPPP")}
-                          </Typography>
+                          <Typography variant="h6">{groupLabel}</Typography>
                         </Box>
                         <Box>
                           {groupedTrips[date].map((trip) => {
@@ -96,6 +106,16 @@ export default function Trips() {
                               trip.arriveAt,
                               new Date()
                             );
+                            const tripIsToday = isToday(trip.arriveAt);
+                            const tripTitle = `${
+                              trip.round ? "Volta do" : "Ida para"
+                            } ${trip.itinerary.school.name}`;
+                            const tripSubtitle = `${format(
+                              trip.arriveAt,
+                              "H:mm"
+                            )} - ${trip.itinerary.driver.user.firstName} ${
+                              trip.itinerary.driver.user.lastName
+                            }`;
 
                             return (
                               <Accordion key={trip.id}>
@@ -111,16 +131,13 @@ export default function Trips() {
                                   >
                                     <Grid item>
                                       <Typography gutterBottom>
-                                        {trip.round ? "Volta do" : "Ida para"}{" "}
-                                        {trip.itinerary.school.name}
+                                        {tripTitle}
                                       </Typography>
                                       <Typography
                                         variant="body2"
                                         color="darkgray"
                                       >
-                                        {format(trip.arriveAt, "H:mm")} -{" "}
-                                        {trip.itinerary.driver.user.firstName}{" "}
-                                        {trip.itinerary.driver.user.lastName}
+                                        {tripSubtitle}
                                       </Typography>
                                     </Grid>
                                     {trip.startedAt ? (
@@ -155,18 +172,31 @@ export default function Trips() {
                                       padding: 0,
                                       [`& .${timelineOppositeContentClasses.root}`]:
                                         {
-                                          flex: 0.1,
+                                          flex: {
+                                            xs: 1,
+                                            sm: 0.8,
+                                            md: 0.6,
+                                            lg: 0.4,
+                                            xl: 0.2,
+                                          },
                                         },
                                     }}
                                   >
                                     <TimelineItem>
                                       <TimelineOppositeContent color="text.secondary">
-                                        {trip.startedAt
-                                          ? format(
-                                              trip.startedAt,
-                                              "MMM dd, H:mm"
-                                            )
-                                          : "-"}
+                                        {trip.startedAt ? (
+                                          format(trip.startedAt, "MMM dd, H:mm")
+                                        ) : tripIsToday ? (
+                                          <Button
+                                            size="small"
+                                            color="success"
+                                            variant="contained"
+                                            startIcon={<CheckIcon />}
+                                            onClick={() => start(trip)}
+                                          >
+                                            Iniciar
+                                          </Button>
+                                        ) : null}
                                       </TimelineOppositeContent>
                                       <TimelineSeparator>
                                         <TimelineDot
@@ -204,20 +234,47 @@ export default function Trips() {
                                       <TimelineItem key={student.id}>
                                         <TimelineOppositeContent color="text.secondary">
                                           {trip.round &&
-                                          student.pivot?.disembarkedAt
-                                            ? format(
-                                                student.pivot.disembarkedAt,
-                                                "MMM dd, H:mm"
-                                              )
-                                            : !trip.round &&
-                                              student.pivot?.embarkedAt
-                                            ? format(
-                                                student.pivot.embarkedAt,
-                                                "MMM dd, H:mm"
-                                              )
-                                            : student.pivot?.absent
-                                            ? "Ausente"
-                                            : "-"}
+                                          student.pivot?.disembarkedAt ? (
+                                            format(
+                                              student.pivot.disembarkedAt,
+                                              "MMM dd, H:mm"
+                                            )
+                                          ) : !trip.round &&
+                                            student.pivot?.embarkedAt ? (
+                                            format(
+                                              student.pivot.embarkedAt,
+                                              "MMM dd, H:mm"
+                                            )
+                                          ) : tripIsToday &&
+                                            !trip.finishedAt ? (
+                                            student.pivot?.absent ? (
+                                              <Button
+                                                size="small"
+                                                color="success"
+                                                variant="contained"
+                                                startIcon={<CheckIcon />}
+                                                onClick={() =>
+                                                  present({ trip, student })
+                                                }
+                                              >
+                                                Comparecer
+                                              </Button>
+                                            ) : (
+                                              <Button
+                                                size="small"
+                                                color="error"
+                                                variant="contained"
+                                                startIcon={<CloseIcon />}
+                                                onClick={() =>
+                                                  absent({ trip, student })
+                                                }
+                                              >
+                                                Ausentar
+                                              </Button>
+                                            )
+                                          ) : (
+                                            "Ausente"
+                                          )}
                                         </TimelineOppositeContent>
                                         <TimelineSeparator>
                                           <TimelineDot
@@ -262,12 +319,22 @@ export default function Trips() {
                                     ))}
                                     <TimelineItem>
                                       <TimelineOppositeContent color="text.secondary">
-                                        {trip.finishedAt
-                                          ? format(
-                                              trip.finishedAt,
-                                              "MMM dd, H:mm"
-                                            )
-                                          : "-"}
+                                        {trip.finishedAt ? (
+                                          format(
+                                            trip.finishedAt,
+                                            "MMM dd, H:mm"
+                                          )
+                                        ) : trip.startedAt ? (
+                                          <Button
+                                            size="small"
+                                            color="error"
+                                            variant="contained"
+                                            startIcon={<CloseIcon />}
+                                            onClick={() => end(trip)}
+                                          >
+                                            Finalizar
+                                          </Button>
+                                        ) : null}
                                       </TimelineOppositeContent>
                                       <TimelineSeparator>
                                         <TimelineDot

@@ -17,10 +17,13 @@ import {
   userCreateSchema,
   userEditSchema,
 } from "./schemas";
+import { AxiosError } from "axios";
 
 export type Resource<T> = {
   data: T;
 };
+
+export type BackendError = AxiosError<{ message?: string }>;
 
 // MODELS
 
