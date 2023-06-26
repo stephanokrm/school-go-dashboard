@@ -34,6 +34,7 @@ export default function StudentEdit() {
   const { data: responsibles = [], isLoading: isLoadingResponsibles } =
     useGetResponsiblesQuery();
   const { control, handleSubmit, watch, setError } = useForm<StudentEditForm>({
+    // @ts-ignore
     resolver: yupResolver(studentEditSchema),
     values: student,
   });
