@@ -28,6 +28,7 @@ export default function StudentCreate() {
     useGetResponsiblesQuery();
   const { control, handleSubmit, watch, setError } = useForm<StudentCreateForm>(
     {
+      // @ts-ignore
       resolver: yupResolver(studentCreateSchema),
     }
   );
