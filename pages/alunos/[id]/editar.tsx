@@ -36,6 +36,7 @@ export default function StudentEdit() {
   const { control, handleSubmit, watch, setError } = useForm<StudentEditForm>({
     // @ts-ignore
     resolver: yupResolver(studentEditSchema),
+    // @ts-ignore
     values: student,
   });
   const {
