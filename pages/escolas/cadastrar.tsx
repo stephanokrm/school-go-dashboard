@@ -21,6 +21,7 @@ import { SchoolCreateForm } from "../../src/types";
 export default function SchoolCreate() {
   const { control, handleSubmit, watch, getValues, setError } =
     useForm<SchoolCreateForm>({
+      // @ts-ignore
       resolver: yupResolver(schoolCreateSchema),
     });
 
