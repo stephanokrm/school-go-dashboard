@@ -26,6 +26,7 @@ export default function SchoolEdit() {
     id as string | undefined
   );
   const { control, handleSubmit, watch, setError } = useForm<SchoolEditForm>({
+    // @ts-ignore
     resolver: yupResolver(schoolEditSchema),
     values: school,
   });
